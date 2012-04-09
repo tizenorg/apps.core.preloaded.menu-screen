@@ -1,0 +1,38 @@
+#!/bin/sh
+
+INHOUSE_ID="5000"
+
+init_vconf()
+{
+	# for menu daemon
+	vconftool set -t int memory/menu-screen/is_menu_screen_done 0 -i
+
+	# for menu-screen
+	vconftool set -t int db/setting/menu_scroll_unit 1 -i -u 5000
+	vconftool set -t int memory/idle_screen/top 0 -i -u 5000
+}
+
+
+
+
+make_notifier_directory()
+{
+	NOTIFIER_DIR=`cat /usr/share/install-info/desktop.conf`
+	for I in $NOTIFIER_DIR
+	do
+		#echo "notifier directory :: $I"
+		if [ ! -d $I ]; then
+			mkdir -p $I
+		fi
+		chmod 775 $I
+		chown :$INHOUSE_ID $I
+		touch $I/.notify_this_directory
+	done
+}
+
+
+
+init_vconf
+make_notifier_directory
+
+# End of a file

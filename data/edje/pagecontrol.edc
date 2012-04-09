@@ -1,0 +1,151 @@
+/**
+ * Copyright (c) 2000 - 2012 Samsung Electronics Co., Ltd All Rights Reserved
+ *
+ * This file is part of Menu-screen
+ * Written by Jin Yoon <jinny.yoon@samsung.com>, Youngjoo Park <yjoo93.park@samsung.com>
+ *
+ * PROPRIETARY/CONFIDENTIAL
+ *
+ * This software is the confidential and proprietary information of SAMSUNG ELECTRONICS ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement you entered into with SAMSUNG ELECTRONICS.
+ * SAMSUNG make no representations or warranties about the suitability of the software, either express or implied, including but not limited to the implied warranties of merchantability, fitness for a particular purpose, or non-infringement.
+ * SAMSUNG shall not be liable for any damages suffered by licensee as a result of using, modifying or distributing this software or its derivatives.
+ */
+
+collections {
+	group { 
+	   name: "elm/pagecontrol/base/default";
+
+	   parts {
+		  part {
+			 name: "bg";
+			 type: RECT;
+			 mouse_events: 1;
+			 scale: 1;
+			 description {
+				state: "default" 0.0;
+				color: 0 0 0 0;
+			 }
+		  }
+		  part {
+			 name: "elm.swallow.page";
+			 type: SWALLOW;
+			 mouse_events: 1;
+			 scale: 1;
+			 description {
+				state: "default" 0.0;
+				min: 332 32;
+			 }
+		  }
+	   }
+	}
+
+	#define PAGE_ITEM(number) \
+	group { \
+	   name: "elm/page/item/default_"number; \
+	   images { \
+		  image: "../images/RM06_App tray_page indicator.png" COMP; \
+		  image: "../images/RM06_App tray_page indicator_focus.png" COMP; \
+	   } \
+	   parts { \
+		  part { \
+			 name: "bg"; \
+			 type: RECT; \
+			 mouse_events: 0; \
+			 scale: 1; \
+			 description { \
+				state: "default" 0.0; \
+				min: 44 40; \
+				max: 44 40; \
+				align: 0.5 0.5; \
+				color: 0 0 0 0; \
+			 } \
+		  } \
+		  part { \
+			 name: "indicator_1"; \
+			 mouse_events: 0; \
+			 scale: 1; \
+			 description { \
+				state: "default" 0.0; \
+				min: 8 8; \
+				max: 8 8; \
+				fixed: 1 1; \
+				align: 0.5 0.5; \
+				visible: 1; \
+				rel1 { to: "bg"; } \
+				rel2 { to: "bg"; } \
+				image { \
+				   normal: "../images/RM06_App tray_page indicator.png"; \
+				} \
+			 } \
+			 description { \
+				state: "selected" 0.0; \
+				inherit: "default" 0.0; \
+				min: 8 8; \
+				max: 8 8; \
+				visible: 0; \
+			 } \
+		  } \
+		  part { \
+			 name: "indicator_2"; \
+			 mouse_events: 0; \
+			 scale: 1; \
+			 description { \
+				state: "default" 0.0; \
+				min: 8 8; \
+				max: 8 8; \
+				fixed: 1 1; \
+				align: 0.5 0.5; \
+				visible: 0; \
+				rel1 { to: "bg"; } \
+				rel2 { to: "bg"; } \
+				image { \
+				   normal: "../images/RM06_App tray_page indicator_focus.png"; \
+				} \
+			 } \
+			 description { \
+				state: "selected" 0.0; \
+				inherit: "default" 0.0; \
+				min: 8 8; \
+				max: 8 8; \
+				visible: 1; \
+			 } \
+		  } \
+	   } \
+	   programs { \
+		  program { \
+			 name: "indicator_on"; \
+			 signal: "elm,state,indicator,on"; \
+			 source: "elm"; \
+			 action: STATE_SET "selected" 0.0; \
+			 target: "indicator_1"; \
+			 target: "indicator_2"; \
+		  } \
+		  program { \
+			 name: "indicator_off"; \
+			 signal: "elm,state,indicator,off"; \
+			 source: "elm"; \
+			 action: STATE_SET "default" 0.0; \
+			 target: "indicator_1"; \
+			 target: "indicator_2"; \
+		  } \
+		  program { \
+			 name: "indicator_clicked"; \
+			 signal: "mouse,clicked,1"; \
+			 source: "bg"; \
+			 action: SIGNAL_EMIT "clicked" "indicator_clicked"; \
+		  } \
+	   } \
+	} \
+
+	PAGE_ITEM(1)
+	PAGE_ITEM(2)
+	PAGE_ITEM(3)
+	PAGE_ITEM(4)
+	PAGE_ITEM(5)
+	PAGE_ITEM(6)
+	PAGE_ITEM(7)
+	PAGE_ITEM(8)
+	PAGE_ITEM(9)
+	PAGE_ITEM(10)
+}

@@ -1,0 +1,98 @@
+menu-screen (1.0.10) unstable; urgency=low
+
+  * Git: shared/pkgs/m/menu-screen
+  * Tag: menu-screen_1.0.10
+
+  * [Add] Window class : MENU_SCREEN
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Thu, 05 Apr 2012 16:47:19 +0900
+
+menu-screen (1.0.9) unstable; urgency=low
+
+  * Git: shared/pkgs/m/menu-screen
+  * Tag: menu-screen_1.0.9
+
+  * [Modify] Support for international languages.
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Wed, 04 Apr 2012 14:14:04 +0900
+
+menu-screen (1.0.8) unstable; urgency=low
+
+  * Git: shared1/pkgs/m/menu-screen
+  * Tag: menu-screen_1.0.8
+
+  * [Modify] spec
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Thu, 29 Mar 2012 17:48:20 +0900
+
+menu-screen (1.0.7) unstable; urgency=low
+
+  * Git: shared1/pkgs/m/menu-screen
+  * Tag: menu-screen_1.0.7
+
+  * [Add] Desktop field - X-Tizen-Removable
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Mon, 26 Mar 2012 09:02:57 +0900
+
+menu-screen (1.0.6) unstable; urgency=low
+
+  * Git: shared1/pkgs/m/menu-screen
+  * Tag: menu-screen_1.0.6
+
+  * [Modify] Desktop field
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Thu, 22 Mar 2012 10:23:46 +0900
+
+menu-screen (1.0.5) unstable; urgency=low
+
+  * Git: shared1/pkgs/m/menu-screen
+  * Tag: menu-screen_1.0.5
+
+  * [Add] Wallpaper, Package-manager features
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Fri, 24 Feb 2012 15:00:29 +0900
+
+menu-screen (1.0.4) unstable; urgency=low
+
+  * Git: shared1/pkgs/m/menu-screen
+  * Tag: menu-screen_1.0.4
+
+  * [Modify] Copyright
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Wed, 22 Feb 2012 15:15:11 +0900
+
+menu-screen (1.0.3) unstable; urgency=low
+
+  * Git: shared1/pkgs/m/menu-screen
+  * Tag: menu-screen_1.0.3
+
+  * [Modify] Block events in the page-controller.
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Wed, 22 Feb 2012 10:19:19 +0900
+
+menu-screen (1.0.2) unstable; urgency=low
+
+  * Git: shared1/pkgs/m/menu-screen
+  * Tag: menu-screen_1.0.2
+
+  * [Remove] Unused variables for mapbuf
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Tue, 21 Feb 2012 17:56:47 +0900
+
+menu-screen (1.0.1) unstable; urgency=low
+
+  * Git: shared1/pkgs/m/menu-screen
+  * Tag: menu-screen_1.0.1
+
+  * [Modify] Language problem.
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Tue, 21 Feb 2012 15:13:49 +0900
+
+menu-screen (1.0.0) unstable; urgency=low
+
+  * Git: shared1/pkgs/m/menu-screen
+  * Tag: menu-screen_1.0.0
+
+  * Initial Version
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Fri, 17 Feb 2012 10:38:08 +0900
