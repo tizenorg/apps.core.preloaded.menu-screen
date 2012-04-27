@@ -17,12 +17,15 @@
 
 #include <Ecore_Evas.h>
 #include <Evas.h>
+#include <stdbool.h>
 
 extern int menu_screen_get_root_width(void);
 extern int menu_screen_get_root_height(void);
 extern double menu_screen_get_yscale(void);
 extern Evas *menu_screen_get_evas(void);
 extern Evas_Object *menu_screen_get_win(void);
+extern bool menu_screen_get_done(void);
+extern void menu_screen_set_done(bool is_done);
 
 #endif //__MENU_SCREEN_H__
 

@@ -1,3 +1,12 @@
+menu-screen (1.0.11) unstable; urgency=low
+
+  * Git: shared/pkgs/m/menu-screen
+  * Tag: menu-screen_1.0.11
+
+  * [Add] Exit with idle-time language changing
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Fri, 20 Apr 2012 11:47:30 +0900
+
 menu-screen (1.0.10) unstable; urgency=low
 
   * Git: shared/pkgs/m/menu-screen

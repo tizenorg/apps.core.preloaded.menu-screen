@@ -50,11 +50,13 @@ static struct {
 	Evas *evas;
 	Ecore_Evas *ee;
 	Evas_Object *win;
+	bool is_done;
 } menu_screen_info = {
 	.state = APP_STATE_PAUSE,
 	.evas = NULL,
 	.ee = NULL,
 	.win = NULL,
+	.is_done = false,
 };
 
 
@@ -90,6 +92,20 @@ double menu_screen_get_yscale(void)
 Evas_Object *menu_screen_get_win(void)
 {
 	return menu_screen_info.win;
+}
+
+
+
+bool menu_screen_get_done(void)
+{
+	return menu_screen_info.is_done;
+}
+
+
+
+void menu_screen_set_done(bool is_done)
+{
+	menu_screen_info.is_done = is_done;
 }
 
 
@@ -378,6 +394,10 @@ static void _language_changed_cb(void *data)
 
 	_D("Language is changed");
 
+	if (false == menu_screen_info.is_done) {
+		elm_exit();
+	}
+
 	layout = evas_object_data_get(menu_screen_info.win, "layout");
 	ret_if(NULL == layout);
 	all_apps = evas_object_data_get(layout, "all_apps");
@@ -409,6 +429,7 @@ static void _language_changed_cb(void *data)
 
 			if (!name) {
 				_D("Faield to get name for %s", item_get_package(item));
+				ail_package_destroy_appinfo(ai);
 				continue;
 			}
 

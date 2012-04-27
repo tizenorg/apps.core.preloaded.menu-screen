@@ -74,6 +74,7 @@ ERROR:
 	all_apps_list_destroy(list);
 	evas_object_data_del(all_apps, "list");
 	page_scroller_bring_in(scroller, 0);
+	menu_screen_set_done(true);
 
 	return ECORE_CALLBACK_CANCEL;
 }
