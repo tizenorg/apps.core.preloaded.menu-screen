@@ -9,6 +9,7 @@ Release:    1.1
 Group:      TO_BE/FILLED_IN
 License:    Samsung Proprietary License
 Source0:    %{name}-%{version}.tar.gz
+Source1001: packaging/org.tizen.menu-screen.manifest 
 BuildRequires:  pkgconfig(elementary)
 BuildRequires:  pkgconfig(appcore-efl)
 BuildRequires:  pkgconfig(utilX)
@@ -53,6 +54,7 @@ An utility library for developers of the menu screen (devel)
 %setup -q
 
 %build
+cp %{SOURCE1001} .
 CFLAGS="-I/usr/lib/glib-2.0/include/ -I/usr/include/glib-2.0 -I/usr/lib/dbus-1.0/include -I/usr/include/dbus-1.0 -I/usr/include/e_dbus-1 -I/usr/include/ethumb-0 -I/usr/include/edje-1 -I/usr/include/efreet-1 -I/usr/include/embryo-1 -I/usr/include/ecore-1 -I/usr/include/eet-1 -I/usr/include/evas-1 -I/usr/include/eina-1 -I/usr/include/eina-1/eina $CFLAGS" CXXFLAGS=$CXXFLAGS cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}
 
 make %{?jobs:-j%jobs}
@@ -103,6 +105,7 @@ make_notifier_directory
 
 #%files -f %{name}.lang
 %files 
+%manifest org.tizen.menu-screen.manifest
 %dir %attr(-,inhouse,inhouse) /opt/apps/org.tizen.menu-screen/data
 %{_appdir}/org.tizen.menu-screen/bin/menu-screen
 %{_appdir}/org.tizen.menu-screen/res/edje/all_apps_portrait.edj
