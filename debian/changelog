@@ -1,0 +1,8 @@
+menu-screen (1.0.12) unstable; urgency=low
+
+  * Git: shared/pkgs/m/menu-screen
+  * Tag: menu-screen_1.0.12
+
+  * [Modify] Environment for ELM_ENGINE, ELM_FPS
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Wed, 02 May 2012 19:00:43 +0900

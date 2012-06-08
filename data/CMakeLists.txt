@@ -1,0 +1,6 @@
+CONFIGURE_FILE(${PACKAGE_NAME}.desktop.in ${CMAKE_BINARY_DIR}/${PACKAGE_NAME}.desktop)
+INSTALL(FILES ${CMAKE_BINARY_DIR}/${PACKAGE_NAME}.desktop DESTINATION /opt/share/applications)
+
+ADD_SUBDIRECTORY(edje)
+
+# End of a file

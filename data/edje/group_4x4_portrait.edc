@@ -1,0 +1,196 @@
+ /*
+  * Copyright 2012  Samsung Electronics Co., Ltd
+  *
+  * Licensed under the Flora License, Version 1.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  *
+  *     http://www.tizenopensource.org/license
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  */
+
+
+
+#define MENU(part_name, p_relx, p_rely, relx, rely, n_relx, n_rely, ratio)  \
+	part { \
+		name: "menu_swallow_"part_name; \
+		type: SWALLOW; \
+		scale: 1; \
+		mouse_events: 1; \
+		description { \
+			state: "default" 0.0;	\
+			visible: 1; \
+			fixed: 1 1; \
+			rel1 { relative: (relx)+(ratio) (rely)+(ratio); to, "bg"; } \
+			rel2 { relative: (relx)+(ratio) (rely)+(ratio); to, "bg"; } \
+		} \
+		description { \
+			state: "prev" 0.0;	\
+			inherit: "default" 0.0;	\
+			rel1.relative: (p_relx)+(ratio) (p_rely)+(ratio); \
+			rel2.relative: (p_relx)+(ratio) (p_rely)+(ratio); \
+		} \
+		description { \
+			state: "next" 0.0;	\
+			inherit: "default" 0.0;	\
+			rel1.relative: (n_relx)+(ratio) (n_rely)+(ratio); \
+			rel2.relative: (n_relx)+(ratio) (n_rely)+(ratio); \
+		} \
+		description { \
+			state: "invisible" 0.0;	\
+			inherit: "default" 0.0;	\
+			visible: 0; \
+			rel1.relative: (n_relx)+(ratio) (n_rely)+(ratio); \
+			rel2.relative: (n_relx)+(ratio) (n_rely)+(ratio); \
+		} \
+	} \
+
+#define MENU_PROGRAM(part_name)  \
+	program { \
+		name: "menu_"part_name"_prev"; \
+		signal: "move,prev"; \
+		source: "menu"part_name; \
+		action:  STATE_SET "prev" 0.0; \
+		target: "menu_swallow_"part_name; \
+	} \
+	program { \
+		name: "menu_"part_name"_next"; \
+		signal: "move,next"; \
+		source: "menu"part_name; \
+		action:  STATE_SET "next" 0.0; \
+		target: "menu_swallow_"part_name; \
+	} \
+	program { \
+		name: "menu_"part_name"_ani"; \
+		signal: "ani,return"; \
+		source: "menu"part_name; \
+		action:  STATE_SET "default" 0.0; \
+		target: "menu_swallow_"part_name; \
+		transition: DECELERATE 0.4; \
+	} \
+	program { \
+		name: "menu_"part_name"_invisible"; \
+		signal: "invisible"; \
+		source: "menu"part_name; \
+		action:  STATE_SET "invisible" 0.0; \
+		target: "menu_swallow_"part_name; \
+	}
+
+
+collections {
+	group {
+		name: "menu_bg";
+		parts {
+			part {
+				name: "bg";
+				type: SWALLOW;
+				mouse_events: 1;
+				description {
+					state: "default" 0.0;
+					rel1 { relative: 0.0 0.0; }
+					rel2 { relative: 1.0 1.0; }
+				}
+			}
+
+			MENU("0", -0.25, 0.0, 0.0, 0.0, 0.25, 0.0, 0.125)
+			MENU("1", 0.0, 0.0, 0.25, 0.0, 0.50, 0.0, 0.125)
+			MENU("2", 0.25, 0.0, 0.50, 0.0, 0.75, 0.0, 0.125)
+			MENU("3", 0.50, 0.0, 0.75, 0.0, 0.0, 0.20, 0.125)
+
+			MENU("4", 0.75, 0.0, 0.0, 0.20, 0.25, 0.20, 0.125)
+			MENU("5", 0.0, 0.20, 0.25, 0.20, 0.50, 0.20, 0.125)
+			MENU("6", 0.25, 0.20, 0.50, 0.20, 0.75, 0.20, 0.125)
+			MENU("7", 0.50, 0.20, 0.75, 0.20, 0.0, 0.40, 0.125)
+
+			MENU("8", 0.75, 0.20, 0.0, 0.40, 0.25, 0.40, 0.125)
+			MENU("9", 0.0, 0.40, 0.25, 0.40, 0.50, 0.40, 0.125)
+			MENU("10", 0.25, 0.40, 0.50, 0.40, 0.75, 0.40, 0.125)
+			MENU("11", 0.50, 0.40, 0.75, 0.40, 0.0, 0.60, 0.125)
+
+			MENU("12", 0.75, 0.40, 0.0, 0.60, 0.25, 0.60, 0.125)
+			MENU("13", 0.0, 0.60, 0.25, 0.60, 0.50, 0.60, 0.125)
+			MENU("14", 0.25, 0.60, 0.50, 0.60, 0.75, 0.60, 0.125)
+			MENU("15", 0.50, 0.60, 0.75, 0.60, 1.0, 0.80, 0.125)
+
+			MENU("16", 0.75, 0.60, 0.0, 0.80, 0.25, 0.80, 0.125)
+			MENU("17", 0.0, 0.80, 0.25, 0.80, 0.50, 0.80, 0.125)
+			MENU("18", 0.25, 0.80, 0.50, 0.80, 0.75, 0.80, 0.125)
+			MENU("19", 0.50, 0.80, 0.75, 0.80, 1.0, 0.80, 0.125)
+
+			part {
+				name: "dim";
+				type: RECT;
+				scale: 1;
+				mouse_events: 1;
+				description {
+					state: "default" 0.0;
+					visible: 0;
+					rel1 { relative: 0.0 0.0; to, "bg"; }
+					rel2 { relative: 1.0 1.0; to, "bg"; }
+				}
+				description {
+					state: "edit" 0.0;
+					inherit: "default" 0.0;
+					visible: 1;
+					color: 0 0 0 102;
+				}
+			}
+		}
+
+		programs {
+			MENU_PROGRAM("0")
+			MENU_PROGRAM("1")
+			MENU_PROGRAM("2")
+			MENU_PROGRAM("3")
+			MENU_PROGRAM("4")
+			MENU_PROGRAM("5")
+			MENU_PROGRAM("6")
+			MENU_PROGRAM("7")
+			MENU_PROGRAM("8")
+			MENU_PROGRAM("9")
+			MENU_PROGRAM("10")
+			MENU_PROGRAM("11")
+			MENU_PROGRAM("12")
+			MENU_PROGRAM("13")
+			MENU_PROGRAM("14")
+			MENU_PROGRAM("15")
+			MENU_PROGRAM("16")
+			MENU_PROGRAM("17")
+			MENU_PROGRAM("18")
+			MENU_PROGRAM("19")
+
+			program {
+				name: "dim,on";
+				signal: "dim,on";
+				source: "menu";
+				action: STATE_SET "edit" 0.0;
+				target: "dim";
+			}
+			program {
+				name: "dim,off";
+				signal: "dim,off";
+				source: "menu";
+				action: STATE_SET "default" 0.0;
+				target: "dim";
+			}
+
+			program {
+				name: "dim,down";
+				signal: "mouse,down,1";
+				source: "dim";
+				action: SIGNAL_EMIT "dim,down" "menu";
+			}
+			program {
+				name: "dim,up";
+				signal: "mouse,up,1";
+				source: "dim";
+				action: SIGNAL_EMIT "dim,up" "menu";
+			}
+		}
+	} // group
+} // collections
