@@ -4,10 +4,10 @@
 
 Name:       org.tizen.menu-screen
 Summary:    An utility library of the menu screen
-Version:    1.0.11
+Version:    1.0.12
 Release:    1.1
 Group:      TO_BE/FILLED_IN
-License:    Samsung Proprietary License
+License:    Flora Software License
 Source0:    %{name}-%{version}.tar.gz
 Source1001: packaging/org.tizen.menu-screen.manifest 
 BuildRequires:  pkgconfig(elementary)
