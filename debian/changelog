@@ -1,6 +1,15 @@
-menu-screen (1.0.12) unstable; urgency=low
+org.tizen.menu-screen (1.0.13) unstable; urgency=low
 
-  * Git: shared/pkgs/m/menu-screen
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.13
+
+  * modify the vconf key for the selected menu-screen.
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Tue, 21 Aug 2012 10:37:58 +0900
+
+org.tizen.menu-screen (1.0.12) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
   * Tag: menu-screen_1.0.12
 
   * [Modify] Environment for ELM_ENGINE, ELM_FPS
