@@ -1,3 +1,13 @@
+ADD_CUSTOM_TARGET(index.edj
+		COMMAND edje_cc -id ${CMAKE_CURRENT_SOURCE_DIR}/../images ${EDJE_CFLAGS}
+		${CMAKE_CURRENT_SOURCE_DIR}/index.edc index.edj
+		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/index.edc
+)
+ADD_DEPENDENCIES(${PROJECT_NAME} index.edj)
+INSTALL(FILES index.edj DESTINATION ${EDJEDIR})
+
+
+
 ADD_CUSTOM_TARGET(item_4x4.edj
 		COMMAND edje_cc -id ${CMAKE_CURRENT_SOURCE_DIR}/../images ${EDJE_CFLAGS}
 		${CMAKE_CURRENT_SOURCE_DIR}/item_4x4.edc item_4x4.edj

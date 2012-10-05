@@ -40,8 +40,8 @@ collections {
 				mouse_events: 0;
 				description {
 					state: "default" 0.0;
-					rel1 { relative: 0.0 50/1280; to, "bg";}
-					rel2 { relative: 1.0 154/1280; to, "bg";}
+					rel1 { relative: 0.0 70/1280; to, "bg";}
+					rel2 { relative: 1.0 174/1280; to, "bg";}
 					color: 0 0 0 255;
 					visible: 0;
 				}

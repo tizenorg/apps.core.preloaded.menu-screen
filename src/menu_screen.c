@@ -54,12 +54,14 @@ static struct {
 	Evas *evas;
 	Ecore_Evas *ee;
 	Evas_Object *win;
+	Elm_Theme *theme;
 	bool is_done;
 } menu_screen_info = {
 	.state = APP_STATE_PAUSE,
 	.evas = NULL,
 	.ee = NULL,
 	.win = NULL,
+	.theme = NULL,
 	.is_done = false,
 };
 
@@ -96,6 +98,13 @@ double menu_screen_get_yscale(void)
 Evas_Object *menu_screen_get_win(void)
 {
 	return menu_screen_info.win;
+}
+
+
+
+Elm_Theme *menu_screen_get_theme(void)
+{
+	return menu_screen_info.theme;
 }
 
 
@@ -284,11 +293,31 @@ static void _change_bg_cb(keynode_t *node, void *data)
 
 
 
+static void _init_theme(void)
+{
+	menu_screen_info.theme = elm_theme_new();
+	elm_theme_ref_set(menu_screen_info.theme, NULL);
+	elm_theme_extension_add(menu_screen_info.theme, EDJEDIR"/index.edj");
+}
+
+
+
+static void _fini_theme(void)
+{
+	elm_theme_extension_del(menu_screen_info.theme, EDJEDIR"/index.edj");
+	elm_theme_free(menu_screen_info.theme);
+	menu_screen_info.theme = NULL;
+
+}
+
+
+
 static bool _create_cb(void *data)
 {
 	Evas_Object *layout;
 
 	_set_scale();
+	_init_theme();
 	retv_if(MENU_SCREEN_ERROR_FAIL == _create_canvas(PACKAGE, PACKAGE), EXIT_FAILURE);
 	elm_win_indicator_mode_set(menu_screen_info.win, ELM_WIN_INDICATOR_SHOW);
 
@@ -332,6 +361,7 @@ static void _terminate_cb(void *data)
 
 	_destroy_bg();
 	_destroy_canvas();
+	_fini_theme();
 	evas_object_del(menu_screen_info.win);
 }
 

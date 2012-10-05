@@ -1,3 +1,12 @@
+org.tizen.menu-screen (1.0.14) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.14
+
+  * enlarge the area of index
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Fri, 05 Oct 2012 13:39:00 +0900
+
 org.tizen.menu-screen (1.0.13) unstable; urgency=low
 
   * Git: apps/home/menu-screen

@@ -63,7 +63,8 @@ Evas_Object *index_create(Evas_Object *tab, unsigned int count)
 	index = elm_index_add(tab);
 	retv_if(NULL == index, NULL);
 
-	elm_object_style_set(index, "pagecontrol");
+	elm_object_theme_set(index, menu_screen_get_theme());
+	elm_object_style_set(index, "menuscreen/index");
 	elm_index_horizontal_set(index, EINA_TRUE);
 	elm_index_autohide_disabled_set(index, EINA_TRUE);
 

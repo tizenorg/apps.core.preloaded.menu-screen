@@ -16,8 +16,8 @@
 
 
 
-#ifndef __APP_TRAY_POPUP_H__
-#define __APP_TRAY_POPUP_H__
+#ifndef __MENU_SCREEN_POPUP_H__
+#define __MENU_SCREEN_POPUP_H__
 
 extern void popup_append_list(Evas_Object *popup);
 extern void popup_remove_list(Evas_Object *popup);
@@ -26,6 +26,6 @@ extern void popup_free_list();
 extern Evas_Object *popup_create(Evas_Object *parent, const char *warning);
 extern void popup_destroy(Evas_Object *popup);
 
-#endif //__APP_TRAY_POPUP_H__
+#endif //__MENU_SCREEN_POPUP_H__
 
 // End of a file

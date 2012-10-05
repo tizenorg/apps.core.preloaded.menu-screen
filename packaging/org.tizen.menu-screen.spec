@@ -4,7 +4,7 @@
 
 Name:       org.tizen.menu-screen
 Summary:    An utility library of the menu screen
-Version:    1.0.13
+Version:    1.0.14
 Release:    1.1
 Group:      TO_BE/FILLED_IN
 License:    Flora Software License
@@ -59,7 +59,7 @@ make %{?jobs:-j%jobs}
 
 %install
 %make_install
-mkdir %{buildroot}/opt/apps/org.tizen.menu-screen/data
+mkdir -p %{buildroot}/opt/apps/org.tizen.menu-screen/data
 
 
 %post
@@ -89,6 +89,7 @@ init_vconf
 %{_appdir}/org.tizen.menu-screen/res/edje/group_4x4_portrait.edj
 %{_appdir}/org.tizen.menu-screen/res/edje/item_4x4.edj
 %{_appdir}/org.tizen.menu-screen/res/edje/layout_portrait.edj
+%{_appdir}/org.tizen.menu-screen/res/edje/index.edj
 %{_opt_datadir}/packages/org.tizen.menu-screen.xml
 
 
