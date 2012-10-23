@@ -372,7 +372,7 @@ static void _pause_cb(void *data)
 	_D("Pause start");
 
 	if (vconf_set_int(VCONFKEY_IDLE_SCREEN_TOP, VCONFKEY_IDLE_SCREEN_TOP_FALSE) < 0) {
-		_E("Failed to set memory/idle/top to 0");
+		_E("Failed to set %s to 0", VCONFKEY_IDLE_SCREEN_TOP);
 	}
 
 	menu_screen_info.state = APP_STATE_PAUSE;
@@ -385,7 +385,7 @@ static void _resume_cb(void *data)
 	_D("START RESUME");
 
 	if (vconf_set_int(VCONFKEY_IDLE_SCREEN_TOP, VCONFKEY_IDLE_SCREEN_TOP_TRUE) < 0) {
-		_E("Failed to set memory/idle/top to 1");
+		_E("Failed to set %s to 1", VCONFKEY_IDLE_SCREEN_TOP);
 	}
 
 	utilx_hide_fake_effect(
@@ -403,7 +403,7 @@ static void _service_cb(service_h service, void *data)
 	_D("START RESET : %d", menu_screen_info.state);
 
 	if (vconf_set_int(VCONFKEY_IDLE_SCREEN_TOP, VCONFKEY_IDLE_SCREEN_TOP_TRUE) < 0) {
-		_E("Failed to set memory/idle/top to 1");
+		_E("Failed to set %s to 1", VCONFKEY_IDLE_SCREEN_TOP);
 	}
 
 	utilx_hide_fake_effect(

@@ -8,7 +8,7 @@ init_vconf()
 	vconftool set -t int memory/menu-screen/is_menu_screen_done 0 -i -f
 
 	# for menu-screen
-	vconftool set -t int memory/idle_screen/top 0 -i -u 5000 -f
+	vconftool set -t int memory/idle-screen/top 0 -i -u 5000 -f
 	vconftool set -t string db/setting/menuscreen/package_name "org.tizen.menu-screen" -i -u 5000 -f
 }
 
