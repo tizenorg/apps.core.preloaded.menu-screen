@@ -16,8 +16,8 @@
 
 
 
-#ifndef __APP_TRAY_PAGE_CONTROL_H__
-#define __APP_TRAY_PAGE_CONTROL_H__
+#ifndef __MENU_SCREEN_PAGE_CONTROL_H__
+#define __MENU_SCREEN_PAGE_CONTROL_H__
 
 #include <Evas.h>
 
@@ -30,6 +30,6 @@ extern void index_destroy(Evas_Object *index);
 extern void index_show(Evas_Object *index);
 extern void index_hide(Evas_Object *index);
 
-#endif //__APP_TRAY_PAGE_CONTROL_H__
+#endif //__MENU_SCREEN_PAGE_CONTROL_H__
 
 // End of the file
