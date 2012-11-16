@@ -10,6 +10,7 @@
 			<smack request="system::app_logging" type="w"/>
 			<smack request="isf" type="r"/>
 			<smack request="dbus" type="w"/>
+			<smack request="ug-image-viewer-efl" type="x"/>
 		</request>
 	</define>
 	<request>
