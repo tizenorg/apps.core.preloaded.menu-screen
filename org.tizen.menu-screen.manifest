@@ -5,7 +5,7 @@
 			<smack request="ail::db" type="rw"/>
 			<smack request="system::vconf" type="arwxt"/>
 			<smack request="system::homedir" type="arwxt"/>
-			<smack request="net-config" type="r"/>
+			<smack request="system::use_internet" type="r"/>
 			<smack request="xorg" type="w"/>
 			<smack request="system::app_logging" type="w"/>
 			<smack request="isf" type="r"/>
@@ -16,4 +16,7 @@
 	<request>
 		<domain name="org.tizen.menu-screen" />
 	</request>
+	<assign>
+		<filesystem path="/usr/apps/org.tizen.menu-screen/bin/menu-screen" label="org.tizen.menu-screen" exec_label="org.tizen.menu-screen" />
+	</assign>
 </manifest>

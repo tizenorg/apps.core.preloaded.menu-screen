@@ -35,8 +35,7 @@
 #include "page_scroller.h"
 #include "util.h"
 
-#define STR_ENV_ENGINE "LAUNCHER_ENGINE"
-#define STR_ENV_FPS "LAUNCHER_FPS"
+#define MENU_SCREEN_ENGINE "file/private/org.tizen.menu-screen/engine"
 
 #define LAYOUT_EDJE_PORTRAIT EDJEDIR"/layout_portrait.edj"
 #define LAYOUT_GROUP_NAME "layout"
@@ -49,8 +48,6 @@ static struct {
 	int state;
 	int root_width;
 	int root_height;
-	double xscale;
-	double yscale;
 	Evas *evas;
 	Ecore_Evas *ee;
 	Evas_Object *win;
@@ -84,13 +81,6 @@ int menu_screen_get_root_width(void)
 int menu_screen_get_root_height(void)
 {
 	return menu_screen_info.root_height;
-}
-
-
-
-double menu_screen_get_yscale(void)
-{
-	return menu_screen_info.yscale;
 }
 
 
@@ -154,6 +144,8 @@ static menu_screen_error_e _create_canvas(char *name, char *title)
 	}
 
 	evas_object_move(menu_screen_info.win, 0, 0);
+	evas_object_size_hint_min_set(menu_screen_info.win, menu_screen_info.root_width, menu_screen_info.root_height);
+	evas_object_size_hint_max_set(menu_screen_info.win, menu_screen_info.root_width, menu_screen_info.root_height);
 	evas_object_resize(menu_screen_info.win, menu_screen_info.root_width, menu_screen_info.root_height);
 	evas_object_show(menu_screen_info.win);
 
@@ -181,9 +173,8 @@ static int _dead_cb(int pid, void *data)
 
 
 
-static void _set_scale(void)
+static void _get_window_size(void)
 {
-	double scale;
 	Ecore_X_Window focus_win;
 	Ecore_X_Window root_win;
 
@@ -191,11 +182,7 @@ static void _set_scale(void)
 	root_win = ecore_x_window_root_get(focus_win);
 	ecore_x_window_size_get(root_win, &menu_screen_info.root_width, &menu_screen_info.root_height);
 
-	menu_screen_info.xscale = (double) menu_screen_info.root_width / (double) BASE_WIDTH;
-	menu_screen_info.yscale = (double) menu_screen_info.root_height / (double) BASE_HEIGHT;
-	scale = menu_screen_info.xscale < menu_screen_info.yscale ? menu_screen_info.xscale : menu_screen_info.yscale;
-	_D("width:%d, height:%d, scale:%f", menu_screen_info.root_width, menu_screen_info.root_height, scale);
-	elm_config_scale_set(scale);
+	_D("width:%d, height:%d", menu_screen_info.root_width, menu_screen_info.root_height);
 }
 
 
@@ -254,7 +241,7 @@ static void _create_bg(void)
 	wf = (double) width / (double) w;
 	hf = (double) height / (double) h;
 
-	f = wf > hf ? hf : wf;
+	f = wf < hf ? hf : wf;
 
 	w = (int) ((double) f * (double) w);
 	h = (int) ((double) f * (double) h);
@@ -312,13 +299,41 @@ static void _fini_theme(void)
 
 
 
+Evas_Object *_create_conformant(Evas_Object *win)
+{
+	Evas_Object *conformant;
+
+	conformant = elm_conformant_add(win);
+	retv_if(NULL == conformant, NULL);
+
+	evas_object_size_hint_weight_set(conformant, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	evas_object_data_set(conformant, "win", win);
+	evas_object_show(conformant);
+
+	elm_win_resize_object_add(win, conformant);
+	elm_win_conformant_set(win, EINA_TRUE);
+
+	return conformant;
+}
+
+
+
+void _destroy_conformant(Evas_Object *conformant)
+{
+	evas_object_data_del(conformant, "win");
+	evas_object_del(conformant);
+}
+
+
+
 static bool _create_cb(void *data)
 {
+	Evas_Object *conformant;
 	Evas_Object *layout;
 
-	_set_scale();
+	_get_window_size();
 	_init_theme();
-	retv_if(MENU_SCREEN_ERROR_FAIL == _create_canvas(PACKAGE, PACKAGE), EXIT_FAILURE);
+	retv_if(MENU_SCREEN_ERROR_FAIL == _create_canvas(PACKAGE, PACKAGE), false);
 	elm_win_indicator_mode_set(menu_screen_info.win, ELM_WIN_INDICATOR_SHOW);
 
 	if (vconf_notify_key_changed(VCONFKEY_BGSET, _change_bg_cb, NULL) < 0) {
@@ -326,16 +341,20 @@ static bool _create_cb(void *data)
 	}
 	_create_bg();
 
-	layout = layout_create(menu_screen_info.win, LAYOUT_EDJE_PORTRAIT,
+	conformant = _create_conformant(menu_screen_info.win);
+	retv_if(NULL == conformant, false);
+	evas_object_data_set(menu_screen_info.win, "conformant", conformant);
+
+	layout = layout_create(conformant, LAYOUT_EDJE_PORTRAIT,
 				LAYOUT_GROUP_NAME, MENU_SCREEN_ROTATE_PORTRAIT);
 	if (NULL == layout) {
-		_E("Faield to load an edje object");
+		_E("Failed to load an edje object");
 		evas_object_del(menu_screen_info.win);
-		return EXIT_FAILURE;
+		return false;
 	}
 	evas_object_data_set(menu_screen_info.win, "layout", layout);
-	evas_object_show(layout);
 
+	elm_object_content_set(conformant, layout);
 	mouse_register();
 	aul_listen_app_dead_signal(_dead_cb, NULL);
 
@@ -346,6 +365,7 @@ static bool _create_cb(void *data)
 
 static void _terminate_cb(void *data)
 {
+	Evas_Object *conformant;
 	Evas_Object *layout;
 
 	if (vconf_ignore_key_changed(VCONFKEY_BGSET, _change_bg_cb) < 0) {
@@ -357,7 +377,10 @@ static void _terminate_cb(void *data)
 	mouse_unregister();
 
 	layout = evas_object_data_del(menu_screen_info.win, "layout");
-	layout_destroy(layout);
+	if (layout) layout_destroy(layout);
+
+	conformant = evas_object_data_del(menu_screen_info.win, "conformant");
+	if (conformant) _destroy_conformant(conformant);
 
 	_destroy_bg();
 	_destroy_canvas();
@@ -455,20 +478,20 @@ static void _language_changed_cb(void *data)
 			item = page_get_item_at(page, j);
 			if (!item) continue;
 
-			if (ail_package_get_appinfo(item_get_package(item), &ai) < 0) continue;
+			if (ail_get_appinfo(item_get_package(item), &ai) < 0) continue;
 			if (ail_appinfo_get_str(ai, AIL_PROP_NAME_STR, &name) < 0) {
-				ail_package_destroy_appinfo(ai);
+				ail_destroy_appinfo(ai);
 				continue;
 			}
 
 			if (!name) {
-				_D("Faield to get name for %s", item_get_package(item));
-				ail_package_destroy_appinfo(ai);
+				_D("Failed to get name for %s", item_get_package(item));
+				ail_destroy_appinfo(ai);
 				continue;
 			}
 
 			item_set_name(item, name, 0);
-			ail_package_destroy_appinfo(ai);
+			ail_destroy_appinfo(ai);
 		}
 
 		mapbuf_enable(page, 1);
@@ -501,25 +524,17 @@ static void _fini(void)
 
 int main(int argc, char *argv[])
 {
-	const char *env;
+	char *buf;
 	app_event_callback_s event_callback;
 
-	env = getenv(STR_ENV_ENGINE);
-	if (env) {
-		_D("ELM_ENGINE is set as [%s]", env);
-		setenv("ELM_ENGINE", env, 1);
+	buf = vconf_get_str(MENU_SCREEN_ENGINE);
+	if (buf) {
+		_D("ELM_ENGINE is set as [%s]\n", buf);
+		setenv("ELM_ENGINE", buf, 1);
+		free(buf);
 	} else {
 		_D("ELM_ENGINE is set as [%s]", "gl");
 		setenv("ELM_ENGINE", "gl", 1);
-	}
-
-	env = getenv(STR_ENV_FPS);
-	if (env) {
-		_D("ELM_FPS is set as [%s]", env);
-		setenv("ELM_FPS", env, 1);
-	} else {
-		_D("ELM_FPS is set as [%s]", "6000");
-		setenv("ELM_FPS", "6000", 1);
 	}
 
 	_init(&event_callback);

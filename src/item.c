@@ -328,7 +328,7 @@ void item_enable_progress(Evas_Object *obj)
 		evas_object_del(progress);
 	}
 
-	progress = elm_progressbar_add(menu_screen_get_win());
+	progress = elm_progressbar_add(obj);
 	ret_if(NULL == progress);
 
 	elm_object_part_content_set(obj, "progress,swallow", progress);
@@ -388,21 +388,21 @@ int item_is_enabled_progress(Evas_Object *obj)
 
 
 
-static Evas_Object *_add_icon_image(const char *icon_file)
+static Evas_Object *_add_icon_image(Evas_Object *item, const char *icon_file)
 {
 	Evas_Object *icon;
 
-	icon = elm_icon_add(menu_screen_get_win());
-	if (elm_icon_file_set(icon, icon_file, NULL) == EINA_FALSE) {
+	icon = elm_icon_add(item);
+	if (elm_image_file_set(icon, icon_file, NULL) == EINA_FALSE) {
 		_E("Icon file is not accessible (%s)", icon_file);
 		evas_object_del(icon);
 		icon = NULL;
 	}
 
-	elm_icon_resizable_set(icon, EINA_TRUE, EINA_TRUE);
+	elm_image_resizable_set(icon, EINA_TRUE, EINA_TRUE);
 
-	if (menu_screen_get_root_height() >= BASE_HEIGHT || menu_screen_get_root_width() >= BASE_WIDTH) {
-		elm_icon_no_scale_set(icon, EINA_TRUE);
+	if (menu_screen_get_root_height() > BASE_HEIGHT || menu_screen_get_root_width() > BASE_WIDTH) {
+		elm_image_no_scale_set(icon, EINA_TRUE);
 	}
 
 	return icon;
@@ -410,7 +410,7 @@ static Evas_Object *_add_icon_image(const char *icon_file)
 
 
 
-static Evas_Object *_add_edje_icon(const char *icon_file)
+static Evas_Object *_add_edje_icon(Evas_Object *item, const char *icon_file)
 {
 	Evas_Object *icon;
 	if (access(icon_file, R_OK) != 0) {
@@ -418,7 +418,7 @@ static Evas_Object *_add_edje_icon(const char *icon_file)
 		return NULL;
 	}
 
-	icon = layout_load_edj(menu_screen_get_win(), (char*)icon_file, ITEM_GROUP_NAME);
+	icon = layout_load_edj(item, (char*)icon_file, ITEM_GROUP_NAME);
 	if (!icon) {
 		_E("Failed to load an edje, [%s] group icon", icon_file);
 		evas_object_del(icon);
@@ -455,10 +455,10 @@ void item_update(Evas_Object *item, app_info_t *ai)
 
 	if (!ai->image) {
 		if (item_is_edje_icon(ai->icon) == MENU_SCREEN_ERROR_OK) {
-			icon = _add_edje_icon(ai->icon);
+			icon = _add_edje_icon(item, ai->icon);
 			evas_object_data_set(item, "icon_image_type", STR_ICON_IMAGE_TYPE_EDJE);
 		} else {
-			icon = _add_icon_image(ai->icon);
+			icon = _add_icon_image(item, ai->icon);
 			evas_object_data_set(item, "icon_image_type", STR_ICON_IMAGE_TYPE_OBJECT);
 		}
 	} else {
@@ -497,7 +497,7 @@ Evas_Object *item_create(Evas_Object *scroller, app_info_t* ai)
 	int item_height;
 
 	item_edje = evas_object_data_get(scroller, "item_edje");
-	item = layout_load_edj(menu_screen_get_win(), item_edje, ITEM_GROUP_NAME);
+	item = layout_load_edj(scroller, item_edje, ITEM_GROUP_NAME);
 	if (!item) {
 		_E("Failed to load an item object");
 		return NULL;

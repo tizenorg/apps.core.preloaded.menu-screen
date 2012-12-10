@@ -56,7 +56,7 @@ inline menu_screen_error_e pkgmgr_uninstall(Evas_Object *item)
 	req_pc = pkgmgr_client_new(PC_REQUEST);
 	retv_if(NULL == req_pc, MENU_SCREEN_ERROR_FAIL);
 
-	if (pkgmgr_client_uninstall(req_pc, NULL, item_get_package(item), PM_DEFAULT, NULL, NULL) < 0) {
+	if (pkgmgr_client_uninstall(req_pc, NULL, item_get_package(item), PM_QUIET, NULL, NULL) < 0) {
 		_E("cannot uninstall %s.", item_get_package(item));
 		ret = MENU_SCREEN_ERROR_FAIL;
 	}

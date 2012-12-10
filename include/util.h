@@ -48,6 +48,15 @@
 #define _T(package) LOG(LOG_DEBUG, "LAUNCH", "[%s:Menuscreen:launch:done]", package);
 #endif
 
+/* Multi-language */
+#ifndef _
+#define _(str) gettext(str)
+#endif
+
+#define gettext_noop(str) (str)
+#define N_(str) gettext_noop(str)
+#define D_(str) dgettext("sys_string", str)
+
 #ifdef APPFWK_MEASUREMENT
 #define PRINT_APPFWK() do {		\
     struct timeval tv;				\

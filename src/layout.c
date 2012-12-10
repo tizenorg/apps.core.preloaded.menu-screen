@@ -33,36 +33,44 @@
 
 
 
-Evas_Object *layout_create(Evas_Object *win, const char *file, const char *group, int rotate)
+Evas_Object *layout_create(Evas_Object *conformant, const char *file, const char *group, int rotate)
 {
 	Evas_Object *layout;
-	Evas_Object *all_apps;
-	int width;
-	int height;
 
-	layout = layout_load_edj(win, file, group);
-	retv_if(NULL == layout, NULL);
+	do {
+		int width;
+		int height;
 
-	evas_object_size_hint_weight_set(layout, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	elm_win_resize_object_add(win, layout);
+		layout = layout_load_edj(conformant, file, group);
+		retv_if(NULL == layout, NULL);
 
-	evas_object_data_set(layout, "win", win);
-	evas_object_data_set(layout, "rotate", (void *) rotate);
+		width = menu_screen_get_root_width();
+		height = menu_screen_get_root_height();
 
-	width = menu_screen_get_root_width();
-	height = menu_screen_get_root_height();
+		evas_object_size_hint_weight_set(layout, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+		evas_object_size_hint_min_set(layout, width, height);
+		evas_object_size_hint_max_set(layout, width, height);
+		evas_object_resize(layout, width, height);
+		evas_object_show(layout);
 
-	evas_object_data_set(layout, "width", (void *) width);
-	evas_object_data_set(layout, "height", (void *) height);
+		evas_object_data_set(layout, "win", menu_screen_get_win());
+		evas_object_data_set(layout, "rotate", (void *) rotate);
+		evas_object_data_set(layout, "width", (void *) width);
+		evas_object_data_set(layout, "height", (void *) height);
+	} while (0);
 
-	all_apps = all_apps_layout_create(layout, rotate);
-	if (NULL == all_apps) {
-		_E("Failed to create scroller");
-		layout_destroy(layout);
-		return NULL;
-	}
-	evas_object_data_set(layout, "all_apps", all_apps);
-	elm_object_part_content_set(layout, "content", all_apps);
+	do {
+		Evas_Object *all_apps;
+
+		all_apps = all_apps_layout_create(layout, rotate);
+		if (NULL == all_apps) {
+			_E("Failed to create scroller");
+			layout_destroy(layout);
+			return NULL;
+		}
+		evas_object_data_set(layout, "all_apps", all_apps);
+		elm_object_part_content_set(layout, "content", all_apps);
+	} while (0);
 
 	return layout;
 }
@@ -73,11 +81,10 @@ void layout_destroy(Evas_Object *layout)
 {
 	Evas_Object *all_apps;
 
-	all_apps = evas_object_data_get(layout, "all_apps");
+	all_apps = evas_object_data_del(layout, "all_apps");
 	all_apps_layout_destroy(all_apps);
 
 	evas_object_data_del(layout, "win");
-	evas_object_data_del(layout, "all_apps");
 	evas_object_data_del(layout, "rotate");
 	evas_object_data_del(layout, "width");
 	evas_object_data_del(layout, "height");

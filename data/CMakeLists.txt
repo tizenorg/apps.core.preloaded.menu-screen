@@ -1,4 +1,4 @@
-SET(MANIFESTDIR "/opt/share/packages")
+SET(MANIFESTDIR "/usr/share/packages")
 
 # manifest
 CONFIGURE_FILE(${PACKAGE_NAME}.xml.in ${CMAKE_BINARY_DIR}/${PACKAGE_NAME}.xml)

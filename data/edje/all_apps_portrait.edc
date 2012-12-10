@@ -40,8 +40,8 @@ collections {
 				mouse_events: 0;
 				description {
 					state: "default" 0.0;
-					rel1 { relative: 0.0 70/1280; to, "bg";}
-					rel2 { relative: 1.0 174/1280; to, "bg";}
+					rel1 { relative: 0.0 0/1210; to, "bg";} // 1280 - 70(indicator)
+					rel2 { relative: 1.0 104/1210; to, "bg";} // 174 - 70
 					color: 0 0 0 255;
 					visible: 0;
 				}
@@ -53,8 +53,8 @@ collections {
                 description {
                     state: "default" 0.0;
                     align: 0.5 0.5;
-					rel1 { relative: 0.0 0.0; to, "index_bg";}
-					rel2 { relative: 1.0 1.0; to, "index_bg";}
+					rel1 { relative: 0.2 0.0; to, "index_bg";}
+					rel2 { relative: 0.8 1.0; to, "index_bg";}
 					visible: 1;
                 }   
             }
@@ -66,8 +66,8 @@ collections {
             	mouse_events: 1;
             	description {
 					state: "default" 0.0;
-					rel1 { relative: 0.0 154/1280; to, "bg"; }
-					rel2 { relative: 1.0 1214/1280; to, "bg"; }
+					rel1 { relative: 0.0 84/1210; to, "bg"; } // 154 - 70
+					rel2 { relative: 1.0 1144/1210; to, "bg"; }
 					color: 34 34 34 255;
 					visible: 0;
             	}

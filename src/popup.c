@@ -19,9 +19,12 @@
 #include <Elementary.h>
 
 #include "conf.h"
+#include "item.h"
 #include "menu_screen.h"
+#include "pkgmgr.h"
 #include "util.h"
 
+#define BUFSZE 1024
 
 
 static void _response_cb(void *data, Evas_Object *obj, void *event_info)

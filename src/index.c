@@ -99,6 +99,7 @@ Evas_Object *index_create(Evas_Object *tab, unsigned int count)
 	_D("COUNT:%d", count);
 
 	evas_object_show(index);
+	free(number);
 
 	return index;
 }

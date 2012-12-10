@@ -22,7 +22,7 @@
 #include <Evas.h>
 #include "util.h"
 
-extern Evas_Object *layout_create(Evas_Object *win, const char *file, const char *group, int rotate);
+extern Evas_Object *layout_create(Evas_Object *conformant, const char *file, const char *group, int rotate);
 extern void layout_destroy(Evas_Object *layout);
 
 extern void layout_enable_block(Evas_Object *layout);

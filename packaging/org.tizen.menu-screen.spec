@@ -1,10 +1,20 @@
 %define _optdir /opt
-%define _appdir %{_optdir}/apps
-%define _opt_datadir %{_optdir}/share
+%define _usrdir /usr
+%define _appdir %{_usrdir}/apps
+%define _usr_datadir %{_usrdir}/share
+
+%define _project_name menu-screen
+%define _package_name org.tizen.%{_project_name}
+
+%define _packagedir %{_appdir}/%{_package_name}
+%define _bindir %{_packagedir}/bin
+%define _datadir %{_optdir}%{_packagedir}/data
+%define _resdir %{_packagedir}/res
+%define _sharedir %{_packagedir}/share
 
 Name:       org.tizen.menu-screen
 Summary:    An utility library of the menu screen
-Version:    1.0.16
+Version:    1.0.17
 Release:    1.1
 Group:      TO_BE/FILLED_IN
 License:    Flora Software License
@@ -53,25 +63,23 @@ An utility library for developers of the menu screen (devel)
 %setup -q
 
 %build
-CFLAGS="-I/usr/lib/glib-2.0/include/ -I/usr/include/glib-2.0 -I/usr/lib/dbus-1.0/include -I/usr/include/dbus-1.0 -I/usr/include/e_dbus-1 -I/usr/include/ethumb-0 -I/usr/include/edje-1 -I/usr/include/efreet-1 -I/usr/include/embryo-1 -I/usr/include/ecore-1 -I/usr/include/eet-1 -I/usr/include/evas-1 -I/usr/include/eina-1 -I/usr/include/eina-1/eina $CFLAGS" CXXFLAGS=$CXXFLAGS cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}
-
+cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}
+CFLAGS="${CFLAGS} -Wall -Werror" LDFLAGS="${LDFLAGS} -Wl,--hash-style=both -Wl,--as-needed"
 make %{?jobs:-j%jobs}
 
 %install
 %make_install
-
+mkdir -p %{buildroot}%{_datadir}
+mkdir -p %{buildroot}/usr/share/license
 
 %post
-
 INHOUSE_ID="5000"
 
 init_vconf()
 {
-	# for menu daemon
-	vconftool set -t int memory/menu-screen/is_menu_screen_done 0 -i -f
-
-	# for menu-screen
 	vconftool set -t int memory/idle-screen/top 0 -i -u 5000 -f
+	vconftool set -t string file/private/org.tizen.menu-screen/engine "gl" -i -u 5000 -f
+	vconftool set -t int memory/menu-screen/is_menu_screen_done 0 -i -f
 	vconftool set -t string db/setting/menuscreen/package_name "org.tizen.menu-screen" -i -u 5000 -f
 }
 
@@ -79,14 +87,14 @@ init_vconf()
 
 init_vconf
 
-%files 
+%files
 %manifest %{name}.manifest
-%{_appdir}/org.tizen.menu-screen/bin/menu-screen
-%{_appdir}/org.tizen.menu-screen/res/edje/all_apps_portrait.edj
-%{_appdir}/org.tizen.menu-screen/res/edje/group_4x4_portrait.edj
-%{_appdir}/org.tizen.menu-screen/res/edje/item_4x4.edj
-%{_appdir}/org.tizen.menu-screen/res/edje/layout_portrait.edj
-%{_appdir}/org.tizen.menu-screen/res/edje/index.edj
-%{_opt_datadir}/packages/org.tizen.menu-screen.xml
-
-
+%defattr(-,root,root,-)
+%{_bindir}/menu-screen
+%{_resdir}/edje/all_apps_portrait.edj
+%{_resdir}/edje/group_4x4_portrait.edj
+%{_resdir}/edje/item_4x4.edj
+%{_resdir}/edje/layout_portrait.edj
+%{_resdir}/edje/index.edj
+%{_usr_datadir}/packages/org.tizen.menu-screen.xml
+%{_usr_datadir}/license/%{name}

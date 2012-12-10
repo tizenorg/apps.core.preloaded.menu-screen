@@ -83,21 +83,15 @@ static void _item_up_cb(void *data, Evas_Object *obj, const char* emission, cons
 	evas_object_color_set(icon_image, 255, 255, 255, 255);
 
 	ret_if(NULL == item_event_info.pressed_item);
-
-	if (item_event_info.pressed_item == item) {
-		bool item_enable_long_press;
-
-		item_enable_long_press = (bool) evas_object_data_get(item, "item_enable_long_press");
-		_D("Not Edit Mode");
-
-		if (mouse_is_scrolling()) {
-			return;
-		}
-
-		item_launch(item);
+	if (item != item_event_info.pressed_item) {
+		item_event_info.pressed_item = NULL;
+		return;
 	}
-
 	item_event_info.pressed_item = NULL;
+
+	if (mouse_is_scrolling()) return;
+
+	item_launch(item);
 }
 
 

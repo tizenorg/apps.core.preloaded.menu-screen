@@ -95,6 +95,7 @@ static menu_screen_error_e _push_items(Evas_Object *all_apps)
 
 	evas_object_data_set(all_apps, "list", list);
 	idle_timer = ecore_idler_add(_push_items_idler_cb, all_apps);
+	retv_if(NULL == idle_timer, MENU_SCREEN_ERROR_FAIL);
 
 	return MENU_SCREEN_ERROR_OK;
 }
@@ -142,6 +143,8 @@ Evas_Object *all_apps_layout_create(Evas_Object *controlbar, int rotate)
 	evas_object_data_set(all_apps, "is_under_pkgmgr", (void *) true);
 	evas_object_data_set(all_apps, "rotate", (void *) rotate);
 	evas_object_data_set(all_apps, "enable_bg_image", (void *) true);
+	evas_object_size_hint_min_set(all_apps, width, height);
+	evas_object_size_hint_max_set(all_apps, width, height);
 	evas_object_resize(all_apps, width, height);
 
 	index = index_create(all_apps, 0);

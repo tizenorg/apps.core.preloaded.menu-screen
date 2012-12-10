@@ -19,15 +19,15 @@
 #include <Elementary.h>
 #include <vconf.h>
 
-#include "menu_screen.h"
 #include "conf.h"
-#include "list.h"
-#include "mapbuf.h"
-#include "page.h"
 #include "index.h"
 #include "item.h"
 #include "item_event.h"
 #include "layout.h"
+#include "list.h"
+#include "mapbuf.h"
+#include "menu_screen.h"
+#include "page.h"
 #include "page_scroller.h"
 #include "pkgmgr.h"
 #include "util.h"
@@ -363,6 +363,8 @@ static Evas_Object *_animated_unpack_item(Evas_Object *scroller, Evas_Object *pa
 
 		for (; pos < page_max_app; pos ++) {
 			item = page_unpack_item_at(page, pos);
+			if (NULL == item) continue;
+
 			page_pack_item(page, pos - 1, item);
 			snprintf(buf, 32, "menu%d", pos - 1);
 			edje_object_signal_emit(_EDJ(page), STR_MOVE_NEXT, buf);
@@ -377,6 +379,8 @@ static Evas_Object *_animated_unpack_item(Evas_Object *scroller, Evas_Object *pa
 		next_page = page_scroller_get_page_at(scroller, page_no);
 		if (next_page) {
 			item = page_unpack_item_at(next_page, 0);
+			if (NULL == item) continue;
+
 			page_pack_item(page, page_max_app - 1, item);
 		} else break;
 
@@ -813,7 +817,6 @@ void page_scroller_destroy(Evas_Object *scroller)
 	Evas_Object *box;
 	Evas_Object *page;
 	Evas_Object *tmp;
-	Evas_Object *tab;
 
 	const Eina_List *page_list;
 	const Eina_List *l;
@@ -822,8 +825,6 @@ void page_scroller_destroy(Evas_Object *scroller)
 	ret_if(NULL == scroller);
 	ret_if(NULL == (box = evas_object_data_get(scroller, "box")));
 	ret_if(NULL == (page_list = elm_box_children_get(box)));
-
-	tab = evas_object_data_get(scroller, "tab");
 
 	pkgmgr_fini();
 
@@ -1031,17 +1032,6 @@ Evas_Object *page_scroller_find_item_by_package(Evas_Object *scroller, const cha
 
 
 
-void _show(Evas_Object *scroller, int page)
-{
-	Evas_Coord w;
-	Evas_Coord h;
-
-	evas_object_geometry_get(scroller, NULL, NULL, &w, &h);
-	elm_scroller_region_show(scroller, page * w, 0, w, h);
-}
-
-
-
 void page_scroller_trim_items(Evas_Object *scroller)
 {
 	register unsigned int i;
@@ -1111,21 +1101,6 @@ void page_scroller_trim_items(Evas_Object *scroller)
 	pos --;
 	eina_list_free(list);
 }
-
-
-
-Evas_Object *_unpack_updated_item(Evas_Object *scroller, unsigned int page_no, unsigned int position_no)
-{
-	Evas_Object *page;
-	Evas_Object *temp;
-
-	retv_if(NULL == scroller, NULL);
-	page = page_scroller_get_page_at(scroller, page_no);
-	temp = page_unpack_item_at(page, (int) position_no);
-
-	return temp;
-}
-
 
 
 // End of a file

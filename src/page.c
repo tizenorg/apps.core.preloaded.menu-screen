@@ -198,6 +198,11 @@ Evas_Object *page_create(Evas_Object *scroller, int idx, int rotate)
 
 	evas_object_size_hint_min_set(bg, page_width, page_height);
 	evas_object_size_hint_max_set(bg, page_width, page_height);
+
+	evas_object_size_hint_min_set(page, page_width, page_height);
+	evas_object_size_hint_max_set(page, page_width, page_height);
+	evas_object_resize(page, page_width, page_height);
+
 	elm_object_part_content_set(page, "bg", bg);
 
 	evas_object_data_set(page, "win", evas_object_data_get(scroller, "win"));

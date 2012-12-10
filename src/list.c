@@ -108,7 +108,7 @@ menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 	retv_if(NULL == ai, MENU_SCREEN_ERROR_FAIL);
 	retv_if(NULL == (ai->package = strdup(package)), MENU_SCREEN_ERROR_FAIL);
 
-	ret = ail_package_get_appinfo(ai->package, &appinfo_h);
+	ret = ail_get_appinfo(ai->package, &appinfo_h);
 	if (AIL_ERROR_OK == ret) {
 		do {
 			break_if(ail_appinfo_get_str(appinfo_h, AIL_PROP_EXEC_STR, &exec) < 0);
@@ -122,12 +122,12 @@ menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 			break_if(NULL == name || NULL == (ai->name = strdup(name)));
 			break_if(NULL == icon || NULL == (ai->icon = strdup(icon)));
 
-			ail_package_destroy_appinfo(appinfo_h);
+			ail_destroy_appinfo(appinfo_h);
 
 			return MENU_SCREEN_ERROR_OK;
 		} while(0);
 
-		ail_package_destroy_appinfo(appinfo_h);
+		ail_destroy_appinfo(appinfo_h);
 		list_free_values(ai);
 		return MENU_SCREEN_ERROR_FAIL;
 	} else if (AIL_ERROR_NO_DATA == ret) {

@@ -94,7 +94,11 @@ app_list *all_apps_list_create(void)
 	list = calloc(1, sizeof(app_list));
 	retv_if(NULL == list, NULL);
 
-	retv_if(ail_filter_new(&f) != AIL_ERROR_OK, NULL);
+	if (ail_filter_new(&f) != AIL_ERROR_OK) {
+		free(list);
+		return NULL;
+	}
+
 	if (ail_filter_add_bool(f, AIL_PROP_NODISPLAY_BOOL, false) != AIL_ERROR_OK){
 		_E("Failed to add filter");
 		ail_filter_destroy(f);

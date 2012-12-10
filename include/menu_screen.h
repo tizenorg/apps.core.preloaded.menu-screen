@@ -25,7 +25,6 @@
 
 extern int menu_screen_get_root_width(void);
 extern int menu_screen_get_root_height(void);
-extern double menu_screen_get_yscale(void);
 extern Evas *menu_screen_get_evas(void);
 extern Evas_Object *menu_screen_get_win(void);
 extern Elm_Theme *menu_screen_get_theme(void);
