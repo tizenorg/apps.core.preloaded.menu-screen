@@ -45,7 +45,7 @@ Evas_Object *layout_create(Evas_Object *conformant, const char *file, const char
 		retv_if(NULL == layout, NULL);
 
 		width = menu_screen_get_root_width();
-		height = menu_screen_get_root_height();
+		height = menu_screen_get_root_height() - INDEX_HEIGHT;
 
 		evas_object_size_hint_weight_set(layout, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 		evas_object_size_hint_min_set(layout, width, height);

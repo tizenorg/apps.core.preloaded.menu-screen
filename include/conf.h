@@ -25,6 +25,7 @@
 #define BASE_WIDTH 720.0f
 
 #define PAGE_PORTRAIT_HEIGHT 1060.0f
+#define INDEX_HEIGHT 70
 
 #endif // _MENU_SCREEN_CONF_H_
 

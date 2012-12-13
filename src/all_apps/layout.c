@@ -121,8 +121,10 @@ Evas_Object *all_apps_layout_create(Evas_Object *controlbar, int rotate)
 	all_apps_edje = ALL_APPS_EDJE_PORTRAIT;
 	page_edje = GROUP_4X4_EDJE_PORTRAIT;
 	width = menu_screen_get_root_width();
-	height = menu_screen_get_root_height();
-	item_width = width / 4.0f;
+	height = menu_screen_get_root_height() - INDEX_HEIGHT;
+
+	if (menu_screen_get_root_width() > menu_screen_get_root_height()) item_width = height / 5.0f;
+	else item_width = width / 4.0f;
 
 	if (EINA_FALSE == elm_layout_file_set(all_apps, all_apps_edje, ALL_APPS_GROUP)) {
 		evas_object_del(all_apps);

@@ -143,7 +143,6 @@ static menu_screen_error_e _create_canvas(char *name, char *title)
 		_E("[%s] Failed to get ecore_evas object", __func__);
 	}
 
-	evas_object_move(menu_screen_info.win, 0, 0);
 	evas_object_size_hint_min_set(menu_screen_info.win, menu_screen_info.root_width, menu_screen_info.root_height);
 	evas_object_size_hint_max_set(menu_screen_info.win, menu_screen_info.root_width, menu_screen_info.root_height);
 	evas_object_resize(menu_screen_info.win, menu_screen_info.root_width, menu_screen_info.root_height);
