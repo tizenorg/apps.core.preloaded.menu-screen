@@ -1,3 +1,12 @@
+org.tizen.menu-screen (1.0.18) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.18
+
+  *  Window size is not overflowed more than the root window size.
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Thu, 13 Dec 2012 15:27:55 +0900
+
 org.tizen.menu-screen (1.0.17) unstable; urgency=low
 
   * Git: apps/home/menu-screen
