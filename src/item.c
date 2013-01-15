@@ -518,7 +518,7 @@ Evas_Object *item_create(Evas_Object *scroller, app_info_t* ai)
 	evas_object_size_hint_max_set(bg, item_width, item_height);
 	elm_object_part_content_set(item, "bg", bg);
 
-	edje_object_text_class_set(_EDJ(item), "menu_item", "SLP:style=medium", 24);
+	edje_object_text_class_set(_EDJ(item), "menu_item", "TIZEN:style=medium", 24);
 
 	evas_object_data_set(item, "win", evas_object_data_get(scroller, "win"));
 	evas_object_data_set(item, "layout", evas_object_data_get(scroller, "layout"));
