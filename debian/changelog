@@ -1,3 +1,12 @@
+org.tizen.menu-screen (1.0.19) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.19
+
+  * EFL Requests : font, style
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Tue, 15 Jan 2013 19:26:11 +0900
+
 org.tizen.menu-screen (1.0.18) unstable; urgency=low
 
   * Git: apps/home/menu-screen
