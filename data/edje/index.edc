@@ -14,10 +14,10 @@
   * limitations under the License.
   */
 
-#define INDEX_PAGECONTROL_IND_INC 35 35 
-#define INDEX_PAGECONTROL_IND_MIN_INC 35 35 
+#define INDEX_PAGECONTROL_IND_INC 35 35
+#define INDEX_PAGECONTROL_IND_MIN_INC 35 35
 #define INDEX_PAGECONTROL_FONT_COLOR_INC 255 255 255
-#define INDEX_PAGECONTROL_FONT_SIZE_INC 18 
+#define INDEX_PAGECONTROL_FONT_SIZE_INC 18
 
 collections {
    group {
@@ -140,7 +140,7 @@ collections {
                color: INDEX_PAGECONTROL_FONT_COLOR_INC 0;
                align: 0.5 0.5;
                text {
-                  font: "SLP:style=Bold";
+                  font: "TIZEN:style=Bold";
                   size: INDEX_PAGECONTROL_FONT_SIZE_INC;
                   min: 0 1;
                   //FIXME:values should be 0.5 0.5 when fonts are aligned correctly.

@@ -19,7 +19,7 @@
 styles {
 	style {
 		name: "app_name_style";
-		base: "font=SLP:style=MEDIUM font_size=27 align=center valign=top color=#FFFFFF style=soft_shadow shadow_color=#00000060 ellipsis=1";
+		base: "font=TIZEN:style=MEDIUM font_size=27 align=center valign=top color=#FFFFFF style=soft_shadow shadow_color=#00000060 ellipsis=1";
 
 		tag: "br" "\n";
 	}
@@ -121,7 +121,7 @@ collections {
 					text {
 						//style: "app_name_style";
 						text_class: "menu_item";
-						font: "SLP:style=medium";
+						font: "TIZEN:style=medium";
 						size: 16;
 						text: "Icon";
 						align: 0.5 0.1;
@@ -136,7 +136,7 @@ collections {
 				}
 			}
 		}
-		
+
 		programs {
 			program {
 				name: "item,down";

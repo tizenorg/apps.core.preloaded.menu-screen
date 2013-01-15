@@ -305,6 +305,7 @@ Evas_Object *_create_conformant(Evas_Object *win)
 	conformant = elm_conformant_add(win);
 	retv_if(NULL == conformant, NULL);
 
+	elm_object_style_set(conformant, "nokeypad");
 	evas_object_size_hint_weight_set(conformant, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_data_set(conformant, "win", win);
 	evas_object_show(conformant);
