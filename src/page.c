@@ -68,21 +68,6 @@ inline int page_is_dirty(Evas_Object *page)
 
 
 
-static void _changed_size_hints_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
-{
-	Evas_Object *map;
-	Evas_Coord w, h;
-
-	evas_object_size_hint_min_get(obj, &w, &h);
-
-	map = mapbuf_get_mapbuf(obj);
-	if (map) {
-		evas_object_size_hint_min_set(map, w, h);
-	}
-}
-
-
-
 static menu_screen_error_e _insert_page_at(Evas_Object *scroller, Evas_Object *page, int index)
 {
 	unsigned int nr_of_pages;
@@ -176,7 +161,6 @@ Evas_Object *page_create(Evas_Object *scroller, int idx, int rotate)
 	page = layout_load_edj(scroller, page_edje, PAGE_GROUP_NAME);
 	retv_if(!page, NULL);
 
-	evas_object_event_callback_add(page, EVAS_CALLBACK_CHANGED_SIZE_HINTS, _changed_size_hints_cb, NULL);
 	edje_object_signal_callback_add(_EDJ(page), "dim,down", "menu", _dim_down_cb, NULL);
 	edje_object_signal_callback_add(_EDJ(page), "dim,up", "menu", _dim_up_cb, NULL);
 
@@ -247,8 +231,6 @@ void page_destroy(Evas_Object *scroller, Evas_Object *page)
 	register unsigned int i;
 	int page_max_app;
 	unsigned int count;
-
-	evas_object_event_callback_del(page, EVAS_CALLBACK_CHANGED_SIZE_HINTS, _changed_size_hints_cb);
 
 	page_max_app = (int) evas_object_data_get(scroller, "page_max_app");
 	for (i = 0; i < page_max_app; i ++) {
@@ -357,6 +339,9 @@ menu_screen_error_e page_unpack_item(Evas_Object *page, Evas_Object *item)
 		page_mark_dirty(page);
 	}
 
+	mapbuf_disable(page, 1);
+	mapbuf_enable(page, 1);
+
 	return MENU_SCREEN_ERROR_OK;
 }
 
@@ -396,6 +381,10 @@ Evas_Object *page_unpack_item_at(Evas_Object *page, int idx)
 
 		page_mark_dirty(page);
 	}
+
+	mapbuf_disable(page, 1);
+	mapbuf_enable(page, 1);
+
 	return object;
 }
 
@@ -430,7 +419,9 @@ void page_pack_item(Evas_Object *page, int idx, Evas_Object *item)
 	item_mark_dirty(item);
 	elm_object_part_content_set(page, tmp, item);
 	page_mark_dirty(page);
-	mapbuf_enable(page, 0);
+
+	mapbuf_disable(page, 1);
+	mapbuf_enable(page, 1);
 }
 
 
@@ -450,6 +441,9 @@ void page_set_item(Evas_Object *page, int idx, Evas_Object *item)
 	evas_object_data_set(item, "pending,idx", (void *) idx);
 
 	item_set_page(item, page, 1);
+
+	mapbuf_disable(page, 1);
+	mapbuf_enable(page, 1);
 }
 
 
