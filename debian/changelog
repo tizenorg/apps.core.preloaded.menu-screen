@@ -1,3 +1,12 @@
+org.tizen.menu-screen (1.0.20) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.20
+
+  * mapbuf is re-enabled when installing & removing an app
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Wed, 16 Jan 2013 16:56:22 +0900
+
 org.tizen.menu-screen (1.0.19) unstable; urgency=low
 
   * Git: apps/home/menu-screen
