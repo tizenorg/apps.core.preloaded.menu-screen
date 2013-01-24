@@ -63,6 +63,8 @@ menu_screen_error_e mapbuf_enable(Evas_Object *obj, int force)
 	Evas_Object *mapbuf;
 	int cnt;
 
+	_D("Mapbuf disabled version");
+
 	mapbuf = mapbuf_get_mapbuf(obj);
 	if (!mapbuf) {
 		_D("Failed to get the mapbuf object");
@@ -71,7 +73,8 @@ menu_screen_error_e mapbuf_enable(Evas_Object *obj, int force)
 
 	if (force) {
 		evas_object_data_set(mapbuf, "mapbuf_enabled", (void*)0);
-		elm_mapbuf_enabled_set(mapbuf, 1);
+		//elm_mapbuf_enabled_set(mapbuf, 1); // Mapbuf has been disabled because of a mapbuf bug.
+		elm_mapbuf_enabled_set(mapbuf, 0);
 		return MENU_SCREEN_ERROR_OK;
 	}
 
@@ -82,7 +85,8 @@ menu_screen_error_e mapbuf_enable(Evas_Object *obj, int force)
 
 	if (cnt == 0) {
 		if (!elm_mapbuf_enabled_get(mapbuf)) {
-			elm_mapbuf_enabled_set(mapbuf, 1);
+			//elm_mapbuf_enabled_set(mapbuf, 1); // Mapbuf has been disabled because of a mapbuf bug.
+			elm_mapbuf_enabled_set(mapbuf, 0);
 			//_D("[%s] mapbuf enabled", __func__);
 		}
 	}
