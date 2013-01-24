@@ -222,7 +222,6 @@ static void _create_bg(void)
 			free(buf);
 			return;
 		}
-		evas_object_image_load_orientation_set(bg, EINA_TRUE);
 		evas_object_data_set(menu_screen_get_win(), "bg", bg);
 	}
 
