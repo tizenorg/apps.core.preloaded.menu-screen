@@ -736,6 +736,31 @@ static void _mapbuf_cb(keynode_t *node, void *data)
 
 
 
+void _mouse_wheel_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
+{
+	Evas_Event_Mouse_Wheel *ei = event_info;
+	Evas_Object *scroller = data;
+	int x, y, w, h;
+	int idx = -1;
+
+	_D("Wheel's up or down(%d)", ei->z);
+
+	elm_scroller_region_get(scroller, &x, &y, &w, &h);
+	if (ei->z > 0) { // Wheel's up
+		idx = x / w;
+		idx ++;
+	} else if (ei->z < 0) { // Wheel's down
+		idx = x / w; // Scroller got ECORE events at first, then Menu-screen gets EVAS events.
+	} else { // Wheel's not moving.
+		_D("Wheel's not moving");
+	}
+
+	if (idx >= page_scroller_count_page(scroller) || idx < 0) return;
+	page_scroller_bring_in(scroller, idx);
+}
+
+
+
 Evas_Object *page_scroller_create(Evas_Object *tab, Evas_Object *index, page_scroller_sort_type_e sort_type, int rotate)
 {
 	Evas_Object *box;
@@ -793,6 +818,7 @@ Evas_Object *page_scroller_create(Evas_Object *tab, Evas_Object *index, page_scr
 	elm_object_content_set(scroller, box);
 
 	evas_object_event_callback_add(box, EVAS_CALLBACK_DEL, _evas_object_event_del_cb, "BOX");
+	evas_object_event_callback_add(scroller, EVAS_CALLBACK_MOUSE_WHEEL, _mouse_wheel_cb, scroller);
 
 	evas_object_show(box);
 	evas_object_show(scroller);
@@ -875,6 +901,7 @@ void page_scroller_destroy(Evas_Object *scroller)
 
 	evas_object_del(scroller);
 	evas_object_event_callback_del(box, EVAS_CALLBACK_DEL, _evas_object_event_del_cb);
+	evas_object_event_callback_del(scroller, EVAS_CALLBACK_MOUSE_WHEEL, _mouse_wheel_cb);
 
 	if (vconf_ignore_key_changed("memory/menuscreen/desktop", _desktop_cb) < 0) {
 		_E("Failed to ignore the desktop event");
