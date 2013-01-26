@@ -1,3 +1,12 @@
+org.tizen.menu-screen (1.0.22) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.22
+
+  * Bring in the scroller with MOUSE_WHEEL_EVENT
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Sun, 27 Jan 2013 01:09:05 +0900
+
 org.tizen.menu-screen (1.0.21) unstable; urgency=low
 
   * Git: apps/home/menu-screen
