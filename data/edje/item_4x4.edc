@@ -52,8 +52,8 @@ collections {
 				mouse_events: 1;
 				description {
 					state: "default" 0.0;
-					rel1 { relative: 48/180 30/180; to, "bg"; }
-					rel2 { relative: 132/180 114/180; to, "bg"; }
+					rel1 { relative: 37/180 8/180; to, "bg"; }
+					rel2 { relative: 143/180 114/180; to, "bg"; }
 					color: 0 0 0 0;
 				}
 			}
@@ -75,7 +75,7 @@ collections {
 				mouse_events: 1;
 				description {
 					state: "default" 0.0;
-					rel1 { relative: 15/180 10/180; to, "bg"; }
+					rel1 { relative: 15/180 8/180; to, "bg"; }
 					rel2 { relative: 165/180 160/180; to, "bg"; }
 					color: 0 0 0 0;
 					visible: 1;
@@ -102,7 +102,6 @@ collections {
 			}
 			part {
 				name: "txt";
-				//type: TEXTBLOCK;
 				type: TEXT;
 				effect: SOFT_SHADOW;
 				scale: 1;
@@ -110,8 +109,6 @@ collections {
 				description
 				{
 					state: "default" 0.0;
-					//rel1 { relative: 0.0 120/180; to, "bg"; }
-					//rel2 { relative: 1.0 180/180; to, "bg"; }
 					rel1 { relative: 0.0 114/180; to, "bg"; }
 					rel2 { relative: 1.0 175/180; to, "bg"; }
 					align: 0.5 0.5;
@@ -119,7 +116,6 @@ collections {
 					color2: 0 0 0 35;
 					color3: 0 0 0 35;
 					text {
-						//style: "app_name_style";
 						text_class: "menu_item";
 						font: "TIZEN:style=medium";
 						size: 16;

@@ -622,7 +622,7 @@ static menu_screen_error_e _end(const char *package, const char *val, void *scro
 	};
 	Eina_List *install_list;
 
-	_D("package [%s]", package);
+	_D("package [%s], val [%s]", package, val);
 
 	pi = NULL;
 	install_list = evas_object_data_get(scroller, "install_list");
