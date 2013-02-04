@@ -1,3 +1,12 @@
+org.tizen.menu-screen (1.0.23) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.23
+
+  * Enlarge the size of icons
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Mon, 04 Feb 2013 11:22:57 +0900
+
 org.tizen.menu-screen (1.0.22) unstable; urgency=low
 
   * Git: apps/home/menu-screen
