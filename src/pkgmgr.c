@@ -46,7 +46,7 @@ static struct {
 
 
 
-inline menu_screen_error_e pkgmgr_uninstall(Evas_Object *item)
+HAPI inline menu_screen_error_e pkgmgr_uninstall(Evas_Object *item)
 {
 	pkgmgr_client *req_pc = NULL;
 	int ret = MENU_SCREEN_ERROR_OK;
@@ -162,7 +162,7 @@ static menu_screen_error_e _start_update(const char *package, void *scroller)
 		install_list = eina_list_append(install_list, pi);
 		evas_object_data_set(scroller, "install_list", install_list);
 	} else {
-		if (pi->status != DOWNLOAD_END) {
+		if (pi->status != DOWNLOAD_END && pi->status != INSTALL_END) {
 			_D("Package [%s] is in invalid state (%d), cancel this", package, pi->status);
 			install_list = eina_list_remove(install_list, pi);
 			evas_object_data_set(scroller, "install_list", install_list);
@@ -220,10 +220,24 @@ static menu_screen_error_e _start_install(const char *package, void *scroller)
 		retv_if(NULL == pi, MENU_SCREEN_ERROR_FAIL);
 
 		pi->ai.package = strdup(package);
-		pi->item = page_scroller_find_item_by_package(scroller, package, &page_no);
-		if (pi->item) {
-			pi->page = page_scroller_get_page_at(scroller, page_no);
+		if (!pi->ai.package) {
+			free(pi);
+			return MENU_SCREEN_ERROR_FAIL;
 		}
+
+		pi->ai.icon = strdup(DEFAULT_ICON);
+		if (!pi->ai.icon) {
+			free(pi->ai.package);
+			free(pi);
+			return MENU_SCREEN_ERROR_FAIL;
+		}
+
+		pi->item = page_scroller_find_item_by_package(scroller, package, &page_no);
+		if (!pi->item) {
+			if (MENU_SCREEN_ERROR_FAIL == page_scroller_push_item(scroller, &pi->ai)) _E("Cannot push an item");
+		}
+		pi->item = page_scroller_find_item_by_package(scroller, package, &page_no);
+		pi->page = page_scroller_get_page_at(scroller, page_no);
 
 		if (pi->item && pi->page) {
 			pi->ai.nodisplay = false;
@@ -232,7 +246,7 @@ static menu_screen_error_e _start_install(const char *package, void *scroller)
 		install_list = eina_list_append(install_list, pi);
 		evas_object_data_set(scroller, "install_list", install_list);
 	} else {
-		if (pi->status != DOWNLOAD_END) {
+		if (pi->status != DOWNLOAD_END && pi->status != INSTALL_END) {
 			_D("Package [%s] is in invalid state (%d), cancel this", package, pi->status);
 			install_list = eina_list_remove(install_list, pi);
 			evas_object_data_set(scroller, "install_list", install_list);
@@ -336,6 +350,7 @@ static menu_screen_error_e _icon_path(const char *package, const char *val, void
 		retv_if (NULL == pi->ai.icon, MENU_SCREEN_ERROR_OUT_OF_MEMORY);
 
 		if (!pi->item) {
+			_D("There is no item for [%s]", package);
 			pi->ai.nodisplay = false;
 
 			if (MENU_SCREEN_ERROR_FAIL == page_scroller_push_item(scroller, &pi->ai)) {
@@ -346,6 +361,7 @@ static menu_screen_error_e _icon_path(const char *package, const char *val, void
 				free(pi);
 			}
 		} else {
+			_D("There is an item for [%s:%p]", package, pi->item);
 			item_update(pi->item, &pi->ai);
 		}
 	}
@@ -562,8 +578,7 @@ static menu_screen_error_e _end_unknown(const char *package, struct package_info
 		// Remove an item only if it is installing.
 		if (
 			pi->status == INSTALL_BEGIN || pi->status == INSTALLING || pi->status == INSTALL_END ||
-			pi->status == DOWNLOAD_BEGIN || pi->status == DOWNLOADING || pi->status == DOWNLOAD_END ||
-			pi->status == UPDATE_BEGIN || pi->status == UPDATING || pi->status == UPDATE_END
+			pi->status == DOWNLOAD_BEGIN || pi->status == DOWNLOADING || pi->status == DOWNLOAD_END
 		)
 		{
 			if (pi->page) {
@@ -634,6 +649,10 @@ static menu_screen_error_e _end(const char *package, const char *val, void *scro
 	}
 
 	retv_if(NULL == pi, MENU_SCREEN_ERROR_FAIL);
+
+	list_free_values(&pi->ai);
+	if (MENU_SCREEN_ERROR_OK != list_get_values(package, &pi->ai)) _E("Cannot get values");
+	item_update(pi->item, &pi->ai);
 
 	if (item_is_enabled_progress(pi->item)) {
 		item_disable_progress(pi->item);
@@ -732,7 +751,7 @@ static menu_screen_error_e _pkgmgr_cb(int req_id, const char *pkg_type, const ch
 
 
 
-menu_screen_error_e pkgmgr_init(Evas_Object *scroller)
+HAPI menu_screen_error_e pkgmgr_init(Evas_Object *scroller)
 {
 	if (NULL != pkg_mgr_info.listen_pc) {
 		return MENU_SCREEN_ERROR_OK;
@@ -748,7 +767,7 @@ menu_screen_error_e pkgmgr_init(Evas_Object *scroller)
 
 
 
-void pkgmgr_fini(void)
+HAPI void pkgmgr_fini(void)
 {
 	ret_if(NULL == pkg_mgr_info.listen_pc);
 	if (pkgmgr_client_free(pkg_mgr_info.listen_pc) != PKGMGR_R_OK) {
@@ -759,7 +778,7 @@ void pkgmgr_fini(void)
 
 
 
-Evas_Object *pkgmgr_find_pended_object(const char *package, int with_desktop_file, Evas_Object *scroller, Evas_Object **page)
+HAPI Evas_Object *pkgmgr_find_pended_object(const char *package, int with_desktop_file, Evas_Object *scroller, Evas_Object **page)
 {
 	Eina_List *l;
 	Eina_List *tmp;

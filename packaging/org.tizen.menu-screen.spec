@@ -19,27 +19,28 @@ Release:    1.1
 Group:      TO_BE/FILLED_IN
 License:    Flora Software License
 Source0:    %{name}-%{version}.tar.gz
-BuildRequires:  pkgconfig(elementary)
+BuildRequires:  pkgconfig(ail)
 BuildRequires:  pkgconfig(appcore-efl)
-BuildRequires:  pkgconfig(utilX)
 BuildRequires:  pkgconfig(aul)
-BuildRequires:  pkgconfig(dlog)
-BuildRequires:  pkgconfig(sysman)
+BuildRequires:  pkgconfig(badge)
 BuildRequires:  pkgconfig(bundle)
-BuildRequires:  pkgconfig(pkgmgr)
-BuildRequires:  pkgconfig(syspopup-caller)
-BuildRequires:  pkgconfig(heynoti)
-BuildRequires:  pkgconfig(evas)
-BuildRequires:  pkgconfig(ecore-evas)
-BuildRequires:  pkgconfig(edje)
+BuildRequires:  pkgconfig(capi-appfw-application)
+BuildRequires:  pkgconfig(dlog)
 BuildRequires:  pkgconfig(ecore)
+BuildRequires:  pkgconfig(ecore-evas)
 BuildRequires:  pkgconfig(ecore-file)
 BuildRequires:  pkgconfig(ecore-imf)
 BuildRequires:  pkgconfig(ecore-input)
+BuildRequires:  pkgconfig(edje)
 BuildRequires:  pkgconfig(eet)
 BuildRequires:  pkgconfig(eina)
-BuildRequires:  pkgconfig(ail)
-BuildRequires:  pkgconfig(capi-appfw-application)
+BuildRequires:  pkgconfig(elementary)
+BuildRequires:  pkgconfig(evas)
+BuildRequires:  pkgconfig(heynoti)
+BuildRequires:  pkgconfig(pkgmgr)
+BuildRequires:  pkgconfig(sysman)
+BuildRequires:  pkgconfig(syspopup-caller)
+BuildRequires:  pkgconfig(utilX)
 BuildRequires:  cmake
 BuildRequires:  edje-tools
 BuildRequires:  gettext-tools
@@ -92,9 +93,11 @@ init_vconf
 %defattr(-,root,root,-)
 %{_bindir}/menu-screen
 %{_resdir}/edje/all_apps_portrait.edj
+%{_resdir}/edje/button_edit.edj
 %{_resdir}/edje/group_4x4_portrait.edj
 %{_resdir}/edje/item_4x4.edj
 %{_resdir}/edje/layout_portrait.edj
 %{_resdir}/edje/index.edj
+%{_resdir}/images/default.png
 %{_usr_datadir}/packages/org.tizen.menu-screen.xml
 %{_usr_datadir}/license/%{name}

@@ -34,6 +34,163 @@
 
 #define GROUP_4X4_EDJE_PORTRAIT EDJEDIR"/group_4x4_portrait.edj";
 
+#define ALL_APPS_EDIT_BUTTON_EDJE EDJEDIR"/button_edit.edj"
+#define ALL_APPS_EDIT_BUTTON_GROUP "button_edit"
+#define ALL_APPS_EDIT_BUTTON_PART "button_edit"
+
+#define STR_DONE _("Done")
+
+
+HAPI void all_apps_layout_edit(Evas_Object *all_apps)
+{
+	Evas_Object *edit_button;
+	Evas_Object *scroller;
+
+	edit_button = elm_object_part_content_get(all_apps, ALL_APPS_EDIT_BUTTON_PART);
+	ret_if(NULL == edit_button);
+	edje_object_signal_emit(_EDJ(edit_button), "edit_button,enable", "menu");
+	if (edje_object_part_text_set(_EDJ(edit_button), "edit_button_text", STR_DONE) == EINA_FALSE) {
+		_E("Failed to set text on the part, edje:%p, part:%s, text:%s", _EDJ(edit_button), "edit_button_text", STR_DONE);
+	}
+
+	scroller = elm_object_part_content_get(all_apps, "content");
+	ret_if(NULL == scroller);
+	page_scroller_edit(scroller);
+}
+
+
+
+HAPI void all_apps_layout_unedit(Evas_Object *all_apps)
+{
+	Evas_Object *edit_button;
+
+	ret_if(NULL == all_apps);
+
+	do {
+		edit_button = elm_object_part_content_get(all_apps, ALL_APPS_EDIT_BUTTON_PART);
+		ret_if(NULL == edit_button);
+
+		edje_object_signal_emit(_EDJ(edit_button), "edit_button,disable", "menu");
+		if (edje_object_part_text_set(_EDJ(edit_button), "edit_button_text", "") == EINA_FALSE) {
+			_E("Failed to set text on the part, edje:%p, part:%s, text:(null)", _EDJ(edit_button), "edit_button_text");
+		}
+	} while (0);
+
+	do {
+		Evas_Object *scroller;
+
+		scroller = elm_object_part_content_get(all_apps, "content");
+		ret_if(NULL == scroller);
+
+		page_scroller_unedit(scroller);
+	} while (0);
+}
+
+
+
+static void _press_edit_button(Evas_Object *edje)
+{
+	edje_object_signal_emit(edje, "edit_button,enable,press", "menu");
+}
+
+
+
+static void _release_edit_button(Evas_Object *edje)
+{
+	edje_object_signal_emit(edje, "edit_button,enable,release", "menu");
+}
+
+
+
+static void _edit_button_down_cb(void *data, Evas_Object *obj, const char* emission, const char* source)
+{
+	Evas_Object *scroller = data;
+
+	_D("Edit button is down");
+
+	if (page_scroller_is_edited(scroller)) {
+		_press_edit_button(obj);
+	}
+}
+
+
+
+static void _edit_button_up_cb(void *data, Evas_Object *obj, const char* emission, const char* source)
+{
+	Evas_Object *scroller = data;
+	Evas_Object *all_apps;
+
+	_D("Edit button is up");
+
+	all_apps = evas_object_data_get(scroller, "tab");
+	if (page_scroller_is_edited(scroller)) {
+		Evas_Object *eo;
+		bool pressed = false;
+
+		eo = evas_object_data_get(obj, "evas_object");
+		pressed = (bool) evas_object_data_get(eo, "pressed");
+		if (pressed) {
+			all_apps_layout_unedit(all_apps);
+		} else {
+			_release_edit_button(obj);
+		}
+	} else {
+		all_apps_layout_edit(all_apps);
+	}
+}
+
+
+
+static void _button_out_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
+{
+	_D("Edit button is out");
+	evas_object_data_set(obj, "pressed", (void *) false);
+}
+
+
+
+static void _button_in_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
+{
+	_D("Edit button is in");
+	evas_object_data_set(obj, "pressed", (void *) true);
+}
+
+
+
+static Evas_Object *_add_edit_button(Evas_Object *parent, Evas_Object *scroller)
+{
+	Evas_Object *button;
+
+	retv_if(NULL == parent, NULL);
+	retv_if(NULL == scroller, NULL);
+
+	button = layout_load_edj(parent, ALL_APPS_EDIT_BUTTON_EDJE, ALL_APPS_EDIT_BUTTON_GROUP);
+	retv_if(NULL == button, NULL);
+
+	edje_object_signal_callback_add(_EDJ(button), "edit_button,down", "menu", _edit_button_down_cb, scroller);
+	edje_object_signal_callback_add(_EDJ(button), "edit_button,up", "menu", _edit_button_up_cb, scroller);
+	evas_object_event_callback_add(button, EVAS_CALLBACK_MOUSE_OUT, _button_out_cb, NULL);
+	evas_object_event_callback_add(button, EVAS_CALLBACK_MOUSE_IN, _button_in_cb, NULL);
+	evas_object_data_set(button, "pressed", (void *) false);
+
+	return button;
+}
+
+
+
+static void _remove_edit_button(Evas_Object *button)
+{
+	ret_if(NULL == button);
+
+	edje_object_signal_callback_del(_EDJ(button), "edit_button,down", "menu", _edit_button_down_cb);
+	edje_object_signal_callback_del(_EDJ(button), "edit_button,up", "menu", _edit_button_up_cb);
+	evas_object_event_callback_del(button, EVAS_CALLBACK_MOUSE_OUT, _button_out_cb);
+	evas_object_event_callback_del(button, EVAS_CALLBACK_MOUSE_IN, _button_in_cb);
+	evas_object_data_del(button, "pressed");
+
+	layout_unload_edj(button);
+}
+
 
 
 static menu_screen_error_e _load_item(Evas_Object *scroller, app_list_item *item)
@@ -80,6 +237,15 @@ ERROR:
 	page_scroller_bring_in(scroller, 0);
 	menu_screen_set_done(true);
 
+	do {
+		Evas_Object *button;
+		button = _add_edit_button(all_apps, scroller);
+		if (NULL == button) {
+			_D("cannot make the edit button");
+		}
+		elm_object_part_content_set(all_apps, ALL_APPS_EDIT_BUTTON_PART, button);
+	} while (0);
+
 	return ECORE_CALLBACK_CANCEL;
 }
 
@@ -102,7 +268,7 @@ static menu_screen_error_e _push_items(Evas_Object *all_apps)
 
 
 
-Evas_Object *all_apps_layout_create(Evas_Object *controlbar, int rotate)
+HAPI Evas_Object *all_apps_layout_create(Evas_Object *controlbar, int rotate)
 {
 	Evas_Object *all_apps;
 	Evas_Object *index;
@@ -176,10 +342,22 @@ Evas_Object *all_apps_layout_create(Evas_Object *controlbar, int rotate)
 
 
 
-void all_apps_layout_destroy(Evas_Object *all_apps)
+HAPI void all_apps_layout_destroy(Evas_Object *all_apps)
 {
 	Evas_Object *index;
 	Evas_Object *scroller;
+
+	ret_if(NULL == all_apps);
+
+	do {
+		Evas_Object *button;
+		if(all_apps) {
+			button = elm_object_part_content_unset(all_apps, ALL_APPS_EDIT_BUTTON_PART);
+			_remove_edit_button(button);
+		} else {
+			_D("cannot find the all_apps object");
+		}
+	} while (0);
 
 	index = evas_object_data_get(all_apps, "index");
 	scroller = evas_object_data_get(all_apps, "scroller");

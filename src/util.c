@@ -22,7 +22,7 @@
 
 
 
-void _evas_object_resize_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
+HAPI void _evas_object_resize_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
 {
 	Evas_Coord x;
 	Evas_Coord y;
@@ -35,14 +35,14 @@ void _evas_object_resize_cb(void *data, Evas *e, Evas_Object *obj, void *event_i
 
 
 
-void _evas_object_event_del_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
+HAPI void _evas_object_event_del_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
 {
 	_D("%s IS REMOVED!", (const char *) data);
 }
 
 
 
-void _evas_object_event_move_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
+HAPI void _evas_object_event_move_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
 {
 	Evas_Coord x;
 	Evas_Coord y;
@@ -55,7 +55,7 @@ void _evas_object_event_move_cb(void *data, Evas *e, Evas_Object *obj, void *eve
 
 
 
-void _evas_object_event_show_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
+HAPI void _evas_object_event_show_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
 {
 	Evas_Coord x;
 	Evas_Coord y;

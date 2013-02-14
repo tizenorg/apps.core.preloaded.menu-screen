@@ -64,49 +64,49 @@ static struct {
 
 
 
-Evas *menu_screen_get_evas(void)
+HAPI Evas *menu_screen_get_evas(void)
 {
 	return menu_screen_info.evas;
 }
 
 
 
-int menu_screen_get_root_width(void)
+HAPI int menu_screen_get_root_width(void)
 {
 	return menu_screen_info.root_width;
 }
 
 
 
-int menu_screen_get_root_height(void)
+HAPI int menu_screen_get_root_height(void)
 {
 	return menu_screen_info.root_height;
 }
 
 
 
-Evas_Object *menu_screen_get_win(void)
+HAPI Evas_Object *menu_screen_get_win(void)
 {
 	return menu_screen_info.win;
 }
 
 
 
-Elm_Theme *menu_screen_get_theme(void)
+HAPI Elm_Theme *menu_screen_get_theme(void)
 {
 	return menu_screen_info.theme;
 }
 
 
 
-bool menu_screen_get_done(void)
+HAPI bool menu_screen_get_done(void)
 {
 	return menu_screen_info.is_done;
 }
 
 
 
-void menu_screen_set_done(bool is_done)
+HAPI void menu_screen_set_done(bool is_done)
 {
 	menu_screen_info.is_done = is_done;
 }
@@ -299,7 +299,7 @@ static void _fini_theme(void)
 
 
 
-Evas_Object *_create_conformant(Evas_Object *win)
+static Evas_Object *_create_conformant(Evas_Object *win)
 {
 	Evas_Object *conformant;
 
@@ -319,7 +319,7 @@ Evas_Object *_create_conformant(Evas_Object *win)
 
 
 
-void _destroy_conformant(Evas_Object *conformant)
+static void _destroy_conformant(Evas_Object *conformant)
 {
 	evas_object_data_del(conformant, "win");
 	evas_object_del(conformant);
