@@ -34,7 +34,7 @@
 
 
 
-inline void page_mark_dirty(Evas_Object *page)
+HAPI inline void page_mark_dirty(Evas_Object *page)
 {
 	int value;
 	value = (int) evas_object_data_get(page, "dirty");
@@ -43,7 +43,7 @@ inline void page_mark_dirty(Evas_Object *page)
 
 
 
-inline void page_unmark_dirty(Evas_Object *page)
+HAPI inline void page_unmark_dirty(Evas_Object *page)
 {
 	int value;
 	value = (int) evas_object_data_get(page, "dirty");
@@ -54,14 +54,14 @@ inline void page_unmark_dirty(Evas_Object *page)
 
 
 
-inline void page_clean_dirty(Evas_Object *page)
+HAPI inline void page_clean_dirty(Evas_Object *page)
 {
 	evas_object_data_set(page, "dirty", 0);
 }
 
 
 
-inline int page_is_dirty(Evas_Object *page)
+HAPI inline int page_is_dirty(Evas_Object *page)
 {
 	return (int) evas_object_data_get(page, "dirty");
 }
@@ -137,7 +137,7 @@ static void _dim_up_cb(void *data, Evas_Object *obj, const char* emission, const
 
 
 
-Evas_Object *page_create(Evas_Object *scroller, int idx, int rotate)
+HAPI Evas_Object *page_create(Evas_Object *scroller, int idx, int rotate)
 {
 	Evas_Object *page;
 	Evas_Object *bg;
@@ -218,7 +218,7 @@ Evas_Object *page_create(Evas_Object *scroller, int idx, int rotate)
 
 
 
-void page_destroy(Evas_Object *scroller, Evas_Object *page)
+HAPI void page_destroy(Evas_Object *scroller, Evas_Object *page)
 {
 	Evas_Object *mapbuf;
 	Evas_Object *bg;
@@ -279,7 +279,7 @@ void page_destroy(Evas_Object *scroller, Evas_Object *page)
 
 
 
-Evas_Object *page_get_item_at(Evas_Object *page, unsigned int idx)
+HAPI Evas_Object *page_get_item_at(Evas_Object *page, unsigned int idx)
 {
 	Eina_List *pending_list;
 	Eina_List *n;
@@ -305,7 +305,7 @@ Evas_Object *page_get_item_at(Evas_Object *page, unsigned int idx)
 
 
 
-menu_screen_error_e page_unpack_item(Evas_Object *page, Evas_Object *item)
+HAPI menu_screen_error_e page_unpack_item(Evas_Object *page, Evas_Object *item)
 {
 	char tmp[PATH_MAX];
 	Evas_Object *check_item;
@@ -347,7 +347,7 @@ menu_screen_error_e page_unpack_item(Evas_Object *page, Evas_Object *item)
 
 
 
-Evas_Object *page_unpack_item_at(Evas_Object *page, int idx)
+HAPI Evas_Object *page_unpack_item_at(Evas_Object *page, int idx)
 {
 	Eina_List *pending_list;
 	Eina_List *n;
@@ -390,7 +390,7 @@ Evas_Object *page_unpack_item_at(Evas_Object *page, int idx)
 
 
 
-void page_pack_item(Evas_Object *page, int idx, Evas_Object *item)
+HAPI void page_pack_item(Evas_Object *page, int idx, Evas_Object *item)
 {
 	char tmp[PATH_MAX];
 	Evas_Object *object;
@@ -426,7 +426,7 @@ void page_pack_item(Evas_Object *page, int idx, Evas_Object *item)
 
 
 
-void page_set_item(Evas_Object *page, int idx, Evas_Object *item)
+HAPI void page_set_item(Evas_Object *page, int idx, Evas_Object *item)
 {
 	Eina_List *list;
 
@@ -448,7 +448,7 @@ void page_set_item(Evas_Object *page, int idx, Evas_Object *item)
 
 
 
-inline unsigned int page_count_item(Evas_Object *page)
+HAPI inline unsigned int page_count_item(Evas_Object *page)
 {
 	register unsigned int i;
 	unsigned int count = 0;
@@ -466,7 +466,7 @@ inline unsigned int page_count_item(Evas_Object *page)
 
 
 
-int page_find_empty_near(Evas_Object *page, int pivot)
+HAPI int page_find_empty_near(Evas_Object *page, int pivot)
 {
 	int pivot_saved = pivot;
 	Evas_Object *obj;
@@ -503,7 +503,7 @@ int page_find_empty_near(Evas_Object *page, int pivot)
 
 
 
-int page_find_first_empty(Evas_Object *page, int pivot)
+HAPI int page_find_first_empty(Evas_Object *page, int pivot)
 {
 	Evas_Object *item;
 	Evas_Object *scroller;
@@ -525,7 +525,7 @@ int page_find_first_empty(Evas_Object *page, int pivot)
 
 
 
-void page_trim_items(Evas_Object *page)
+HAPI void page_trim_items(Evas_Object *page)
 {
 	Evas_Object *item;
 	register unsigned int i;

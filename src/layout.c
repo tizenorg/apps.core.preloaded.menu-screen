@@ -33,7 +33,7 @@
 
 
 
-Evas_Object *layout_create(Evas_Object *conformant, const char *file, const char *group, int rotate)
+HAPI Evas_Object *layout_create(Evas_Object *conformant, const char *file, const char *group, int rotate)
 {
 	Evas_Object *layout;
 
@@ -77,7 +77,7 @@ Evas_Object *layout_create(Evas_Object *conformant, const char *file, const char
 
 
 
-void layout_destroy(Evas_Object *layout)
+HAPI void layout_destroy(Evas_Object *layout)
 {
 	Evas_Object *all_apps;
 
@@ -94,7 +94,7 @@ void layout_destroy(Evas_Object *layout)
 
 
 
-void layout_enable_block(Evas_Object *layout)
+HAPI void layout_enable_block(Evas_Object *layout)
 {
 	ret_if(NULL == layout);
 
@@ -104,7 +104,7 @@ void layout_enable_block(Evas_Object *layout)
 
 
 
-void layout_disable_block(Evas_Object *layout)
+HAPI void layout_disable_block(Evas_Object *layout)
 {
 	ret_if(NULL == layout);
 
@@ -114,7 +114,7 @@ void layout_disable_block(Evas_Object *layout)
 
 
 
-Evas_Object* layout_load_edj(Evas_Object *parent, const char *edjname, const char *grpname)
+HAPI Evas_Object* layout_load_edj(Evas_Object *parent, const char *edjname, const char *grpname)
 {
 	Evas_Object *eo;
 
@@ -132,7 +132,7 @@ Evas_Object* layout_load_edj(Evas_Object *parent, const char *edjname, const cha
 
 
 
-void layout_unload_edj(Evas_Object *layout)
+HAPI void layout_unload_edj(Evas_Object *layout)
 {
 	Evas_Object *evas_object;
 

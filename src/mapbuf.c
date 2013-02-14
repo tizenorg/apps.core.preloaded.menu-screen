@@ -26,7 +26,7 @@
 
 
 
-Evas_Object *mapbuf_get_mapbuf(Evas_Object *obj)
+HAPI Evas_Object *mapbuf_get_mapbuf(Evas_Object *obj)
 {
 	Evas_Object *mapbuf;
 
@@ -42,7 +42,7 @@ Evas_Object *mapbuf_get_mapbuf(Evas_Object *obj)
 
 
 
-Evas_Object *mapbuf_get_page(Evas_Object *obj)
+HAPI Evas_Object *mapbuf_get_page(Evas_Object *obj)
 {
 	Evas_Object *page;
 
@@ -58,12 +58,10 @@ Evas_Object *mapbuf_get_page(Evas_Object *obj)
 
 
 
-menu_screen_error_e mapbuf_enable(Evas_Object *obj, int force)
+HAPI menu_screen_error_e mapbuf_enable(Evas_Object *obj, int force)
 {
 	Evas_Object *mapbuf;
 	int cnt;
-
-	_D("Mapbuf disabled version");
 
 	mapbuf = mapbuf_get_mapbuf(obj);
 	if (!mapbuf) {
@@ -96,7 +94,7 @@ menu_screen_error_e mapbuf_enable(Evas_Object *obj, int force)
 
 
 
-int mapbuf_is_enabled(Evas_Object *obj)
+HAPI int mapbuf_is_enabled(Evas_Object *obj)
 {
 	Evas_Object *mapbuf;
 	mapbuf = mapbuf_get_mapbuf(obj);
@@ -109,7 +107,7 @@ int mapbuf_is_enabled(Evas_Object *obj)
 
 
 
-int mapbuf_disable(Evas_Object *obj, int force)
+HAPI int mapbuf_disable(Evas_Object *obj, int force)
 {
 	Evas_Object *mapbuf;
 	int cnt;
@@ -143,7 +141,7 @@ int mapbuf_disable(Evas_Object *obj, int force)
 
 
 
-Evas_Object *mapbuf_bind(Evas_Object *box, Evas_Object *page)
+HAPI Evas_Object *mapbuf_bind(Evas_Object *box, Evas_Object *page)
 {
 	Evas_Object *mapbuf;
 
@@ -167,7 +165,7 @@ Evas_Object *mapbuf_bind(Evas_Object *box, Evas_Object *page)
 
 
 
-Evas_Object *mapbuf_unbind(Evas_Object *obj)
+HAPI Evas_Object *mapbuf_unbind(Evas_Object *obj)
 {
 	Evas_Object *page;
 	Evas_Object *mapbuf;

@@ -16,6 +16,7 @@ INCLUDE(FindPkgConfig)
 pkg_check_modules(MENU_PKGS REQUIRED
 	ail
 	aul
+	badge
 	bundle
 	capi-appfw-application
 	dlog
@@ -59,6 +60,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 ADD_EXECUTABLE(${PROJECT_NAME}
 	src/index.c
 	src/item.c
+	src/item_badge.c
 	src/item_event.c
 	src/layout.c
 	src/list.c

@@ -29,6 +29,8 @@
 #include "mouse.h"
 #include "page.h"
 #include "page_scroller.h"
+#include "pkgmgr.h"
+#include "popup.h"
 #include "util.h"
 #include "all_apps/layout.h"
 
@@ -70,6 +72,7 @@ static void _item_down_cb(void *data, Evas_Object *obj, const char* emission, co
 
 static void _item_up_cb(void *data, Evas_Object *obj, const char* emission, const char* source)
 {
+	Evas_Object *scroller;
 	Evas_Object *icon_image;
 	Evas_Object *item;
 
@@ -91,12 +94,57 @@ static void _item_up_cb(void *data, Evas_Object *obj, const char* emission, cons
 
 	if (mouse_is_scrolling()) return;
 
+	scroller = evas_object_data_get(item, "scroller");
+	ret_if(NULL == scroller);
+
+	if (true == page_scroller_is_edited(scroller)) {
+		return;
+	}
 	item_launch(item);
 }
 
 
 
-void item_event_register(Evas_Object *item)
+static void _uninstall_down_cb(void *data, Evas_Object *obj, const char* emission, const char* source)
+{
+	_D("Uninstall button is down");
+	obj = evas_object_data_get(obj, "evas_object");
+	if (obj) evas_object_data_set(obj, "removing", (void*)1);
+}
+
+
+
+static void _uninstall_up_cb(void *item, Evas_Object *obj, const char* emission, const char* source)
+{
+	Evas_Object *win;
+	Evas_Object *scroller;
+	char *package;
+
+	ret_if(mouse_is_scrolling());
+
+	win = menu_screen_get_win();
+	ret_if(NULL == win);
+
+	_D("Uninstall button is up");
+	scroller = evas_object_data_get(item, "scroller");
+	obj = evas_object_data_get(obj, "evas_object");
+	ret_if(NULL == obj);
+	ret_if(NULL == evas_object_data_get(obj, "removing"));
+
+	evas_object_data_del(obj, "removing");
+
+	package = item_get_package(obj);
+	ret_if(!package || strlen(package) == 0);
+	ret_if(pkgmgr_find_pended_object(package, 0, scroller, NULL));
+
+	_D("Uninstalling... [%s]", package);
+
+	popup_create_uninstall(win, item);
+}
+
+
+
+HAPI void item_event_register(Evas_Object *item)
 {
 	Evas_Object *item_edje;
 	item_edje = _EDJ(item);
@@ -104,17 +152,23 @@ void item_event_register(Evas_Object *item)
 
 	edje_object_signal_callback_add(item_edje, "item,down", "menu", _item_down_cb, NULL);
 	edje_object_signal_callback_add(item_edje, "item,up", "menu", _item_up_cb, NULL);
+
+	edje_object_signal_callback_add(item_edje, "uninstall,down", "menu", _uninstall_down_cb, NULL);
+	edje_object_signal_callback_add(item_edje, "uninstall,up", "menu", _uninstall_up_cb, item);
 }
 
 
 
-void item_event_unregister(Evas_Object *item)
+HAPI void item_event_unregister(Evas_Object *item)
 {
 	Evas_Object *item_edje;
 	item_edje = _EDJ(item);
 
 	edje_object_signal_callback_del(item_edje, "item,down", "menu", _item_down_cb);
 	edje_object_signal_callback_del(item_edje, "item,up", "menu", _item_up_cb);
+
+	edje_object_signal_callback_del(item_edje, "uninstall,down", "menu", _uninstall_down_cb);
+	edje_object_signal_callback_del(item_edje, "uninstall,up", "menu", _uninstall_up_cb);
 
 	evas_object_data_del(item_edje, "item");
 }

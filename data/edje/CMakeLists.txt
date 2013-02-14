@@ -48,4 +48,14 @@ INSTALL(FILES layout_portrait.edj DESTINATION ${EDJEDIR})
 
 
 
+ADD_CUSTOM_TARGET(button_edit.edj
+		COMMAND edje_cc -id ${CMAKE_CURRENT_SOURCE_DIR}/../images ${EDJE_CFLAGS}
+		${CMAKE_CURRENT_SOURCE_DIR}/button_edit.edc button_edit.edj
+		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/button_edit.edc
+)
+ADD_DEPENDENCIES(${PROJECT_NAME} button_edit.edj)
+INSTALL(FILES button_edit.edj DESTINATION ${EDJEDIR})
+
+
+
 # End of a file

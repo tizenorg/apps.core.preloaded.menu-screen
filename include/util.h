@@ -33,15 +33,15 @@
 
 /* Log */
 #if !defined(_W)
-#define _W(fmt, arg...) LOGW("[%s:%d] "fmt"\n", __func__, __LINE__, ##arg)
+#define _W(fmt, arg...) LOGW(fmt"\n", ##arg)
 #endif
 
 #if !defined(_D)
-#define _D(fmt, arg...) LOGD("[%s:%d] "fmt"\n", __func__, __LINE__, ##arg)
+#define _D(fmt, arg...) LOGD(fmt"\n", ##arg)
 #endif
 
 #if !defined(_E)
-#define _E(fmt, arg...) LOGE("[%s:%d] "fmt"\n", __func__, __LINE__, ##arg)
+#define _E(fmt, arg...) LOGE(fmt"\n", ##arg)
 #endif
 
 #if !defined(_T)
@@ -56,6 +56,12 @@
 #define gettext_noop(str) (str)
 #define N_(str) gettext_noop(str)
 #define D_(str) dgettext("sys_string", str)
+
+/* Build */
+#define HAPI __attribute__((visibility("hidden")))
+
+/* Packaging */
+#define DEFAULT_ICON IMAGEDIR"/default.png"
 
 #ifdef APPFWK_MEASUREMENT
 #define PRINT_APPFWK() do {		\
