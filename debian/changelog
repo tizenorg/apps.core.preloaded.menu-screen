@@ -1,0 +1,98 @@
+org.tizen.menu-screen (1.0.23) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.23
+
+  * Enlarge the size of icons
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Mon, 04 Feb 2013 11:22:57 +0900
+
+org.tizen.menu-screen (1.0.22) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.22
+
+  * Bring in the scroller with MOUSE_WHEEL_EVENT
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Sun, 27 Jan 2013 01:09:05 +0900
+
+org.tizen.menu-screen (1.0.21) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.21
+
+  * Mapbuf has been disabled all the time.
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Thu, 24 Jan 2013 17:28:06 +0900
+
+org.tizen.menu-screen (1.0.20) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.20
+
+  * mapbuf is re-enabled when installing & removing an app
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Wed, 16 Jan 2013 16:56:22 +0900
+
+org.tizen.menu-screen (1.0.19) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.19
+
+  * EFL Requests : font, style
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Tue, 15 Jan 2013 19:26:11 +0900
+
+org.tizen.menu-screen (1.0.18) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.18
+
+  *  Window size is not overflowed more than the root window size.
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Thu, 13 Dec 2012 15:27:55 +0900
+
+org.tizen.menu-screen (1.0.17) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.17
+
+  * Code sync
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Thu, 06 Dec 2012 16:56:25 +0900
+
+org.tizen.menu-screen (1.0.15) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.15
+
+  * SMACK - manifest
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Sun, 04 Nov 2012 09:08:47 +0900
+
+org.tizen.menu-screen (1.0.14) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.14
+
+  * enlarge the area of index
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Fri, 05 Oct 2012 13:39:00 +0900
+
+org.tizen.menu-screen (1.0.13) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.13
+
+  * modify the vconf key for the selected menu-screen.
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Tue, 21 Aug 2012 10:37:58 +0900
+
+org.tizen.menu-screen (1.0.12) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.12
+
+  * [Modify] Environment for ELM_ENGINE, ELM_FPS
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Wed, 02 May 2012 19:00:43 +0900
