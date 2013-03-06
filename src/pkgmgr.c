@@ -18,6 +18,7 @@
 
 #include <Elementary.h>
 #include <package-manager.h>
+#include <pkgmgr-info.h>
 
 #include "conf.h"
 #include "index.h"
@@ -48,21 +49,54 @@ static struct {
 
 HAPI inline menu_screen_error_e pkgmgr_uninstall(Evas_Object *item)
 {
-	pkgmgr_client *req_pc = NULL;
 	int ret = MENU_SCREEN_ERROR_OK;
 
 	retv_if(NULL == item, MENU_SCREEN_ERROR_FAIL);
 
+	char *pkgid = NULL;
+	char *appid = item_get_package(item);
+	retv_if(NULL == appid, MENU_SCREEN_ERROR_FAIL);
+
+	pkgmgr_client *req_pc = NULL;
 	req_pc = pkgmgr_client_new(PC_REQUEST);
 	retv_if(NULL == req_pc, MENU_SCREEN_ERROR_FAIL);
 
-	if (pkgmgr_client_uninstall(req_pc, NULL, item_get_package(item), PM_QUIET, NULL, NULL) < 0) {
+	pkgmgrinfo_appinfo_h handle;
+	if (PMINFO_R_OK != pkgmgrinfo_appinfo_get_appinfo(appid, &handle)) {
+		if (PKGMGR_R_OK != pkgmgr_client_free(req_pc)) {
+			_E("cannot free pkgmgr_client for request.");
+		}
+		return MENU_SCREEN_ERROR_FAIL;
+	}
+
+	if (PMINFO_R_OK != pkgmgrinfo_appinfo_get_pkgid(handle, &pkgid)) {
+		if (PMINFO_R_OK != pkgmgrinfo_appinfo_destroy_appinfo(handle)) {
+			_E("cannot destroy the appinfo");
+		}
+
+		if (PKGMGR_R_OK != pkgmgr_client_free(req_pc)) {
+			_E("cannot free pkgmgr_client for request.");
+		}
+
+		return MENU_SCREEN_ERROR_FAIL;
+	}
+
+	if (!pkgid) pkgid = appid;
+
+	_D("Uninstall a package[%s] from an app[%s]", pkgid, appid);
+	if (pkgmgr_client_uninstall(req_pc, NULL, pkgid, PM_QUIET, NULL, NULL) < 0) {
 		_E("cannot uninstall %s.", item_get_package(item));
 		ret = MENU_SCREEN_ERROR_FAIL;
 	}
 
-	if (pkgmgr_client_free(req_pc) != PKGMGR_R_OK) {
-		_E("cannot free pkgmgr_client for request.");
+	if (PMINFO_R_OK != pkgmgrinfo_appinfo_destroy_appinfo(handle)) {
+		_E("cannot destroy the appinfo");
+		ret = MENU_SCREEN_ERROR_FAIL;
+	}
+
+	if (PMINFO_R_OK != pkgmgr_client_free(req_pc)) {
+		_E("cannot free pkgmgr_client");
+		ret = MENU_SCREEN_ERROR_FAIL;
 	}
 
 	return ret;
@@ -116,6 +150,7 @@ static menu_screen_error_e _start_uninstall(const char *package, void *scroller)
 	pi->status = UNINSTALL_BEGIN;
 	pi->ai.package = strdup(package);
 	pi->ai.nodisplay = false;
+	pi->ai.enabled = true;
 	pi->item = page_scroller_find_item_by_package(scroller, package, &page_no);
 	pi->page = page_scroller_get_page_at(scroller, page_no);
 
@@ -157,6 +192,7 @@ static menu_screen_error_e _start_update(const char *package, void *scroller)
 
 		if (pi->item && pi->page) {
 			pi->ai.nodisplay = false;
+			pi->ai.enabled = true;
 		}
 
 		install_list = eina_list_append(install_list, pi);
@@ -168,7 +204,7 @@ static menu_screen_error_e _start_update(const char *package, void *scroller)
 			evas_object_data_set(scroller, "install_list", install_list);
 			if (pi->item) {
 				page_unpack_item(pi->page, pi->item);
-				page_trim_items(pi->page);
+				page_scroller_trim_items(scroller);
 				item_destroy(pi->item);
 			}
 
@@ -241,6 +277,7 @@ static menu_screen_error_e _start_install(const char *package, void *scroller)
 
 		if (pi->item && pi->page) {
 			pi->ai.nodisplay = false;
+			pi->ai.enabled = true;
 		}
 
 		install_list = eina_list_append(install_list, pi);
@@ -252,7 +289,7 @@ static menu_screen_error_e _start_install(const char *package, void *scroller)
 			evas_object_data_set(scroller, "install_list", install_list);
 			if (pi->item) {
 				page_unpack_item(pi->page, pi->item);
-				page_trim_items(pi->page);
+				page_scroller_trim_items(scroller);
 				item_destroy(pi->item);
 			}
 
@@ -352,6 +389,7 @@ static menu_screen_error_e _icon_path(const char *package, const char *val, void
 		if (!pi->item) {
 			_D("There is no item for [%s]", package);
 			pi->ai.nodisplay = false;
+			pi->ai.enabled = true;
 
 			if (MENU_SCREEN_ERROR_FAIL == page_scroller_push_item(scroller, &pi->ai)) {
 				_E("Failed to create a new item, remove this package from the installing list");
@@ -398,7 +436,7 @@ static menu_screen_error_e _download_percent(const char *package, const char *va
 		_D("Invalid state for %s, This is not started from the download_begin state(%s)", package, val);
 	}
 
-	if (!pi->ai.nodisplay && pi->item) {
+	if (!pi->ai.nodisplay && pi->ai.enabled && pi->item) {
 		if (!item_is_enabled_progress(pi->item)) {
 			item_enable_progress(pi->item);
 		}
@@ -450,7 +488,7 @@ static menu_screen_error_e _install_percent(const char *package, const char *val
 		_D("Invalid state for %s, This is not the uninstall or install_begin state(%s)", package, val);
 	}
 
-	if (!pi->ai.nodisplay && pi->item) {
+	if (!pi->ai.nodisplay && pi->ai.enabled && pi->item) {
 		if (!item_is_enabled_progress(pi->item)) {
 			item_enable_progress(pi->item);
 		}
@@ -583,7 +621,7 @@ static menu_screen_error_e _end_unknown(const char *package, struct package_info
 		{
 			if (pi->page) {
 				page_unpack_item(pi->page, pi->item);
-				page_trim_items(pi->page);
+				page_scroller_trim_items(scroller);
 			} else {
 				_D("Page is not valid (%s)", package);
 			}

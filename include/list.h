@@ -32,6 +32,7 @@ typedef struct
 	char *icon;
 	char *desktop;
 	bool nodisplay;
+	bool enabled;
 	bool x_slp_removable;
 	bool x_slp_taskmanage;
 	pid_t pid;

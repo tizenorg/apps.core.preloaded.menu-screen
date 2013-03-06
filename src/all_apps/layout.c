@@ -199,8 +199,8 @@ static menu_screen_error_e _load_item(Evas_Object *scroller, app_list_item *item
 
 	retv_if(NULL == item, MENU_SCREEN_ERROR_FAIL);
 	ai = item->data;
-	if (ai->nodisplay == true) {
-		return MENU_SCREEN_ERROR_FAIL;
+	if (ai->nodisplay || !ai->enabled) {
+		return MENU_SCREEN_ERROR_OK;
 	}
 
 	retv_if(MENU_SCREEN_ERROR_FAIL == page_scroller_push_item(scroller, ai), MENU_SCREEN_ERROR_FAIL);
