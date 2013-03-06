@@ -33,6 +33,7 @@ pkg_check_modules(MENU_PKGS REQUIRED
 	evas
 	heynoti
 	pkgmgr
+	pkgmgr-info
 	sysman
 	syspopup-caller
 	utilX

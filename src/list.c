@@ -115,6 +115,7 @@ HAPI menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 			break_if(ail_appinfo_get_str(appinfo_h, AIL_PROP_NAME_STR, &name) < 0);
 			break_if(ail_appinfo_get_str(appinfo_h, AIL_PROP_ICON_STR, &icon) < 0);
 			break_if(ail_appinfo_get_bool(appinfo_h, AIL_PROP_NODISPLAY_BOOL, &ai->nodisplay) < 0);
+			break_if(ail_appinfo_get_bool(appinfo_h, AIL_PROP_X_SLP_ENABLED_BOOL, &ai->enabled) < 0);
 			break_if(ail_appinfo_get_bool(appinfo_h, AIL_PROP_X_SLP_REMOVABLE_BOOL, &ai->x_slp_removable) < 0);
 			break_if(ail_appinfo_get_bool(appinfo_h, AIL_PROP_X_SLP_TASKMANAGE_BOOL, &ai->x_slp_taskmanage) < 0);
 

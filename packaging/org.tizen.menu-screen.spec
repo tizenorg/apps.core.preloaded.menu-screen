@@ -14,7 +14,7 @@
 
 Name:       org.tizen.menu-screen
 Summary:    An utility library of the menu screen
-Version:    1.0.24
+Version:    1.0.25
 Release:    1.1
 Group:      TO_BE/FILLED_IN
 License:    Flora Software License
@@ -38,6 +38,7 @@ BuildRequires:  pkgconfig(elementary)
 BuildRequires:  pkgconfig(evas)
 BuildRequires:  pkgconfig(heynoti)
 BuildRequires:  pkgconfig(pkgmgr)
+BuildRequires:  pkgconfig(pkgmgr-info)
 BuildRequires:  pkgconfig(sysman)
 BuildRequires:  pkgconfig(syspopup-caller)
 BuildRequires:  pkgconfig(utilX)
