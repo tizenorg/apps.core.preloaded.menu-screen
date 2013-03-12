@@ -464,7 +464,12 @@ static Evas_Object *_add_icon_image(Evas_Object *item, const char *icon_file)
 {
 	Evas_Object *icon;
 
+	retv_if(NULL == item, NULL);
+	retv_if(NULL == icon_file, NULL);
+
 	icon = elm_icon_add(item);
+	retv_if(NULL == icon, NULL);
+
 	if (elm_image_file_set(icon, icon_file, NULL) == EINA_FALSE) {
 		_E("Icon file is not accessible (%s)", icon_file);
 		evas_object_del(icon);
@@ -485,6 +490,10 @@ static Evas_Object *_add_icon_image(Evas_Object *item, const char *icon_file)
 static Evas_Object *_add_edje_icon(Evas_Object *item, const char *icon_file)
 {
 	Evas_Object *icon;
+
+	retv_if(NULL == item, NULL);
+	retv_if(NULL == icon_file, NULL);
+
 	if (access(icon_file, R_OK) != 0) {
 		_E("Failed to get an icon");
 		return NULL;
@@ -524,6 +533,9 @@ HAPI menu_screen_error_e item_is_edje_icon(const char *icon)
 HAPI void item_update(Evas_Object *item, app_info_t *ai)
 {
 	Evas_Object *icon = NULL;
+
+	ret_if(NULL == item);
+	ret_if(NULL == ai);
 
 	if (!ai->image) {
 		if (0 != access(ai->icon, R_OK)) {
@@ -602,6 +614,7 @@ HAPI Evas_Object *item_create(Evas_Object *scroller, app_info_t* ai)
 
 	bg = evas_object_rectangle_add(menu_screen_get_evas());
 	if (!bg) {
+		_E("Cannot add an rectangle");
 		evas_object_del(item);
 		return NULL;
 	}

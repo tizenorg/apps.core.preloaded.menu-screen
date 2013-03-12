@@ -873,7 +873,7 @@ HAPI Evas_Object *page_scroller_create(Evas_Object *tab, Evas_Object *index, pag
 	evas_object_show(box);
 	evas_object_show(scroller);
 
-	if (vconf_notify_key_changed("memory/menuscreen/desktop", _desktop_cb, scroller) < 0) {
+	if (vconf_notify_key_changed(VCONFKEY_AIL_INFO_STATE, _desktop_cb, scroller) < 0) {
 		_E("Failed to register a desktop change event handler");
 	}
 
@@ -955,7 +955,7 @@ HAPI void page_scroller_destroy(Evas_Object *scroller)
 	evas_object_event_callback_del(box, EVAS_CALLBACK_DEL, _evas_object_event_del_cb);
 	evas_object_event_callback_del(scroller, EVAS_CALLBACK_MOUSE_WHEEL, _mouse_wheel_cb);
 
-	if (vconf_ignore_key_changed("memory/menuscreen/desktop", _desktop_cb) < 0) {
+	if (vconf_ignore_key_changed(VCONFKEY_AIL_INFO_STATE, _desktop_cb) < 0) {
 		_E("Failed to ignore the desktop event");
 	}
 
