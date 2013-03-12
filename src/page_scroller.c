@@ -881,7 +881,8 @@ HAPI Evas_Object *page_scroller_create(Evas_Object *tab, Evas_Object *index, pag
 		_E("Failed to register a vconf cb for %s", "memory/menuscreen/mapbuf");
 	}
 
-	pkgmgr_init(scroller);
+	// FIXME : This will be enabled after rebuilding the routine for appid <-> pkgid.
+	//pkgmgr_init(scroller);
 	item_badge_register_changed_cb(scroller);
 
 	return scroller;
@@ -904,7 +905,9 @@ HAPI void page_scroller_destroy(Evas_Object *scroller)
 	ret_if(NULL == (page_list = elm_box_children_get(box)));
 
 	item_badge_unregister_changed_cb();
-	pkgmgr_fini();
+
+	// FIXME : This will be enabled after rebuilding the routine for appid <-> pkgid.
+	//pkgmgr_fini();
 
 	EINA_LIST_FOREACH_SAFE(page_list, l, ln, page) {
 		int count;
