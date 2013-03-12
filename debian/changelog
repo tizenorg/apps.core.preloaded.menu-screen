@@ -1,3 +1,12 @@
+org.tizen.menu-screen (1.0.27) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.27
+
+  * Disable the routines for pkgmgr temporarily.
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Tue, 12 Mar 2013 17:06:12 +0900
+
 org.tizen.menu-screen (1.0.26) unstable; urgency=low
 
   * Git: apps/home/menu-screen
