@@ -19,6 +19,7 @@ pkg_check_modules(MENU_PKGS REQUIRED
 	badge
 	bundle
 	capi-appfw-application
+	capi-system-info
 	dlog
 	ecore
 	ecore-evas
