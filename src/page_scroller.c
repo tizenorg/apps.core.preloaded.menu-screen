@@ -19,6 +19,7 @@
 #include <Elementary.h>
 #include <vconf.h>
 
+#include "item_badge.h"
 #include "conf.h"
 #include "index.h"
 #include "item.h"
@@ -52,7 +53,7 @@ static int _count_pages(Evas_Object *scroller)
 
 
 
-void page_scroller_bring_in(Evas_Object *scroller, int idx)
+HAPI void page_scroller_bring_in(Evas_Object *scroller, int idx)
 {
 	Evas_Object *index;
 	int w, h;
@@ -74,7 +75,7 @@ void page_scroller_bring_in(Evas_Object *scroller, int idx)
 
 
 
-void page_scroller_show_region(Evas_Object *scroller, int idx)
+HAPI void page_scroller_show_region(Evas_Object *scroller, int idx)
 {
 	Evas_Object *index;
 	int w, h;
@@ -192,7 +193,7 @@ static void _scroller_unregister(Evas_Object *scroller)
 
 
 
-menu_screen_error_e _find_position_by_default(Evas_Object *scroller, int *candidate_page, int *candidate_pos, void *data)
+static menu_screen_error_e _find_position_by_default(Evas_Object *scroller, int *candidate_page, int *candidate_pos, void *data)
 {
 	Evas_Object *page;
 	Evas_Object *item;
@@ -234,7 +235,7 @@ menu_screen_error_e _find_position_by_default(Evas_Object *scroller, int *candid
 
 
 
-menu_screen_error_e _find_position_by_package(Evas_Object *scroller, int *candidate_page, int *candidate_pos, void *data)
+static menu_screen_error_e _find_position_by_package(Evas_Object *scroller, int *candidate_page, int *candidate_pos, void *data)
 {
 	Evas_Object *page;
 	Evas_Object *item;
@@ -270,6 +271,54 @@ menu_screen_error_e _find_position_by_package(Evas_Object *scroller, int *candid
 				*candidate_pos = position_no;
 				return MENU_SCREEN_ERROR_OK;
 			} else if ((package = item_get_package(item)) && strcmp(package, ai->package) > 0) {
+				*candidate_page = page_no;
+				*candidate_pos = position_no;
+				return MENU_SCREEN_ERROR_OK;
+			}
+		}
+	}
+
+	return MENU_SCREEN_ERROR_OK;
+}
+
+
+
+static menu_screen_error_e _find_position_by_name(Evas_Object *scroller, int *candidate_page, int *candidate_pos, void *data)
+{
+	Evas_Object *page;
+	Evas_Object *item;
+	register int page_no;
+	register int position_no;
+	unsigned int nr_of_pages;
+	int page_max_app;
+	app_info_t *ai = data;
+
+	retv_if(NULL == scroller, MENU_SCREEN_ERROR_INVALID_PARAMETER);
+	retv_if(NULL == candidate_page, MENU_SCREEN_ERROR_INVALID_PARAMETER);
+	retv_if(NULL == candidate_pos, MENU_SCREEN_ERROR_INVALID_PARAMETER);
+	retv_if(NULL == data, MENU_SCREEN_ERROR_INVALID_PARAMETER);
+	retv_if(NULL == ai->name, MENU_SCREEN_ERROR_INVALID_PARAMETER);
+
+	*candidate_page = 0;
+	*candidate_pos = 0;
+	nr_of_pages = page_scroller_count_page(scroller);
+	page_max_app = (int) evas_object_data_get(scroller, "page_max_app");
+	for (page_no = 0; page_no < nr_of_pages; page_no ++) {
+		page = page_scroller_get_page_at(scroller, page_no);
+		if (!page) {
+			_D("Page is not found at %d", page_no);
+			return MENU_SCREEN_ERROR_FAIL;
+		}
+
+		for (position_no = 0; position_no < page_max_app; position_no ++) {
+			char *name;
+
+			item = page_get_item_at(page, position_no);
+			if (!item) {
+				*candidate_page = page_no;
+				*candidate_pos = position_no;
+				return MENU_SCREEN_ERROR_OK;
+			} else if ((name = item_get_name(item)) && strcmp(name, ai->name) > 0) {
 				*candidate_page = page_no;
 				*candidate_pos = position_no;
 				return MENU_SCREEN_ERROR_OK;
@@ -393,7 +442,7 @@ static Evas_Object *_animated_unpack_item(Evas_Object *scroller, Evas_Object *pa
 
 
 
-menu_screen_error_e page_scroller_push_item(Evas_Object *scroller, app_info_t *ai)
+HAPI menu_screen_error_e page_scroller_push_item(Evas_Object *scroller, app_info_t *ai)
 {
 	Evas_Object *page;
 	Evas_Object *item;
@@ -417,7 +466,7 @@ menu_screen_error_e page_scroller_push_item(Evas_Object *scroller, app_info_t *a
 		},
 		{
 			.sort_type = PAGE_SCROLLER_SORT_BY_NAME,
-			.sort_func = NULL,
+			.sort_func = _find_position_by_name,
 		},
 		{
 			.sort_type = PAGE_SCROLLER_SORT_MAX,
@@ -476,7 +525,8 @@ static inline menu_screen_error_e _create_cb(const char *package, void *data)
 			break;
 		}
 
-		if (ai.nodisplay) {
+		if (ai.nodisplay || !ai.enabled)
+		{
 			Evas_Object *page;
 
 			_D("package %s is not visible", package);
@@ -484,7 +534,7 @@ static inline menu_screen_error_e _create_cb(const char *package, void *data)
 			if (item) {
 				if (page) {
 					page_unpack_item(page, item);
-					page_trim_items(page);
+					page_scroller_trim_items(scroller);
 				}
 
 				item_destroy(item);
@@ -544,14 +594,14 @@ static inline menu_screen_error_e _update_cb(const char *package, void *data)
 			_D("There is no loaded item is found");
 			item = pkgmgr_find_pended_object(package, 1, scroller, &page);
 			if (item) {
-				if (!ai.nodisplay) {
+				if (!ai.nodisplay && ai.enabled) {
 					_D("Item is found for updating from the install list, Ignore this.");
 					item_update(item, &ai);
 				} else {
 					_D("Item is found for updating from the install list, But nodisplay");
 					if (page) {
 						page_unpack_item(page, item);
-						page_trim_items(page);
+						page_scroller_trim_items(scroller);
 					}
 					item_destroy(item);
 				}
@@ -559,7 +609,7 @@ static inline menu_screen_error_e _update_cb(const char *package, void *data)
 				int ret;
 				_D("Item is not found. Create a new one");
 
-				ret = (ai.nodisplay == false ? page_scroller_push_item(scroller, &ai) : MENU_SCREEN_ERROR_OK);
+				ret = ((!ai.nodisplay && ai.enabled) ? page_scroller_push_item(scroller, &ai) : MENU_SCREEN_ERROR_OK);
 				if (ret == MENU_SCREEN_ERROR_OK) {
 					break;
 				} else {
@@ -576,7 +626,7 @@ static inline menu_screen_error_e _update_cb(const char *package, void *data)
 				_D("Cannot find package in the install list");
 			}
 
-			if (ai.nodisplay == false) {
+			if (!ai.nodisplay && ai.enabled) {
 				item_update(item, &ai);
 				break;
 			}
@@ -584,7 +634,7 @@ static inline menu_screen_error_e _update_cb(const char *package, void *data)
 			page = page_scroller_get_page_at(scroller, page_no);
 			if (page) {
 				page_unpack_item(page, item);
-				page_trim_items(page);
+				page_scroller_trim_items(scroller);
 			}
 			item_destroy(item);
 		}
@@ -736,7 +786,7 @@ static void _mapbuf_cb(keynode_t *node, void *data)
 
 
 
-void _mouse_wheel_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
+static void _mouse_wheel_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
 {
 	Evas_Event_Mouse_Wheel *ei = event_info;
 	Evas_Object *scroller = data;
@@ -761,7 +811,7 @@ void _mouse_wheel_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
 
 
 
-Evas_Object *page_scroller_create(Evas_Object *tab, Evas_Object *index, page_scroller_sort_type_e sort_type, int rotate)
+HAPI Evas_Object *page_scroller_create(Evas_Object *tab, Evas_Object *index, page_scroller_sort_type_e sort_type, int rotate)
 {
 	Evas_Object *box;
 	Evas_Object *scroller;
@@ -823,7 +873,7 @@ Evas_Object *page_scroller_create(Evas_Object *tab, Evas_Object *index, page_scr
 	evas_object_show(box);
 	evas_object_show(scroller);
 
-	if (vconf_notify_key_changed("memory/menuscreen/desktop", _desktop_cb, scroller) < 0) {
+	if (vconf_notify_key_changed(VCONFKEY_AIL_INFO_STATE, _desktop_cb, scroller) < 0) {
 		_E("Failed to register a desktop change event handler");
 	}
 
@@ -831,14 +881,16 @@ Evas_Object *page_scroller_create(Evas_Object *tab, Evas_Object *index, page_scr
 		_E("Failed to register a vconf cb for %s", "memory/menuscreen/mapbuf");
 	}
 
-	pkgmgr_init(scroller);
+	// FIXME : This will be enabled after rebuilding the routine for appid <-> pkgid.
+	//pkgmgr_init(scroller);
+	item_badge_register_changed_cb(scroller);
 
 	return scroller;
 }
 
 
 
-void page_scroller_destroy(Evas_Object *scroller)
+HAPI void page_scroller_destroy(Evas_Object *scroller)
 {
 	Evas_Object *box;
 	Evas_Object *page;
@@ -852,7 +904,10 @@ void page_scroller_destroy(Evas_Object *scroller)
 	ret_if(NULL == (box = evas_object_data_get(scroller, "box")));
 	ret_if(NULL == (page_list = elm_box_children_get(box)));
 
-	pkgmgr_fini();
+	item_badge_unregister_changed_cb();
+
+	// FIXME : This will be enabled after rebuilding the routine for appid <-> pkgid.
+	//pkgmgr_fini();
 
 	EINA_LIST_FOREACH_SAFE(page_list, l, ln, page) {
 		int count;
@@ -903,7 +958,7 @@ void page_scroller_destroy(Evas_Object *scroller)
 	evas_object_event_callback_del(box, EVAS_CALLBACK_DEL, _evas_object_event_del_cb);
 	evas_object_event_callback_del(scroller, EVAS_CALLBACK_MOUSE_WHEEL, _mouse_wheel_cb);
 
-	if (vconf_ignore_key_changed("memory/menuscreen/desktop", _desktop_cb) < 0) {
+	if (vconf_ignore_key_changed(VCONFKEY_AIL_INFO_STATE, _desktop_cb) < 0) {
 		_E("Failed to ignore the desktop event");
 	}
 
@@ -914,7 +969,7 @@ void page_scroller_destroy(Evas_Object *scroller)
 
 
 
-void page_scroller_clean(Evas_Object *scroller)
+HAPI void page_scroller_clean(Evas_Object *scroller)
 {
 	Evas_Object *page;
 	Evas_Object *item;
@@ -947,7 +1002,7 @@ void page_scroller_clean(Evas_Object *scroller)
 
 
 
-Evas_Object *page_scroller_get_page_at(Evas_Object *scroller, unsigned int idx)
+HAPI Evas_Object *page_scroller_get_page_at(Evas_Object *scroller, unsigned int idx)
 {
 	const Eina_List *page_list;
 	Evas_Object *item;
@@ -971,7 +1026,7 @@ Evas_Object *page_scroller_get_page_at(Evas_Object *scroller, unsigned int idx)
 
 
 
-unsigned int page_scroller_count_page(Evas_Object *scroller)
+HAPI unsigned int page_scroller_count_page(Evas_Object *scroller)
 {
 	const Eina_List *page_list;
 	Evas_Object *box;
@@ -987,7 +1042,7 @@ unsigned int page_scroller_count_page(Evas_Object *scroller)
 
 
 
-int page_scroller_get_page_no(Evas_Object* scroller, Evas_Object *page)
+HAPI int page_scroller_get_page_no(Evas_Object* scroller, Evas_Object *page)
 {
 	Evas_Object *item;
 	Evas_Object *box;
@@ -1018,7 +1073,7 @@ int page_scroller_get_page_no(Evas_Object* scroller, Evas_Object *page)
 
 
 
-Evas_Object *page_scroller_find_item_by_package(Evas_Object *scroller, const char *package, int *page_no)
+HAPI Evas_Object *page_scroller_find_item_by_package(Evas_Object *scroller, const char *package, int *page_no)
 {
 	register int i;
 	register int j;
@@ -1059,7 +1114,7 @@ Evas_Object *page_scroller_find_item_by_package(Evas_Object *scroller, const cha
 
 
 
-void page_scroller_trim_items(Evas_Object *scroller)
+HAPI void page_scroller_trim_items(Evas_Object *scroller)
 {
 	register unsigned int i;
 	register unsigned int j;
@@ -1128,6 +1183,85 @@ void page_scroller_trim_items(Evas_Object *scroller)
 	pos --;
 	eina_list_free(list);
 }
+
+
+
+HAPI void page_scroller_edit(Evas_Object *scroller)
+{
+	Evas_Object *page;
+	Evas_Object *item;
+	register unsigned int page_no;
+	register unsigned int position_no;
+	unsigned int nr_of_pages;
+	int page_max_app;
+
+	nr_of_pages = page_scroller_count_page(scroller);
+	page_max_app = (int) evas_object_data_get(scroller, "page_max_app");
+	for (page_no = 0; page_no < nr_of_pages; page_no ++) {
+		page = page_scroller_get_page_at(scroller, page_no);
+		ret_if(NULL == page);
+
+		for (position_no = 0; position_no < page_max_app; position_no ++) {
+			item = page_get_item_at(page, position_no);
+			if (!item) {
+				continue;
+			}
+
+			item_edit(item);
+		}
+	}
+	evas_object_data_set(scroller, "is_edited", (void *) true);
+}
+
+
+
+HAPI void page_scroller_unedit(Evas_Object *scroller)
+{
+	Evas_Object *all_apps;
+	Evas_Object *page;
+	Evas_Object *item;
+	register int page_no;
+	register unsigned int position_no;
+	unsigned int nr_of_pages;
+	int page_max_app;
+
+	ret_if(NULL == scroller);
+
+	all_apps = evas_object_data_get(scroller, "tab");
+	ret_if(NULL == all_apps);
+
+	nr_of_pages = page_scroller_count_page(scroller);
+	page_max_app = (int) evas_object_data_get(scroller, "page_max_app");
+
+	for (page_no = nr_of_pages - 1; page_no >= 0; page_no --) {
+		int count;
+
+		page = page_scroller_get_page_at(scroller, page_no);
+		if (NULL == page) break;
+		count = page_count_item(page);
+
+		page_scroller_trim_items(scroller);
+
+		for (position_no = 0; position_no < page_max_app; position_no ++) {
+			item = page_get_item_at(page, position_no);
+			if (!item) {
+				break;
+			}
+
+			item_unedit(item);
+		}
+	}
+
+	evas_object_data_set(scroller, "is_edited", (void *) false);
+}
+
+
+
+HAPI bool page_scroller_is_edited(Evas_Object *scroller)
+{
+	return (bool) evas_object_data_get(scroller, "is_edited");
+}
+
 
 
 // End of a file

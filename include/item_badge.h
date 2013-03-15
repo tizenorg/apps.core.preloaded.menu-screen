@@ -16,17 +16,20 @@
 
 
 
-#ifndef __MENU_SCREEN_POPUP_H__
-#define __MENU_SCREEN_POPUP_H__
+#ifndef __MENU_SCREEN_BADGE_H__
+#define __MENU_SCREEN_BADGE_H__
 
-extern void popup_append_list(Evas_Object *popup);
-extern void popup_remove_list(Evas_Object *popup);
-extern void popup_free_list();
+#include <stdbool.h>
 
-extern Evas_Object *popup_create(Evas_Object *parent, const char *warning);
-extern void popup_destroy(Evas_Object *popup);
-extern Evas_Object *popup_create_uninstall(Evas_Object *parent, Evas_Object *item);
+#include "util.h"
 
-#endif //__MENU_SCREEN_POPUP_H__
+extern menu_screen_error_e item_badge_register(Evas_Object *item);
+extern void item_badge_unregister(Evas_Object *item);
+extern bool item_badge_is_registered(Evas_Object *item);
+extern int item_badge_count(char *package);
 
+extern void item_badge_register_changed_cb(Evas_Object *scroller);
+extern void item_badge_unregister_changed_cb(void);
+
+#endif
 // End of a file

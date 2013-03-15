@@ -45,6 +45,13 @@ extern void item_set_desktop(Evas_Object *item, char *name, int sync);
 extern void item_enable_delete(Evas_Object *obj);
 extern void item_disable_delete(Evas_Object *item);
 
+extern void item_show_badge(Evas_Object *obj, int value);
+extern void item_hide_badge(Evas_Object *obj);
+extern int item_is_enabled_badge(Evas_Object *obj);
+
+extern void item_edit(Evas_Object *item);
+extern void item_unedit(Evas_Object *item);
+
 extern Evas_Object *item_create(Evas_Object *scroller, app_info_t* ai);
 extern void item_update(Evas_Object *item, app_info_t *ai);
 extern void item_destroy(Evas_Object *obj);

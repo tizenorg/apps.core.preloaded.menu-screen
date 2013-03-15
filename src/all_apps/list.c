@@ -85,7 +85,7 @@ static int _all_apps_sort_cb(const void *d1, const void *d2)
 
 
 
-app_list *all_apps_list_create(void)
+HAPI app_list *all_apps_list_create(void)
 {
 	int count = 0;
 	app_list *list;
@@ -123,7 +123,7 @@ app_list *all_apps_list_create(void)
 
 
 
-void all_apps_list_destroy(app_list *list)
+HAPI void all_apps_list_destroy(app_list *list)
 {
 	app_list_item *item;
 

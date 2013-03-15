@@ -27,7 +27,7 @@
 
 
 
-menu_screen_error_e list_count(app_list *list, int *count)
+HAPI menu_screen_error_e list_count(app_list *list, int *count)
 {
 	retv_if(NULL == list, MENU_SCREEN_ERROR_INVALID_PARAMETER);
 	retv_if(NULL == list->list, MENU_SCREEN_ERROR_INVALID_PARAMETER);
@@ -40,7 +40,7 @@ menu_screen_error_e list_count(app_list *list, int *count)
 
 
 
-menu_screen_error_e list_first(app_list *list)
+HAPI menu_screen_error_e list_first(app_list *list)
 {
 	retv_if(NULL == list, MENU_SCREEN_ERROR_INVALID_PARAMETER);
 
@@ -51,7 +51,7 @@ menu_screen_error_e list_first(app_list *list)
 
 
 
-menu_screen_error_e list_next(app_list *list)
+HAPI menu_screen_error_e list_next(app_list *list)
 {
 	int count;
 
@@ -68,7 +68,7 @@ menu_screen_error_e list_next(app_list *list)
 
 
 
-menu_screen_error_e list_is_ended(app_list *list, bool *flag)
+HAPI menu_screen_error_e list_is_ended(app_list *list, bool *flag)
 {
 	int count;
 
@@ -83,7 +83,7 @@ menu_screen_error_e list_is_ended(app_list *list, bool *flag)
 
 
 
-menu_screen_error_e list_get_item(app_list *list, app_list_item **item)
+HAPI menu_screen_error_e list_get_item(app_list *list, app_list_item **item)
 {
 	retv_if(NULL == list, MENU_SCREEN_ERROR_INVALID_PARAMETER);
 	retv_if(NULL == list->list, MENU_SCREEN_ERROR_INVALID_PARAMETER);
@@ -96,7 +96,7 @@ menu_screen_error_e list_get_item(app_list *list, app_list_item **item)
 
 
 
-menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
+HAPI menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 {
 	ail_appinfo_h appinfo_h;
 	char *exec;
@@ -115,6 +115,7 @@ menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 			break_if(ail_appinfo_get_str(appinfo_h, AIL_PROP_NAME_STR, &name) < 0);
 			break_if(ail_appinfo_get_str(appinfo_h, AIL_PROP_ICON_STR, &icon) < 0);
 			break_if(ail_appinfo_get_bool(appinfo_h, AIL_PROP_NODISPLAY_BOOL, &ai->nodisplay) < 0);
+			break_if(ail_appinfo_get_bool(appinfo_h, AIL_PROP_X_SLP_ENABLED_BOOL, &ai->enabled) < 0);
 			break_if(ail_appinfo_get_bool(appinfo_h, AIL_PROP_X_SLP_REMOVABLE_BOOL, &ai->x_slp_removable) < 0);
 			break_if(ail_appinfo_get_bool(appinfo_h, AIL_PROP_X_SLP_TASKMANAGE_BOOL, &ai->x_slp_taskmanage) < 0);
 
@@ -139,20 +140,35 @@ menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 
 
 
-void list_free_values(app_info_t *ai)
+HAPI void list_free_values(app_info_t *ai)
 {
 	ret_if(NULL == ai);
 
 	/* Origin field */
-	if (ai->package) free(ai->package);
-	if (ai->exec) free(ai->exec);
-	if (ai->name) free(ai->name);
-	if (ai->icon) free(ai->icon);
+	if (ai->package) {
+		free(ai->package);
+		ai->package = NULL;
+	}
+
+	if (ai->exec) {
+		free(ai->exec);
+		ai->exec = NULL;
+	}
+
+	if (ai->name) {
+		free(ai->name);
+		ai->name = NULL;
+	}
+
+	if (ai->icon) {
+		free(ai->icon);
+		ai->icon = NULL;
+	}
 }
 
 
 
-menu_screen_error_e list_append_item(app_list *list, app_list_item *item)
+HAPI menu_screen_error_e list_append_item(app_list *list, app_list_item *item)
 {
 	retv_if(NULL == list, MENU_SCREEN_ERROR_INVALID_PARAMETER);
 	retv_if(NULL == item, MENU_SCREEN_ERROR_INVALID_PARAMETER);
@@ -165,7 +181,7 @@ menu_screen_error_e list_append_item(app_list *list, app_list_item *item)
 
 
 
-menu_screen_error_e list_remove_item(app_list *list, app_list_item *item)
+HAPI menu_screen_error_e list_remove_item(app_list *list, app_list_item *item)
 {
 	retv_if(NULL == list, MENU_SCREEN_ERROR_INVALID_PARAMETER);
 	retv_if(NULL == list->list, MENU_SCREEN_ERROR_INVALID_PARAMETER);
@@ -178,7 +194,7 @@ menu_screen_error_e list_remove_item(app_list *list, app_list_item *item)
 
 
 
-menu_screen_error_e list_sort(app_list *list, int (*_sort_cb)(const void *d1, const void *d2))
+HAPI menu_screen_error_e list_sort(app_list *list, int (*_sort_cb)(const void *d1, const void *d2))
 {
 	retv_if(NULL == list, MENU_SCREEN_ERROR_INVALID_PARAMETER);
 

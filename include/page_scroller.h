@@ -45,6 +45,10 @@ extern void page_scroller_trim_items(Evas_Object *scroller);
 extern void page_scroller_bring_in(Evas_Object *scroller, int idx);
 extern void page_scroller_show_region(Evas_Object *scroller, int idx);
 
+extern void page_scroller_edit(Evas_Object *scroller);
+extern void page_scroller_unedit(Evas_Object *scroller);
+extern bool page_scroller_is_edited(Evas_Object *scroller);
+
 #endif //__MENU_SCREEN_PAGE_SCROLLER_H__
 
 // End of a file

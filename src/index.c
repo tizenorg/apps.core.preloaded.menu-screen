@@ -28,7 +28,7 @@
 
 
 
-inline void index_bring_in(Evas_Object *index, int idx)
+HAPI inline void index_bring_in(Evas_Object *index, int idx)
 {
 	Elm_Object_Item *idx_it;
 
@@ -39,7 +39,7 @@ inline void index_bring_in(Evas_Object *index, int idx)
 
 
 
-void index_destroy(Evas_Object *index)
+HAPI void index_destroy(Evas_Object *index)
 {
 	evas_object_data_del(index, "win");
 	evas_object_data_del(index, "layout");
@@ -52,7 +52,7 @@ void index_destroy(Evas_Object *index)
 
 
 
-Evas_Object *index_create(Evas_Object *tab, unsigned int count)
+HAPI Evas_Object *index_create(Evas_Object *tab, unsigned int count)
 {
 	Evas_Object *index;
 	Evas_Object *scroller;
@@ -106,7 +106,7 @@ Evas_Object *index_create(Evas_Object *tab, unsigned int count)
 
 
 
-Evas_Object *index_update(Evas_Object *layout, Evas_Object *index, unsigned int count)
+HAPI Evas_Object *index_update(Evas_Object *layout, Evas_Object *index, unsigned int count)
 {
 
 	index_destroy(index);
@@ -115,14 +115,14 @@ Evas_Object *index_update(Evas_Object *layout, Evas_Object *index, unsigned int 
 
 
 
-void index_hide(Evas_Object *index)
+HAPI void index_hide(Evas_Object *index)
 {
 	edje_object_signal_emit(_EDJ(index), "hide", "index");
 }
 
 
 
-void index_show(Evas_Object *index)
+HAPI void index_show(Evas_Object *index)
 {
 	edje_object_signal_emit(_EDJ(index), "show", "index");
 }

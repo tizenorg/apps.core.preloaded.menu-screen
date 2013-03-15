@@ -22,6 +22,7 @@
 #include <ail.h>
 
 #include "menu_screen.h"
+#include "item_badge.h"
 #include "conf.h"
 #include "item.h"
 #include "item_event.h"
@@ -29,6 +30,7 @@
 #include "list.h"
 #include "mapbuf.h"
 #include "page.h"
+#include "page_scroller.h"
 #include "popup.h"
 #include "util.h"
 
@@ -88,7 +90,7 @@ static char *_space_to_new_line(const char *str)
 
 
 
-void item_set_icon(Evas_Object *edje, char *icon, int sync)
+HAPI void item_set_icon(Evas_Object *edje, char *icon, int sync)
 {
 	char *tmp;
 	int changed;
@@ -114,7 +116,7 @@ void item_set_icon(Evas_Object *edje, char *icon, int sync)
 
 
 
-inline char *item_get_icon(Evas_Object *edje)
+HAPI inline char *item_get_icon(Evas_Object *edje)
 {
 	return evas_object_data_get(edje, STR_ATTRIBUTE_ICON);
 }
@@ -122,7 +124,7 @@ inline char *item_get_icon(Evas_Object *edje)
 
 
 
-void item_set_name(Evas_Object *edje, char *name, int sync)
+HAPI void item_set_name(Evas_Object *edje, char *name, int sync)
 {
 	char *tmp;
 	int changed;
@@ -168,14 +170,14 @@ void item_set_name(Evas_Object *edje, char *name, int sync)
 
 
 
-inline char *item_get_name(Evas_Object *edje)
+HAPI inline char *item_get_name(Evas_Object *edje)
 {
 	return evas_object_data_get(edje, STR_ATTRIBUTE_NAME);
 }
 
 
 
-void item_set_desktop(Evas_Object *edje, char *name, int sync)
+HAPI void item_set_desktop(Evas_Object *edje, char *name, int sync)
 {
 	char *tmp;
 	int changed;
@@ -201,14 +203,14 @@ void item_set_desktop(Evas_Object *edje, char *name, int sync)
 
 
 
-inline char *item_get_desktop(Evas_Object *edje)
+HAPI inline char *item_get_desktop(Evas_Object *edje)
 {
 	return evas_object_data_get(edje, STR_ATTRIBUTE_DESKTOP);
 }
 
 
 
-void item_set_package(Evas_Object *edje, char *package, int sync)
+HAPI void item_set_package(Evas_Object *edje, char *package, int sync)
 {
 	char *tmp;
 	int changed;
@@ -235,14 +237,14 @@ void item_set_package(Evas_Object *edje, char *package, int sync)
 
 
 
-inline char *item_get_package(Evas_Object *edje)
+HAPI inline char *item_get_package(Evas_Object *edje)
 {
 	return evas_object_data_get(edje, STR_ATTRIBUTE_PKG_NAME);
 }
 
 
 
-void item_set_removable(Evas_Object *edje, int removable, int sync)
+HAPI void item_set_removable(Evas_Object *edje, int removable, int sync)
 {
 	int value;
 	int changed;
@@ -263,14 +265,14 @@ void item_set_removable(Evas_Object *edje, int removable, int sync)
 
 
 
-inline int item_get_removable(Evas_Object *edje)
+HAPI inline int item_get_removable(Evas_Object *edje)
 {
 	return (int) evas_object_data_get(edje, STR_ATTRIBUTE_REMOVABLE);
 }
 
 
 
-void item_set_page(Evas_Object *edje, Evas_Object *page, int sync)
+HAPI void item_set_page(Evas_Object *edje, Evas_Object *page, int sync)
 {
 	Evas_Object *value;
 	int changed;
@@ -291,7 +293,7 @@ void item_set_page(Evas_Object *edje, Evas_Object *page, int sync)
 
 
 
-inline Evas_Object *item_get_page(Evas_Object *edje)
+HAPI inline Evas_Object *item_get_page(Evas_Object *edje)
 {
 	return evas_object_data_get(edje, STR_ATTRIBUTE_PAGE);
 }
@@ -299,7 +301,7 @@ inline Evas_Object *item_get_page(Evas_Object *edje)
 
 
 
-inline void item_enable_delete(Evas_Object *item)
+HAPI inline void item_enable_delete(Evas_Object *item)
 {
 	if (item_get_removable(item) > 0) {
 		edje_object_signal_emit(_EDJ(item), "delete,on", "menu");
@@ -308,7 +310,7 @@ inline void item_enable_delete(Evas_Object *item)
 
 
 
-inline void item_disable_delete(Evas_Object *item)
+HAPI inline void item_disable_delete(Evas_Object *item)
 {
 	if (item_get_removable(item) > 0) {
 		edje_object_signal_emit(_EDJ(item), "delete,off", "menu");
@@ -316,7 +318,50 @@ inline void item_disable_delete(Evas_Object *item)
 }
 
 
-void item_enable_progress(Evas_Object *obj)
+
+HAPI void item_show_badge(Evas_Object *obj, int value)
+{
+	char str[BUFSZE];
+	Evas_Object *scroller;
+
+	ret_if(NULL == obj);
+	ret_if(value <= 0);
+
+	sprintf(str, "%d", value);
+	if (edje_object_part_text_set(_EDJ(obj), "badge,txt", str) == EINA_FALSE) {
+		_E("Failed to set text on the part, edje:%p, part:%s, text:%s", _EDJ(obj), "badge,txt", str);
+	}
+
+	scroller = evas_object_data_get(obj, "scroller");
+	ret_if(NULL == scroller);
+	ret_if(page_scroller_is_edited(scroller));
+
+	edje_object_signal_emit(_EDJ(obj), "badge,on", "menu");
+	evas_object_data_set(obj, "badge,enabled", (void*)1);
+
+	_D("Badge is updated to %s", str);
+}
+
+
+
+HAPI void item_hide_badge(Evas_Object *obj)
+{
+	ret_if(NULL == obj);
+
+	edje_object_signal_emit(_EDJ(obj), "badge,off", "menu");
+	evas_object_data_del(obj, "badge,enabled");
+}
+
+
+
+HAPI int item_is_enabled_badge(Evas_Object *obj)
+{
+	return evas_object_data_get(obj, "badge,enabled") != NULL;
+}
+
+
+
+HAPI void item_enable_progress(Evas_Object *obj)
 {
 	Evas_Object *progress;
 
@@ -347,7 +392,7 @@ void item_enable_progress(Evas_Object *obj)
 
 
 
-void item_update_progress(Evas_Object *obj, int value)
+HAPI void item_update_progress(Evas_Object *obj, int value)
 {
 	Evas_Object *progress;
 
@@ -363,7 +408,7 @@ void item_update_progress(Evas_Object *obj, int value)
 
 
 
-void item_disable_progress(Evas_Object *obj)
+HAPI void item_disable_progress(Evas_Object *obj)
 {
 	Evas_Object *progress;
 
@@ -381,9 +426,36 @@ void item_disable_progress(Evas_Object *obj)
 
 
 
-int item_is_enabled_progress(Evas_Object *obj)
+HAPI int item_is_enabled_progress(Evas_Object *obj)
 {
 	return evas_object_data_get(obj, "progress,enabled") != NULL;
+}
+
+
+
+HAPI void item_edit(Evas_Object *item)
+{
+	if (item_get_removable(item)) {
+		edje_object_signal_emit(_EDJ(item), "uninstall,on", "menu");
+	}
+	edje_object_signal_emit(_EDJ(item), "badge,off", "menu");
+	item_unmark_dirty(item);
+}
+
+
+
+HAPI void item_unedit(Evas_Object *item)
+{
+	char *package;
+
+	edje_object_signal_emit(_EDJ(item), "uninstall,off", "menu");
+
+	package = item_get_package(item);
+	if (item_badge_is_registered(item)
+			&& item_badge_count(package) > 0)
+	{
+		edje_object_signal_emit(_EDJ(item), "badge,on", "menu");
+	}
 }
 
 
@@ -392,7 +464,12 @@ static Evas_Object *_add_icon_image(Evas_Object *item, const char *icon_file)
 {
 	Evas_Object *icon;
 
+	retv_if(NULL == item, NULL);
+	retv_if(NULL == icon_file, NULL);
+
 	icon = elm_icon_add(item);
+	retv_if(NULL == icon, NULL);
+
 	if (elm_image_file_set(icon, icon_file, NULL) == EINA_FALSE) {
 		_E("Icon file is not accessible (%s)", icon_file);
 		evas_object_del(icon);
@@ -413,6 +490,10 @@ static Evas_Object *_add_icon_image(Evas_Object *item, const char *icon_file)
 static Evas_Object *_add_edje_icon(Evas_Object *item, const char *icon_file)
 {
 	Evas_Object *icon;
+
+	retv_if(NULL == item, NULL);
+	retv_if(NULL == icon_file, NULL);
+
 	if (access(icon_file, R_OK) != 0) {
 		_E("Failed to get an icon");
 		return NULL;
@@ -430,7 +511,7 @@ static Evas_Object *_add_edje_icon(Evas_Object *item, const char *icon_file)
 
 
 
-menu_screen_error_e item_is_edje_icon(const char *icon)
+HAPI menu_screen_error_e item_is_edje_icon(const char *icon)
 {
 	int len;
 	const char *ext = "jde.";
@@ -449,17 +530,33 @@ menu_screen_error_e item_is_edje_icon(const char *icon)
 
 
 
-void item_update(Evas_Object *item, app_info_t *ai)
+HAPI void item_update(Evas_Object *item, app_info_t *ai)
 {
-	Evas_Object *icon;
+	Evas_Object *icon = NULL;
+
+	ret_if(NULL == item);
+	ret_if(NULL == ai);
 
 	if (!ai->image) {
-		if (item_is_edje_icon(ai->icon) == MENU_SCREEN_ERROR_OK) {
-			icon = _add_edje_icon(item, ai->icon);
-			evas_object_data_set(item, "icon_image_type", STR_ICON_IMAGE_TYPE_EDJE);
+		if (0 != access(ai->icon, R_OK)) {
+			_E("Failed to access to [%s]", ai->icon);
 		} else {
-			icon = _add_icon_image(item, ai->icon);
-			evas_object_data_set(item, "icon_image_type", STR_ICON_IMAGE_TYPE_OBJECT);
+			FILE *fp;
+
+			fp = fopen(ai->icon, "rb");
+			if (fp) {
+				fseek(fp, 0L, SEEK_END);
+				_D("Access to file [%s], size[%ld]", ai->icon, ftell(fp));
+				fclose(fp);
+			} else _E("Cannot get the file pointer[%s]", ai->icon);
+
+			if (item_is_edje_icon(ai->icon) == MENU_SCREEN_ERROR_OK) {
+				icon = _add_edje_icon(item, ai->icon);
+				evas_object_data_set(item, "icon_image_type", STR_ICON_IMAGE_TYPE_EDJE);
+			} else {
+				icon = _add_icon_image(item, ai->icon);
+				evas_object_data_set(item, "icon_image_type", STR_ICON_IMAGE_TYPE_OBJECT);
+			}
 		}
 	} else {
 		icon = ai->image;
@@ -483,11 +580,23 @@ void item_update(Evas_Object *item, app_info_t *ai)
 	item_set_icon(item, ai->icon, 0);
 	evas_object_data_set(item, STR_ATTRIBUTE_REMOVABLE, (void*) ai->x_slp_removable);
 	evas_object_data_set(item, "pid", (void *) ai->pid);
+
+	item_badge_register(item);
+
+	do {
+		Evas_Object *scroller;
+
+		scroller = evas_object_data_get(item, "scroller");
+		break_if(NULL == scroller);
+
+		if (false == page_scroller_is_edited(scroller)) break;
+		item_edit(item);
+	} while (0);
 }
 
 
 
-Evas_Object *item_create(Evas_Object *scroller, app_info_t* ai)
+HAPI Evas_Object *item_create(Evas_Object *scroller, app_info_t* ai)
 {
 	Evas_Object *item;
 	Evas_Object *bg;
@@ -505,6 +614,7 @@ Evas_Object *item_create(Evas_Object *scroller, app_info_t* ai)
 
 	bg = evas_object_rectangle_add(menu_screen_get_evas());
 	if (!bg) {
+		_E("Cannot add an rectangle");
 		evas_object_del(item);
 		return NULL;
 	}
@@ -540,7 +650,7 @@ Evas_Object *item_create(Evas_Object *scroller, app_info_t* ai)
 
 
 
-void item_destroy(Evas_Object *item)
+HAPI void item_destroy(Evas_Object *item)
 {
 	Evas_Object *icon;
 	Evas_Object *bg;
@@ -565,6 +675,9 @@ void item_destroy(Evas_Object *item)
 		}
 	}
 
+	if (item_badge_is_registered(item)) {
+		item_badge_unregister(item);
+	}
 	item_event_unregister(item);
 
 	item_set_package(item, NULL, 1);
@@ -617,7 +730,7 @@ static Eina_Bool _unblock_cb(void *data)
 
 
 
-void item_launch(Evas_Object *obj)
+HAPI void item_launch(Evas_Object *obj)
 {
 	char *package;
 	char *name;
@@ -661,7 +774,7 @@ void item_launch(Evas_Object *obj)
 
 
 
-int item_get_position(Evas_Object *item)
+HAPI int item_get_position(Evas_Object *item)
 {
 	Evas_Object *scroller;
 	Evas_Object *layout;
@@ -716,21 +829,21 @@ int item_get_position(Evas_Object *item)
 
 
 
-void item_mark_dirty(Evas_Object *item)
+HAPI void item_mark_dirty(Evas_Object *item)
 {
 	evas_object_data_set(item, "dirty", (void *) 1);
 }
 
 
 
-void item_unmark_dirty(Evas_Object *item)
+HAPI void item_unmark_dirty(Evas_Object *item)
 {
 	evas_object_data_set(item, "dirty", (void *) 0);
 }
 
 
 
-int item_is_dirty(Evas_Object *item)
+HAPI int item_is_dirty(Evas_Object *item)
 {
 	return (int) evas_object_data_get(item, "dirty");
 }

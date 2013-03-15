@@ -68,7 +68,7 @@ static struct {
 
 
 
-bool mouse_is_scrolling(void)
+HAPI bool mouse_is_scrolling(void)
 {
 	bool scroll_x = false;
 	bool scroll_y = false;
@@ -141,7 +141,7 @@ static Eina_Bool _move_cb(void *data, int type, void *event)
 
 
 
-void mouse_register(void)
+HAPI void mouse_register(void)
 {
 	mouse_info.mouse_down = ecore_event_handler_add(ECORE_EVENT_MOUSE_BUTTON_DOWN, _down_cb, NULL);
 	if (!mouse_info.mouse_down) {
@@ -168,7 +168,7 @@ void mouse_register(void)
 
 
 
-void mouse_unregister(void)
+HAPI void mouse_unregister(void)
 {
 	if (mouse_info.mouse_down) {
 		ecore_event_handler_del(mouse_info.mouse_down);
