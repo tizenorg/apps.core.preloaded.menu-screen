@@ -18,8 +18,9 @@
 
 #include <stdlib.h>
 #include <Elementary.h>
-#include <aul.h>
 #include <ail.h>
+#include <appsvc.h>
+#include <aul.h>
 
 #include "menu_screen.h"
 #include "item_badge.h"
@@ -43,6 +44,7 @@
 #define STR_ATTRIBUTE_PKG_NAME "package"
 #define STR_ATTRIBUTE_REMOVABLE	"removable"
 #define STR_ATTRIBUTE_DESKTOP "desktop"
+#define STR_ATTRIBUTE_TYPE "type"
 #define STR_ATTRIBUTE_PAGE "pending,page"
 #define STR_ICON_IMAGE_TYPE_OBJECT "object"
 #define STR_ICON_IMAGE_TYPE_EDJE "edje"
@@ -206,6 +208,30 @@ HAPI void item_set_desktop(Evas_Object *edje, char *name, int sync)
 HAPI inline char *item_get_desktop(Evas_Object *edje)
 {
 	return evas_object_data_get(edje, STR_ATTRIBUTE_DESKTOP);
+}
+
+
+
+HAPI void item_set_type(Evas_Object *edje, int type, int sync)
+{
+	int tmp;
+	int changed;
+
+	tmp = (int) evas_object_data_get(edje, STR_ATTRIBUTE_TYPE);
+	changed = (tmp == type ? 0 : 1);	// We have to do sync when an attribute is created
+
+	if (!changed) {
+		return ;
+	}
+
+	evas_object_data_set(edje, STR_ATTRIBUTE_TYPE, (void *) type);
+}
+
+
+
+HAPI inline int item_get_type(Evas_Object *edje)
+{
+	return (int) evas_object_data_get(edje, STR_ATTRIBUTE_TYPE);
 }
 
 
@@ -723,9 +749,15 @@ HAPI void item_destroy(Evas_Object *item)
 static Eina_Bool _unblock_cb(void *data)
 {
 	Evas_Object *layout;
-	layout = evas_object_data_get(menu_screen_get_win(), "layout_current");
+	layout = evas_object_data_get(menu_screen_get_win(), "layout");
 	layout_disable_block(layout);
 	return EINA_FALSE;
+}
+
+
+
+static void _run_cb(bundle *b, int request_code, appsvc_result_val result, void *data)
+{
 }
 
 
@@ -743,32 +775,55 @@ HAPI void item_launch(Evas_Object *obj)
 	package = item_get_package(obj);
 	ret_if(NULL == package);
 
-	layout = evas_object_data_get(menu_screen_get_win(), "layout_current");
+	layout = evas_object_data_get(menu_screen_get_win(), "layout");
 	layout_enable_block(layout);
 
-	ret_aul = aul_open_app(package);
-	if (ret_aul == AUL_R_EINVAL) {
-		char* sinform;
-		int len;
+	bool is_shortcut = (bool) evas_object_data_get(obj, "is_shortcut");
+	bool shortcut_launch_package = (bool) evas_object_data_get(obj, "shortcut_launch_package");
+	if (is_shortcut && !shortcut_launch_package) {
+		bundle *b = NULL;
+		b = bundle_create();
+		ret_if(NULL == b);
 
-		// IDS_IDLE_POP_UNABLE_TO_LAUNCH_PS : "Unable to launch %s"
-		len = strlen(D_("IDS_IDLE_POP_UNABLE_TO_LAUNCH_PS")) + strlen(name) + 1;
+		appsvc_set_operation(b, APPSVC_OPERATION_VIEW);
+		appsvc_set_uri(b, evas_object_data_get(obj, "content_info"));
 
-		sinform = calloc(len, sizeof(char));
-		if (!sinform) {
-			_E("cannot calloc for popup.");
-			return;
+		int ret = -1;
+		ret = appsvc_run_service(b, 0, _run_cb, NULL);
+		if (0 > ret) {
+			_E("cannot run service. ret [%d]", ret);
+			layout_disable_block(layout);
+		} else {
+			_D("Launch app's ret : [%d]", ret);
+			ecore_timer_add(LAYOUT_BLOCK_INTERVAL, _unblock_cb, NULL);
 		}
 
-		snprintf(sinform, len, D_("IDS_IDLE_POP_UNABLE_TO_LAUNCH_PS"), name);
-		popup_create(obj, sinform);
-
-		free(sinform);
-		layout_disable_block(layout);
+		bundle_free(b);
 	} else {
-		_D("Launch app's ret : [%d]", ret_aul);
-		_T(package);
-		ecore_timer_add(LAYOUT_BLOCK_INTERVAL, _unblock_cb, NULL);
+		ret_aul = aul_open_app(package);
+		if (ret_aul == AUL_R_EINVAL) {
+			char* sinform;
+			int len;
+
+			// IDS_IDLE_POP_UNABLE_TO_LAUNCH_PS : "Unable to launch %s"
+			len = strlen(D_("IDS_IDLE_POP_UNABLE_TO_LAUNCH_PS")) + strlen(name) + 1;
+
+			sinform = calloc(len, sizeof(char));
+			if (!sinform) {
+				_E("cannot calloc for popup.");
+				return;
+			}
+
+			snprintf(sinform, len, D_("IDS_IDLE_POP_UNABLE_TO_LAUNCH_PS"), name);
+			popup_create(obj, sinform);
+
+			free(sinform);
+			layout_disable_block(layout);
+		} else {
+			_D("Launch app's ret : [%d]", ret_aul);
+			_T(package);
+			ecore_timer_add(LAYOUT_BLOCK_INTERVAL, _unblock_cb, NULL);
+		}
 	}
 }
 

@@ -42,6 +42,9 @@ extern void item_set_page(Evas_Object *edje, Evas_Object *page, int sync);
 extern char *item_get_desktop(Evas_Object *item);
 extern void item_set_desktop(Evas_Object *item, char *name, int sync);
 
+extern int item_get_type(Evas_Object *item);
+extern void item_set_type(Evas_Object *edje, int type, int sync);
+
 extern void item_enable_delete(Evas_Object *obj);
 extern void item_disable_delete(Evas_Object *item);
 

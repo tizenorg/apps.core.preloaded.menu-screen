@@ -442,7 +442,7 @@ static Evas_Object *_animated_unpack_item(Evas_Object *scroller, Evas_Object *pa
 
 
 
-HAPI menu_screen_error_e page_scroller_push_item(Evas_Object *scroller, app_info_t *ai)
+HAPI Evas_Object *page_scroller_push_item(Evas_Object *scroller, app_info_t *ai)
 {
 	Evas_Object *page;
 	Evas_Object *item;
@@ -485,25 +485,25 @@ HAPI menu_screen_error_e page_scroller_push_item(Evas_Object *scroller, app_info
 
 		rotate = (int) evas_object_data_get(scroller, "rotate");
 		new_page = page_create(scroller, nr_of_pages, rotate);
-		retv_if(NULL == new_page, MENU_SCREEN_ERROR_FAIL);
+		retv_if(NULL == new_page, NULL);
 		mapbuf_enable(new_page, 0);
 	}
 
 	item = item_create(scroller, ai);
-	retv_if(NULL == item, MENU_SCREEN_ERROR_FAIL);
+	retv_if(NULL == item, NULL);
 
 	page = page_scroller_get_page_at(scroller, candidate_page);
 	if (!page) {
 		_D("Impossible, page is not found");
 		item_destroy(item);
-		return MENU_SCREEN_ERROR_FAIL;
+		return NULL;
 	}
 
 	retv_if(MENU_SCREEN_ERROR_OK !=
 			_animated_pack_item(item, scroller, page, candidate_pos),
-			MENU_SCREEN_ERROR_FAIL);
+			NULL);
 
-	return MENU_SCREEN_ERROR_OK;
+	return item;
 }
 
 
@@ -547,11 +547,10 @@ static inline menu_screen_error_e _create_cb(const char *package, void *data)
 		if (!item) {
 			item = page_scroller_find_item_by_package(scroller, ai.package, NULL);
 			if (!item) {
-				int ret;
-
+				Evas_Object *item;
 				_D("package %s is installed directly", package);
-				ret = page_scroller_push_item(scroller, &ai);
-				if (ret == MENU_SCREEN_ERROR_OK) {
+				item = page_scroller_push_item(scroller, &ai);
+				if (item) {
 					break;
 				} else {
 					list_free_values(&ai);
@@ -606,11 +605,10 @@ static inline menu_screen_error_e _update_cb(const char *package, void *data)
 					item_destroy(item);
 				}
 			} else {
-				int ret;
+				Evas_Object *item;
 				_D("Item is not found. Create a new one");
-
-				ret = ((!ai.nodisplay && ai.enabled) ? page_scroller_push_item(scroller, &ai) : MENU_SCREEN_ERROR_OK);
-				if (ret == MENU_SCREEN_ERROR_OK) {
+				item = ((!ai.nodisplay && ai.enabled) ? page_scroller_push_item(scroller, &ai) : NULL);
+				if (item) {
 					break;
 				} else {
 					list_free_values(&ai);

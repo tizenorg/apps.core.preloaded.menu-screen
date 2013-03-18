@@ -23,6 +23,7 @@
 #include "menu_screen.h"
 #include "pkgmgr.h"
 #include "util.h"
+#include "all_apps/shortcut.h"
 
 #define BUFSZE 1024
 
@@ -84,8 +85,15 @@ static void _uninstall_yes_cb(void *data, Evas_Object *obj, void *event_info)
 	evas_object_del(evas_object_data_del(popup, "button2"));
 	evas_object_del(popup);
 
-	if (MENU_SCREEN_ERROR_OK != pkgmgr_uninstall(item)) {
-		_E("Cannot communicate with the pkgmgr-server.");
+	bool is_shortcut = false;
+	is_shortcut = (bool) evas_object_data_get(item, "is_shortcut");
+
+	if (is_shortcut) {
+		all_apps_shortcut_remove(item);
+	} else {
+		if (MENU_SCREEN_ERROR_OK != pkgmgr_uninstall(item)) {
+			_E("Cannot communicate with the pkgmgr-server.");
+		}
 	}
 }
 

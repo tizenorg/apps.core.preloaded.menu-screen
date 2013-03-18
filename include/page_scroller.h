@@ -39,7 +39,7 @@ extern Evas_Object *page_scroller_get_page_at(Evas_Object *scroller, unsigned in
 extern unsigned int page_scroller_count_page(Evas_Object *scroller);
 extern int page_scroller_get_page_no(Evas_Object* scroller, Evas_Object *page);
 
-extern menu_screen_error_e page_scroller_push_item(Evas_Object *scroller, app_info_t *ai);
+extern Evas_Object *page_scroller_push_item(Evas_Object *scroller, app_info_t *ai);
 extern Evas_Object *page_scroller_find_item_by_package(Evas_Object *scroller, const char *package, int *page_no);
 extern void page_scroller_trim_items(Evas_Object *scroller);
 extern void page_scroller_bring_in(Evas_Object *scroller, int idx);

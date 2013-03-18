@@ -270,7 +270,7 @@ static menu_screen_error_e _start_install(const char *package, void *scroller)
 
 		pi->item = page_scroller_find_item_by_package(scroller, package, &page_no);
 		if (!pi->item) {
-			if (MENU_SCREEN_ERROR_FAIL == page_scroller_push_item(scroller, &pi->ai)) _E("Cannot push an item");
+			if (NULL == page_scroller_push_item(scroller, &pi->ai)) _E("Cannot push an item");
 		}
 		pi->item = page_scroller_find_item_by_package(scroller, package, &page_no);
 		pi->page = page_scroller_get_page_at(scroller, page_no);
@@ -391,7 +391,7 @@ static menu_screen_error_e _icon_path(const char *package, const char *val, void
 			pi->ai.nodisplay = false;
 			pi->ai.enabled = true;
 
-			if (MENU_SCREEN_ERROR_FAIL == page_scroller_push_item(scroller, &pi->ai)) {
+			if (NULL == page_scroller_push_item(scroller, &pi->ai)) {
 				_E("Failed to create a new item, remove this package from the installing list");
 				list_free_values(&pi->ai);
 				install_list = eina_list_remove(install_list, pi);
