@@ -28,6 +28,7 @@
 #include "util.h"
 #include "all_apps/layout.h"
 #include "all_apps/list.h"
+#include "all_apps/shortcut.h"
 
 #define ALL_APPS_EDJE_PORTRAIT EDJEDIR"/all_apps_portrait.edj"
 #define ALL_APPS_GROUP "all_apps"
@@ -203,7 +204,7 @@ static menu_screen_error_e _load_item(Evas_Object *scroller, app_list_item *item
 		return MENU_SCREEN_ERROR_OK;
 	}
 
-	retv_if(MENU_SCREEN_ERROR_FAIL == page_scroller_push_item(scroller, ai), MENU_SCREEN_ERROR_FAIL);
+	retv_if(NULL == page_scroller_push_item(scroller, ai), MENU_SCREEN_ERROR_FAIL);
 
 	return MENU_SCREEN_ERROR_OK;
 
@@ -237,15 +238,6 @@ ERROR:
 	page_scroller_bring_in(scroller, 0);
 	menu_screen_set_done(true);
 
-	do {
-		Evas_Object *button;
-		button = _add_edit_button(all_apps, scroller);
-		if (NULL == button) {
-			_D("cannot make the edit button");
-		}
-		elm_object_part_content_set(all_apps, ALL_APPS_EDIT_BUTTON_PART, button);
-	} while (0);
-
 	return ECORE_CALLBACK_CANCEL;
 }
 
@@ -262,6 +254,20 @@ static menu_screen_error_e _push_items(Evas_Object *all_apps)
 	evas_object_data_set(all_apps, "list", list);
 	idle_timer = ecore_idler_add(_push_items_idler_cb, all_apps);
 	retv_if(NULL == idle_timer, MENU_SCREEN_ERROR_FAIL);
+
+	Evas_Object *scroller;
+	scroller = evas_object_data_get(all_apps, "scroller");
+	if (MENU_SCREEN_ERROR_OK != all_apps_shortcut_add_all(scroller))
+		_E("Cannot add shortcuts");
+
+	do {
+		Evas_Object *button;
+		button = _add_edit_button(all_apps, scroller);
+		if (NULL == button) {
+			_D("cannot make the edit button");
+		}
+		elm_object_part_content_set(all_apps, ALL_APPS_EDIT_BUTTON_PART, button);
+	} while (0);
 
 	return MENU_SCREEN_ERROR_OK;
 }
@@ -334,7 +340,7 @@ HAPI Evas_Object *all_apps_layout_create(Evas_Object *controlbar, int rotate)
 
 	elm_object_part_content_set(all_apps, "content", scroller);
 	evas_object_data_set(all_apps, "scroller", scroller);
-
+	if (!all_apps_shortcut_init(all_apps)) _E("Cannot initialize shortcut");
 	retv_if(MENU_SCREEN_ERROR_FAIL == _push_items(all_apps), NULL);
 
 	return all_apps;
@@ -348,6 +354,8 @@ HAPI void all_apps_layout_destroy(Evas_Object *all_apps)
 	Evas_Object *scroller;
 
 	ret_if(NULL == all_apps);
+
+	all_apps_shortcut_fini();
 
 	do {
 		Evas_Object *button;

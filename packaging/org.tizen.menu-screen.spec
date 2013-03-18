@@ -14,17 +14,19 @@
 
 Name:       org.tizen.menu-screen
 Summary:    An utility library of the menu screen
-Version:    1.0.27
+Version:    1.0.29
 Release:    1.1
 Group:      TO_BE/FILLED_IN
 License:    Flora Software License
 Source0:    %{name}-%{version}.tar.gz
 BuildRequires:  pkgconfig(ail)
 BuildRequires:  pkgconfig(appcore-efl)
+BuildRequires:  pkgconfig(appsvc)
 BuildRequires:  pkgconfig(aul)
 BuildRequires:  pkgconfig(badge)
 BuildRequires:  pkgconfig(bundle)
 BuildRequires:  pkgconfig(capi-appfw-application)
+BuildRequires:  pkgconfig(capi-system-info)
 BuildRequires:  pkgconfig(dlog)
 BuildRequires:  pkgconfig(ecore)
 BuildRequires:  pkgconfig(ecore-evas)
@@ -39,6 +41,7 @@ BuildRequires:  pkgconfig(evas)
 BuildRequires:  pkgconfig(heynoti)
 BuildRequires:  pkgconfig(pkgmgr)
 BuildRequires:  pkgconfig(pkgmgr-info)
+BuildRequires:  pkgconfig(shortcut)
 BuildRequires:  pkgconfig(sysman)
 BuildRequires:  pkgconfig(syspopup-caller)
 BuildRequires:  pkgconfig(utilX)
@@ -84,10 +87,42 @@ init_vconf()
 	vconftool set -t int memory/menu-screen/is_menu_screen_done 0 -i -f
 	vconftool set -t string db/setting/menuscreen/package_name "org.tizen.menu-screen" -i -u 5000 -f
 }
-
-
-
 init_vconf
+
+if [ ! -d %{_datadir}/dbspace ]
+then
+	mkdir -p %{_datadir}/dbspace
+fi
+
+if [ ! -d %{_datadir}/shortcut ]
+then
+	mkdir -p %{_datadir}/shortcut
+else
+	rm -rf %{_datadir}/shortcut/*
+fi
+
+sqlite3 %{_datadir}/dbspace/.menu_screen.db 'PRAGMA journal_mode = PERSIST;
+	create table if not exists shortcut (
+		ROWID INTEGER PRIMARY KEY AUTOINCREMENT,
+		appid TEXT,
+		name TEXT,
+		type INTEGER,
+		content_info TEXT,
+		icon TEXT
+	);
+'
+
+chown -R 5000:5000 %{_datadir}
+chown root:5000 %{_datadir}/dbspace/.menu_screen.db
+chown root:5000 %{_datadir}/dbspace/.menu_screen.db-journal
+
+chmod 660 %{_datadir}/dbspace/.menu_screen.db
+chmod 660 %{_datadir}/dbspace/.menu_screen.db-journal
+
+if [ -f /usr/lib/rpm-plugins/msm.so ]
+then
+	chsmack -a 'org.tizen.menu-screen' %{_datadir}/dbspace/.menu_screen.db*
+fi
 
 %files
 %manifest %{name}.manifest

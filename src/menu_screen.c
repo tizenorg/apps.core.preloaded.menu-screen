@@ -16,14 +16,15 @@
 
 
 
-#include <Elementary.h>
-#include <Ecore_X.h>
 #include <ail.h>
 #include <app.h>
-#include <stdbool.h>
-#include <vconf.h>
-#include <utilX.h>
 #include <aul.h>
+#include <Ecore_X.h>
+#include <Elementary.h>
+#include <stdbool.h>
+#include <system_info.h>
+#include <utilX.h>
+#include <vconf.h>
 
 #include "conf.h"
 #include "item.h"
@@ -523,19 +524,40 @@ static void _fini(void)
 
 
 
+#define QP_EMUL_STR		"Emulator"
+static bool _is_emulator_on(void)
+{
+	char *info;
+
+	if (system_info_get_value_string(SYSTEM_INFO_KEY_MODEL, &info) == 0) {
+		if (info == NULL) return false;
+		if (!strncmp(QP_EMUL_STR, info, strlen(info))) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
+
 int main(int argc, char *argv[])
 {
 	char *buf;
 	app_event_callback_s event_callback;
 
-	buf = vconf_get_str(MENU_SCREEN_ENGINE);
-	if (buf) {
-		_D("ELM_ENGINE is set as [%s]\n", buf);
-		setenv("ELM_ENGINE", buf, 1);
-		free(buf);
+	if (_is_emulator_on()) {
+		_D("ELM_ENGINE is set as [software_x11]");
 	} else {
-		_D("ELM_ENGINE is set as [%s]", "gl");
-		setenv("ELM_ENGINE", "gl", 1);
+		buf = vconf_get_str(MENU_SCREEN_ENGINE);
+		if (buf) {
+			_D("ELM_ENGINE is set as [%s]", buf);
+			setenv("ELM_ENGINE", buf, 1);
+			free(buf);
+		} else {
+			_D("ELM_ENGINE is set as [gl]");
+			setenv("ELM_ENGINE", "gl", 1);
+		}
 	}
 
 	_init(&event_callback);

@@ -2,14 +2,14 @@ Source: menu-screen
 Section: utils
 Priority: extra
 Maintainer: Jin Yoon <jinny.yoon@samsung.com>
-Build-Depends: debhelper (>= 5), libelm-dev, libslp-utilx-dev, libslp-setting-dev, libefreet-dev, libslp-sysman-dev, libslp-pm-dev, dlog-dev, libecore-dev, libaul-1-dev, libpkgmgr-client-dev, syspopup-caller-dev, libheynoti-dev, libail-0-dev, librua-dev, libslp-shortcut-dev, menu-daemon, capi-appfw-application-dev, libbadge-dev, pkgmgr-info-dev
+Build-Depends: debhelper (>= 5), libelm-dev, libslp-utilx-dev, libslp-setting-dev, libefreet-dev, libslp-sysman-dev, libslp-pm-dev, dlog-dev, libecore-dev, libaul-1-dev, libpkgmgr-client-dev, syspopup-caller-dev, libheynoti-dev, libail-0-dev, librua-dev, libslp-shortcut-dev, menu-daemon, capi-appfw-application-dev, libbadge-dev, pkgmgr-info-dev, capi-system-info-dev, libshortcut-dev, libappsvc-dev
 Homepage: N/A
 Standards-Version: 0.1.0
 
 Package: org.tizen.menu-screen
 Section: utils
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libelm, libeina, libslp-utilx-0, libslp-setting-0, libefreet, libslp-sysman, libslp-pm-0, libdlog-0, libaul-1, libpkgmgr-client-0, syspopup-caller-0, libheynoti-0, libail-0, menu-daemon, capi-appfw-application, libbadge, pkgmgr-info
+Depends: ${shlibs:Depends}, ${misc:Depends}, libelm, libeina, libslp-utilx-0, libslp-setting-0, libefreet, libslp-sysman, libslp-pm-0, libdlog-0, libaul-1, libpkgmgr-client-0, syspopup-caller-0, libheynoti-0, libail-0, menu-daemon, capi-appfw-application, libbadge, pkgmgr-info, capi-system-info, libshortcut-0, libappsvc-0
 Description: inhouse menu-screen
 
 Package: org.tizen.menu-screen-dbg

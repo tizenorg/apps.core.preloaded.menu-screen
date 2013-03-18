@@ -15,10 +15,12 @@ SET(VERSION 0.1.0)
 INCLUDE(FindPkgConfig)
 pkg_check_modules(MENU_PKGS REQUIRED
 	ail
+	appsvc
 	aul
 	badge
 	bundle
 	capi-appfw-application
+	capi-system-info
 	dlog
 	ecore
 	ecore-evas
@@ -34,6 +36,7 @@ pkg_check_modules(MENU_PKGS REQUIRED
 	heynoti
 	pkgmgr
 	pkgmgr-info
+	shortcut
 	sysman
 	syspopup-caller
 	utilX
@@ -59,6 +62,7 @@ SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS}")
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 ADD_EXECUTABLE(${PROJECT_NAME}
+	src/db.c
 	src/index.c
 	src/item.c
 	src/item_badge.c
@@ -73,8 +77,10 @@ ADD_EXECUTABLE(${PROJECT_NAME}
 	src/pkgmgr.c
 	src/popup.c
 	src/util.c
+	src/all_apps/db.c
 	src/all_apps/layout.c
 	src/all_apps/list.c
+	src/all_apps/shortcut.c
 )
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${pkgs_LDFLAGS} -lm)
