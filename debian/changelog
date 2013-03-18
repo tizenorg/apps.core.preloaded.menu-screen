@@ -1,3 +1,12 @@
+org.tizen.menu-screen (1.0.29) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.29
+
+  * Merge with the private
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Mon, 18 Mar 2013 12:57:04 +0900
+
 org.tizen.menu-screen (1.0.28) unstable; urgency=low
 
   * Git: apps/home/menu-screen
