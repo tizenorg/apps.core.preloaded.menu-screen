@@ -144,7 +144,7 @@ collections {
 					color2: 0 0 0 35;
 					color3: 0 0 0 35;
 					text {
-						text_class: "menu_item";
+						text_class: "tizen";
 						font: "TIZEN:style=medium";
 						size: 6;
 						fit: 1 1;
