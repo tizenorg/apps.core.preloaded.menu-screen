@@ -170,6 +170,7 @@ static int _shorcut_request_cb(
 		const char *icon,
 		int pid,
 		double period,
+		int allow_duplicate,
 		void *data)
 {
 	Evas_Object *scroller = data;
@@ -184,6 +185,15 @@ static int _shorcut_request_cb(
 	_D("Requested from: %d", pid);
 	_D("period : %.2f", period);
 	_D("CBDATA: %p", data);
+
+	if (!allow_duplicate) {
+		int count = 0;
+		count = all_apps_db_count_shortcut(pkgname, name);
+		if (0 < count) {
+			_D("There is already a package(%s:%s) in the Menu-screen", pkgname, name);
+			return -1;
+		}
+	}
 
 	long long rowid = -1l;
 	rowid = all_apps_db_insert_shortcut(pkgname, name, type, content_info, icon);

@@ -41,6 +41,7 @@ extern void all_apps_db_unretrieve_all_info(Eina_List *list);
 
 extern long long all_apps_db_insert_shortcut(const char *appid, const char *name, int type, const char *content_info, const char *icon);
 extern menu_screen_error_e all_apps_db_delete_shortcut(long long rowid);
+extern int all_apps_db_count_shortcut(const char *appid, const char *name);
 
 #endif // __MENU_SCREEN_ALL_APPS_DB_H__
 // End of file

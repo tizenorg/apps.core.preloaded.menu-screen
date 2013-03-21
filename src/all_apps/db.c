@@ -39,6 +39,7 @@
 	"'%s', '%s', %d, '%s', '%s');"
 #define QUERY_DELETE_SHORTCUT "DELETE FROM "SHORTCUT_TABLE" WHERE ROWID=%lld"
 #define QUERY_GET_ALL "SELECT ROWID, appid, name, type, content_info, icon FROM "SHORTCUT_TABLE
+#define QUERY_COUNT_SHORTCUT "SELECT COUNT(*) FROM "SHORTCUT_TABLE" WHERE appid='%s' AND name='%s'"
 
 
 
@@ -145,6 +146,31 @@ HAPI void all_apps_db_unretrieve_all_info(Eina_List *list)
 	}
 
 	eina_list_free(list);
+}
+
+
+
+HAPI int all_apps_db_count_shortcut(const char *appid, const char *name)
+{
+	retv_if(MENU_SCREEN_ERROR_OK != db_open(MENU_SCREEN_DB_FILE), -1);
+
+	char q[QUERY_LEN];
+	snprintf(q, sizeof(q), QUERY_COUNT_SHORTCUT, appid, name);
+
+	stmt_h *st;
+	st = db_prepare(q);
+	retv_if(NULL == st, -1);
+
+	menu_screen_error_e ret = MENU_SCREEN_ERROR_FAIL;
+	ret = db_next(st);
+	retv_if(MENU_SCREEN_ERROR_FAIL == ret, -1);
+
+	int count = -1;
+	count = db_get_int(st, 0);
+
+	db_finalize(st);
+
+	return count;
 }
 
 
