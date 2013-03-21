@@ -1,3 +1,12 @@
+org.tizen.menu-screen (1.0.31) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.31
+
+  * [Shortcut API] allow duplicate
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Thu, 21 Mar 2013 10:38:40 +0900
+
 org.tizen.menu-screen (1.0.30) unstable; urgency=low
 
   * Git: apps/home/menu-screen
