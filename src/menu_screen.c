@@ -548,6 +548,7 @@ int main(int argc, char *argv[])
 
 	if (_is_emulator_on()) {
 		_D("ELM_ENGINE is set as [software_x11]");
+		setenv("ELM_ENGINE", "software_x11", 1);
 	} else {
 		buf = vconf_get_str(MENU_SCREEN_ENGINE);
 		if (buf) {
