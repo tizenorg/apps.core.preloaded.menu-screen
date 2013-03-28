@@ -1,3 +1,12 @@
+org.tizen.menu-screen (1.0.33) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.33
+
+  * SMACK Rules
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Thu, 28 Mar 2013 15:44:18 +0900
+
 org.tizen.menu-screen (1.0.32) unstable; urgency=low
 
   * Git: apps/home/menu-screen
