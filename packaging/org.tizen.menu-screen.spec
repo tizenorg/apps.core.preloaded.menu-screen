@@ -12,9 +12,11 @@
 %define _resdir %{_packagedir}/res
 %define _sharedir %{_packagedir}/share
 
+%define _localedir %{_resdir}/locale
+
 Name:       org.tizen.menu-screen
 Summary:    An utility library of the menu screen
-Version:    1.0.33
+Version:    1.0.34
 Release:    1.1
 Group:      TO_BE/FILLED_IN
 License:    Flora Software License
@@ -135,5 +137,6 @@ fi
 %{_resdir}/edje/layout_portrait.edj
 %{_resdir}/edje/index.edj
 %{_resdir}/images/default.png
+%{_localedir}/*
 %{_usr_datadir}/packages/org.tizen.menu-screen.xml
 %{_usr_datadir}/license/%{name}

@@ -1,0 +1,2 @@
+msgid "IDS_HS_BUTTON_DONE"
+msgstr "Gereed"

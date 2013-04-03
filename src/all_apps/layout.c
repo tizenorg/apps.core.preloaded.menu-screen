@@ -39,7 +39,7 @@
 #define ALL_APPS_EDIT_BUTTON_GROUP "button_edit"
 #define ALL_APPS_EDIT_BUTTON_PART "button_edit"
 
-#define STR_DONE _("Done")
+#define IDS_HS_BUTTON_DONE "IDS_HS_BUTTON_DONE"
 
 
 HAPI void all_apps_layout_edit(Evas_Object *all_apps)
@@ -50,8 +50,8 @@ HAPI void all_apps_layout_edit(Evas_Object *all_apps)
 	edit_button = elm_object_part_content_get(all_apps, ALL_APPS_EDIT_BUTTON_PART);
 	ret_if(NULL == edit_button);
 	edje_object_signal_emit(_EDJ(edit_button), "edit_button,enable", "menu");
-	if (edje_object_part_text_set(_EDJ(edit_button), "edit_button_text", STR_DONE) == EINA_FALSE) {
-		_E("Failed to set text on the part, edje:%p, part:%s, text:%s", _EDJ(edit_button), "edit_button_text", STR_DONE);
+	if (edje_object_part_text_set(_EDJ(edit_button), "edit_button_text", _(IDS_HS_BUTTON_DONE)) == EINA_FALSE) {
+		_E("Failed to set text on the part, edje:%p, part:%s, text:%s", _EDJ(edit_button), "edit_button_text", _(IDS_HS_BUTTON_DONE));
 	}
 
 	scroller = elm_object_part_content_get(all_apps, "content");
