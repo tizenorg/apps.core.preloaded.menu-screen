@@ -321,7 +321,7 @@ HAPI Evas_Object *all_apps_layout_create(Evas_Object *controlbar, int rotate)
 	evas_object_size_hint_max_set(all_apps, width, height);
 	evas_object_resize(all_apps, width, height);
 
-	index = index_create(all_apps, 0);
+	index = index_create(all_apps, 0,0);
 	if (NULL == index) {
 		evas_object_del(all_apps);
 		_E("cannot create index.");

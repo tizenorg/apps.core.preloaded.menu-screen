@@ -52,7 +52,7 @@ HAPI void index_destroy(Evas_Object *index)
 
 
 
-HAPI Evas_Object *index_create(Evas_Object *tab, unsigned int count)
+HAPI Evas_Object *index_create(Evas_Object *tab, unsigned int count,unsigned int current_idx)
 {
 	Evas_Object *index;
 	Evas_Object *scroller;
@@ -78,7 +78,7 @@ HAPI Evas_Object *index_create(Evas_Object *tab, unsigned int count)
 	elm_index_level_go(index, 0);
 
 	if (count > 0) {
-		index_bring_in(index, 0);
+		index_bring_in(index, current_idx);
 	}
 
 	elm_object_part_content_set(tab, PAGE_CONTROLLER_GROUP_NAME, index);
@@ -108,9 +108,22 @@ HAPI Evas_Object *index_create(Evas_Object *tab, unsigned int count)
 
 HAPI Evas_Object *index_update(Evas_Object *layout, Evas_Object *index, unsigned int count)
 {
-
+	int idx;
+	Elm_Object_Item *idx_it;
+	idx_it = elm_index_selected_item_get(index, 0);
+	idx = (int) elm_object_item_data_get(idx_it);
+	
+	if(count == idx)
+	{
+		idx--;
+	}
+	if(idx == -1)
+	{
+		idx = 0;
+	}
+	_D("Current index %d, Current count: %d", idx,count);
 	index_destroy(index);
-	return index_create(layout, count);
+	return index_create(layout, count,idx);
 }
 
 
