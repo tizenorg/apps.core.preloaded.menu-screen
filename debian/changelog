@@ -1,3 +1,12 @@
+org.tizen.menu-screen (1.0.35) unstable; urgency=low
+
+  * Git: apps/home/menu-screen
+  * Tag: menu-screen_1.0.35
+
+  * Prevent issue : code maintainability
+
+ -- Jin Yoon <jinny.yoon@samsung.com>  Tue, 09 Apr 2013 09:53:46 +0900
+
 org.tizen.menu-screen (1.0.34) unstable; urgency=low
 
   * Git: apps/home/menu-screen
