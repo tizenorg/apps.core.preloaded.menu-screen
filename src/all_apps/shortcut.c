@@ -133,6 +133,7 @@ HAPI menu_screen_error_e all_apps_shortcut_add_all(Evas_Object *scroller)
 
 	Ecore_Idler *idle_timer = NULL;
 	idle_timer = ecore_idler_add(_push_items_idler_cb, scroller);
+	retv_if(NULL == idle_timer, MENU_SCREEN_ERROR_FAIL);
 
 	return MENU_SCREEN_ERROR_OK;
 }
