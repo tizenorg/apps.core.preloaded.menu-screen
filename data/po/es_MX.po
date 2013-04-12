@@ -1,2 +1,5 @@
 msgid "IDS_HS_BUTTON_DONE"
 msgstr "Realiz."
+
+msgid "IDS_AT_POP_UNINSTALL_PS_Q"
+msgstr "¿Desinstalar %s?"

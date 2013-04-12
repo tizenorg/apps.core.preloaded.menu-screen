@@ -113,14 +113,13 @@ static void _uninstall_no_cb(void *data, Evas_Object *obj, void *event_info)
 
 
 
+#define IDS_AT_POP_UNINSTALL_PS_Q "IDS_AT_POP_UNINSTALL_PS_Q"
 HAPI Evas_Object *popup_create_uninstall(Evas_Object *parent, Evas_Object *item)
 {
 	Evas_Object *popup;
 	Evas_Object *btn1;
 	Evas_Object *btn2;
 	char warning[BUFSZE];
-
-	retv_if(NULL == warning, NULL);
 
 	popup = elm_popup_add(parent);
 	retv_if(NULL == popup, NULL);
@@ -148,9 +147,18 @@ HAPI Evas_Object *popup_create_uninstall(Evas_Object *parent, Evas_Object *item)
 	evas_object_smart_callback_add(btn2, "clicked", _uninstall_no_cb, popup);
 
 	evas_object_size_hint_weight_set(popup, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	snprintf(warning, sizeof(warning), _("Uninstall %s?"), item_get_name(item));
-	elm_object_text_set(popup, warning);
 	evas_object_show(popup);
+
+	char *name= item_get_name(item);
+	retv_if(NULL == name, popup);
+
+	char *markup_name = elm_entry_utf8_to_markup(name);
+	retv_if(NULL == markup_name, popup);
+
+	snprintf(warning, sizeof(warning), _(IDS_AT_POP_UNINSTALL_PS_Q), markup_name);
+	free(markup_name);
+
+	elm_object_text_set(popup, warning);
 
 	return popup;
 }

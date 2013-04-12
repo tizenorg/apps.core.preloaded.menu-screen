@@ -1,2 +1,5 @@
 msgid "IDS_HS_BUTTON_DONE"
 msgstr "完成"
+
+msgid "IDS_AT_POP_UNINSTALL_PS_Q"
+msgstr "解除安裝 %s 嗎？"

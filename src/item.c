@@ -53,45 +53,6 @@
 
 
 
-#if 0 // Dual line is disabled temporarily.
-static char *_space_to_new_line(const char *str)
-{
-	char *tmp;
-	int len;
-	int space_idx = 0;
-
-	retv_if(NULL == str, NULL);
-	len = strlen(str);
-
-	if (len > LINE_SIZE) {
-		for (space_idx = LINE_SIZE - 1; str[space_idx] != ' ' && space_idx > 0; space_idx--);
-		if (!space_idx) {
-			space_idx = strcspn(str, " ");
-			space_idx = (space_idx == len ? 0 : space_idx);
-		}
-	}
-
-	if (space_idx) {
-		int i;
-		retv_if(NULL == (tmp = calloc(1, len + 4)), NULL);
-
-		for (i = 0; i < space_idx; i++) {
-			tmp[i] = str[i];
-		}
-		strcat(tmp, "<br>");
-		for (i = space_idx + 1; i < len; i++) {
-			tmp[i + 3] = str[i];
-		}
-	} else {
-		retv_if(NULL == (tmp = strdup(str)), NULL);
-	}
-
-	return tmp;
-}
-#endif
-
-
-
 HAPI void item_set_icon(Evas_Object *edje, char *icon, int sync)
 {
 	char *tmp;
@@ -130,7 +91,6 @@ HAPI void item_set_name(Evas_Object *edje, char *name, int sync)
 {
 	char *tmp;
 	int changed;
-	bool is_dual_line;
 
 	tmp = evas_object_data_get(edje, STR_ATTRIBUTE_NAME);
 	changed = (tmp && name) ? strcmp(name, tmp) : 1;
@@ -143,29 +103,10 @@ HAPI void item_set_name(Evas_Object *edje, char *name, int sync)
 	evas_object_data_del(edje, STR_ATTRIBUTE_NAME);
 	if (name) {
 		tmp = strdup(name);
-		if (tmp) {
-			evas_object_data_set(edje, STR_ATTRIBUTE_NAME, tmp);
-		}else {
-			_E("No more memory for allocating space \"%s\"", name);
-		}
-
-		is_dual_line = (bool) evas_object_data_get(edje, "item_text_dual_line");
-		if (is_dual_line) {
-			char *dual_txt;
-
-			# if 0 // Dual line is disabled temporarily.
-			dual_txt = _space_to_new_line(name);
-			#else
-			dual_txt = strdup(name);
-			#endif
-			if (edje_object_part_text_set(_EDJ(edje), "txt", dual_txt) == EINA_FALSE){
-				//_E("Failed to set text on the part");
-			}
-			free(dual_txt);
-		} else {
-			if (edje_object_part_text_set(_EDJ(edje), "txt", name) == EINA_FALSE){
-				//_E("Failed to set text on the part");
-			}
+		ret_if(NULL == tmp);
+		evas_object_data_set(edje, STR_ATTRIBUTE_NAME, tmp);
+		if (edje_object_part_text_set(_EDJ(edje), "txt", tmp) == EINA_FALSE){
+			//_E("Failed to set text on the part");
 		}
 	}
 }
