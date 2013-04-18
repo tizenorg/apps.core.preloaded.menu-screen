@@ -4,7 +4,8 @@
 	<author email="jinny.yoon@samsung.com" href="www.samsung.com">Jin Yoon</author>
 	<author email="yjoo93.park@samsung.com" href="www.samsung.com">Youngjoo Park</author>
 	<description>Menu-screen Application</description>
-	<ui-application appid="@PACKAGE_NAME@" exec="@EXEC_PREFIX@/@PROJECT_NAME@" nodisplay="true" multiple="false" type="capp" taskmanage="false" categories="home-screen">
+	<ui-application appid="@PACKAGE_NAME@" exec="@EXEC_PREFIX@/@PROJECT_NAME@" nodisplay="true" multiple="false" type="capp" taskmanage="false">
+		<category name="http://tizen.org/category/homeapp"></category>
 		<label>Menu-screen</label>
 	</ui-application>
 </manifest>
