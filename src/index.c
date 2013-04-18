@@ -112,7 +112,7 @@ HAPI Evas_Object *index_update(Evas_Object *layout, Evas_Object *index, unsigned
 	Elm_Object_Item *idx_it;
 	idx_it = elm_index_selected_item_get(index, 0);
 	idx = (int) elm_object_item_data_get(idx_it);
-	
+
 	if(count == idx)
 	{
 		idx--;
