@@ -23,7 +23,7 @@
 
 extern void index_bring_in(Evas_Object *index, int idx);
 
-extern Evas_Object *index_create(Evas_Object *layout, unsigned int count);
+extern Evas_Object *index_create(Evas_Object *layout, unsigned int count, unsigned int current_idx);
 extern Evas_Object *index_update(Evas_Object *layout, Evas_Object *index, unsigned int count);
 extern void index_destroy(Evas_Object *index);
 
