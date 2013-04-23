@@ -155,7 +155,7 @@ HAPI Evas_Object *popup_create_uninstall(Evas_Object *parent, Evas_Object *item)
 	char *markup_name = elm_entry_utf8_to_markup(name);
 	retv_if(NULL == markup_name, popup);
 
-	snprintf(warning, sizeof(warning), _(IDS_AT_POP_UNINSTALL_PS_Q), markup_name);
+	snprintf(warning, sizeof(warning), _("IDS_AT_POP_UNINSTALL_PS_Q"), markup_name);
 	free(markup_name);
 
 	elm_object_text_set(popup, warning);
