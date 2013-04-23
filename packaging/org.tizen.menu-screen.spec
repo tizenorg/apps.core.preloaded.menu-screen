@@ -16,7 +16,7 @@
 
 Name:       org.tizen.menu-screen
 Summary:    An utility library of the menu screen
-Version:    1.0.37
+Version:    1.0.38
 Release:    1.1
 Group:      TO_BE/FILLED_IN
 License:    Flora Software License
@@ -86,7 +86,6 @@ init_vconf()
 {
 	vconftool set -t int memory/idle-screen/top 0 -i -u 5000 -f
 	vconftool set -t string file/private/org.tizen.menu-screen/engine "gl" -i -u 5000 -f
-	vconftool set -t int memory/menu-screen/is_menu_screen_done 0 -i -f
 	vconftool set -t string db/setting/menuscreen/package_name "org.tizen.menu-screen" -i -u 5000 -f
 }
 init_vconf
