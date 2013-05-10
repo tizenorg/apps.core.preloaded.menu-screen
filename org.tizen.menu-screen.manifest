@@ -6,6 +6,6 @@
 		<domain name="org.tizen.menu-screen" />
 	</request>
 	<assign>
-		<filesystem path="/usr/apps/org.tizen.menu-screen/bin/menu-screen" label="org.tizen.menu-screen" exec_label="org.tizen.menu-screen" />
+		<filesystem path="/usr/share/packages/org.tizen.menu-screen.xml" label="_" />
 	</assign>
 </manifest>

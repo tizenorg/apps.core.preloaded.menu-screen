@@ -16,7 +16,7 @@
 
 Name:       org.tizen.menu-screen
 Summary:    An utility library of the menu screen
-Version:    1.0.39
+Version:    1.0.41
 Release:    1.1
 Group:      TO_BE/FILLED_IN
 License:    Flora Software License
@@ -139,3 +139,4 @@ fi
 %{_localedir}/*
 %{_usr_datadir}/packages/org.tizen.menu-screen.xml
 %{_usr_datadir}/license/%{name}
+/opt/etc/smack/accesses.d/%{_package_name}.rule
