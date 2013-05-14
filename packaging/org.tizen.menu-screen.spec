@@ -16,7 +16,7 @@
 
 Name:       org.tizen.menu-screen
 Summary:    An utility library of the menu screen
-Version:    1.0.41
+Version:    1.1.0
 Release:    1.1
 Group:      TO_BE/FILLED_IN
 License:    Flora Software License
@@ -113,9 +113,10 @@ sqlite3 %{_datadir}/dbspace/.menu_screen.db 'PRAGMA journal_mode = PERSIST;
 	);
 '
 
-chown -R 5000:5000 %{_datadir}
-chown root:5000 %{_datadir}/dbspace/.menu_screen.db
-chown root:5000 %{_datadir}/dbspace/.menu_screen.db-journal
+INHOUSE_ID="5000"
+chown -R $INHOUSE_ID:$INHOUSE_ID %{_datadir}
+chown root:$INHOUSE_ID %{_datadir}/dbspace/.menu_screen.db
+chown root:$INHOUSE_ID %{_datadir}/dbspace/.menu_screen.db-journal
 
 chmod 660 %{_datadir}/dbspace/.menu_screen.db
 chmod 660 %{_datadir}/dbspace/.menu_screen.db-journal
@@ -136,7 +137,7 @@ fi
 %{_resdir}/edje/layout_portrait.edj
 %{_resdir}/edje/index.edj
 %{_resdir}/images/default.png
-%{_localedir}/*
+%{_localedir}/*/*/*.mo
 %{_usr_datadir}/packages/org.tizen.menu-screen.xml
 %{_usr_datadir}/license/%{name}
 /opt/etc/smack/accesses.d/%{_package_name}.rule

@@ -283,7 +283,7 @@ HAPI Evas_Object *all_apps_layout_create(Evas_Object *controlbar, int rotate)
 	static const char item_edje[] = EDJEDIR"/item_4x4.edj";
 	static const char *page_edje;
 	static const char *all_apps_edje;
-	int item_width;
+	int item_width, item_height;
 	int width;
 	int height;
 
@@ -295,8 +295,8 @@ HAPI Evas_Object *all_apps_layout_create(Evas_Object *controlbar, int rotate)
 	width = menu_screen_get_root_width();
 	height = menu_screen_get_root_height() - INDEX_HEIGHT;
 
-	if (menu_screen_get_root_width() > menu_screen_get_root_height()) item_width = height / 5.0f;
-	else item_width = width / 4.0f;
+	item_width = ITEM_WIDTH_PROP * menu_screen_get_root_width();
+	item_height = ITEM_HEIGHT_PROP * menu_screen_get_root_height();
 
 	if (EINA_FALSE == elm_layout_file_set(all_apps, all_apps_edje, ALL_APPS_GROUP)) {
 		evas_object_del(all_apps);
@@ -311,7 +311,7 @@ HAPI Evas_Object *all_apps_layout_create(Evas_Object *controlbar, int rotate)
 	evas_object_data_set(all_apps, "page_max_app", (void *) PAGE_MAX_APP);
 	evas_object_data_set(all_apps, "item_edje", (void *) item_edje);
 	evas_object_data_set(all_apps, "item_width", (void *) item_width);
-	evas_object_data_set(all_apps, "item_height", (void *) item_width);
+	evas_object_data_set(all_apps, "item_height", (void *) item_height);
 	evas_object_data_set(all_apps, "item_enable_long_press", (void *) true);
 	evas_object_data_set(all_apps, "item_text_dual_line", (void *) true);
 	evas_object_data_set(all_apps, "is_under_pkgmgr", (void *) true);
