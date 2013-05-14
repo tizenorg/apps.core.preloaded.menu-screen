@@ -21,7 +21,7 @@
 
 #include <Evas.h>
 
-#define PAGE_MAX_APP 20
+#define PAGE_MAX_APP 16
 
 extern Evas_Object *all_apps_layout_create(Evas_Object *controlbar, int rotate);
 extern void all_apps_layout_destroy(Evas_Object *all_apps);

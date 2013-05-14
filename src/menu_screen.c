@@ -331,7 +331,6 @@ static void _destroy_conformant(Evas_Object *conformant)
 static bool _create_cb(void *data)
 {
 	Evas_Object *conformant;
-	Evas_Object *layout;
 
 	_get_window_size();
 	_init_theme();
@@ -347,6 +346,7 @@ static bool _create_cb(void *data)
 	retv_if(NULL == conformant, false);
 	evas_object_data_set(menu_screen_info.win, "conformant", conformant);
 
+	Evas_Object *layout;
 	layout = layout_create(conformant, LAYOUT_EDJE_PORTRAIT,
 				LAYOUT_GROUP_NAME, MENU_SCREEN_ROTATE_PORTRAIT);
 	if (NULL == layout) {
@@ -371,7 +371,7 @@ static void _terminate_cb(void *data)
 	Evas_Object *layout;
 
 	if (vconf_ignore_key_changed(VCONFKEY_BGSET, _change_bg_cb) < 0) {
-		_E("Failed to remove bgset %s\n", VCONFKEY_BGSET);
+		_E("Failed to remove bgset [%s]\n", VCONFKEY_BGSET);
 	}
 
 	evas_object_hide(menu_screen_info.win);

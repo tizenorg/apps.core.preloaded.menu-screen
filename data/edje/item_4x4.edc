@@ -16,6 +16,10 @@
 
 
 
+#include "conf.edc"
+
+
+
 styles {
 	style {
 		name: "app_name_style";
@@ -48,19 +52,6 @@ collections {
 					color: 0 0 0 0;
 				}
 			}
-
-			part {
-				name: "icon_bg";
-				type: RECT;
-				scale: 1;
-				mouse_events: 1;
-				description {
-					state: "default" 0.0;
-					rel1 { relative: 36/180 7/180; to, "bg"; }
-					rel2 { relative: 144/180 115/180; to, "bg"; }
-					color: 0 0 0 0;
-				}
-			}
 			part {
 				name: "icon_image";
 				type: SWALLOW;
@@ -68,8 +59,10 @@ collections {
 				mouse_events: 1;
 				description {
 					state: "default" 0.0;
-					rel1 { relative: 0.0 0.0; to, "icon_bg"; }
-					rel2 { relative: 1.0 1.0; to, "icon_bg"; }
+					rel1 { relative: 0.5 54/ITEM_HEIGHT; }
+					rel2 { relative: 0.5 54/ITEM_HEIGHT; }
+					min: 117 117;
+					fixed: 1 1;
 				}
 			}
 			part {
@@ -79,8 +72,8 @@ collections {
 				mouse_events: 1;
 				description {
 					state: "default" 0.0;
-					rel1 { relative: 15/180 7/180; to, "bg"; }
-					rel2 { relative: 165/180 160/180; to, "bg"; }
+					rel1 { relative: 0.0 0.0; to, "icon_image"; }
+					rel2 { relative: 1.0 1.0; to, "txt"; }
 					color: 0 0 0 0;
 					visible: 1;
 				}
@@ -93,8 +86,8 @@ collections {
 				description {
 					state: "default" 0.0;
 					visible: 0;
-					rel1 { relative: 120/180 10/180; to, "bg"; }
-					rel2 { relative: 180/180 70/180; to, "bg"; }
+					rel1 { relative: 110/ITEM_WIDTH 0.0; to, "bg"; }
+					rel2 { relative: 170/ITEM_WIDTH 60/ITEM_HEIGHT; to, "bg"; }
 					image {
 						normal: "../images/menu_badge_01.png";
 					}
@@ -160,8 +153,8 @@ collections {
 				mouse_events: 1;
 				description {
 					state: "default" 0.0;
-					rel1 { relative: 10/180 10/180; to, "bg"; }
-					rel2 { relative: 70/180 70/180; to, "bg"; }
+					rel1 { relative: 10/ITEM_WIDTH 0.0; to, "bg"; }
+					rel2 { relative: 70/ITEM_WIDTH 60/ITEM_HEIGHT; to, "bg"; }
 					image {
 						normal: "../images/RM06_App tray_Btn_Uninstall.png";
 					}
@@ -188,8 +181,8 @@ collections {
 				mouse_events: 1;
 				description {
 					state: "default" 0.0;
-					rel1 { relative: 0/180 10/180; to, "bg"; }
-					rel2 { relative: 60/180 70/180; to, "bg"; }
+					rel1 { relative: -0.2 -0.2; to, "uninstall"; }
+					rel2 { relative: 1.2 1.2; to, "uninstall"; }
 					color: 0 0 0 0;
 					visible: 0;
 				}
@@ -208,9 +201,9 @@ collections {
 				description
 				{
 					state: "default" 0.0;
-					rel1 { relative: 0.0 114/180; to, "bg"; }
-					rel2 { relative: 1.0 175/180; to, "bg"; }
-					align: 0.5 0.5;
+					rel1 { relative: 0.0 1.0; to_x, "bg"; to_y, "icon_image"; }
+					rel2 { relative: 1.0 1.0; to, "bg"; }
+					align: 0.5 0.0;
 					color: 255 255 255 255;
 					color2: 0 0 0 35;
 					color3: 0 0 0 35;
