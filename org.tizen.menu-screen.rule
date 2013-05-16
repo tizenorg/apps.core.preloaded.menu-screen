@@ -66,6 +66,6 @@ org.tizen.dailybriefing-accuweather org.tizen.menu-screen rw
 org.tizen.video-player org.tizen.menu-screen rw
 org.tizen.contacts org.tizen.menu-screen rw
 dbus org.tizen.menu-screen rwx
-e17 org.tizen.menu-screen w
+e17 org.tizen.menu-screen rwx
 stest-service org.tizen.menu-screen rx
 org.tizen.menu-screen stest-service w
