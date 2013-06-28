@@ -21,6 +21,7 @@ Release:    1.1
 Group:      TO_BE/FILLED_IN
 License:    Flora Software License
 Source0:    %{name}-%{version}.tar.gz
+Source1001: 	org.tizen.menu-screen.manifest
 BuildRequires:  pkgconfig(ail)
 BuildRequires:  pkgconfig(appcore-efl)
 BuildRequires:  pkgconfig(appsvc)
@@ -68,6 +69,7 @@ An utility library for developers of the menu screen (devel)
 
 %prep
 %setup -q
+cp %{SOURCE1001} .
 
 %build
 cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}
