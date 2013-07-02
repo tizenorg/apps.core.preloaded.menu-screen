@@ -125,7 +125,7 @@ chmod 660 %{_datadir}/dbspace/.menu_screen.db-journal
 
 if [ -f /usr/lib/rpm-plugins/msm.so ]
 then
-	chsmack -a 'org.tizen.menu-screen' %{_datadir}/dbspace/.menu_screen.db*
+#	chsmack -a 'org.tizen.menu-screen' %{_datadir}/dbspace/.menu_screen.db*
 fi
 
 %files
