@@ -123,10 +123,10 @@ chown root:$INHOUSE_ID %{_datadir}/dbspace/.menu_screen.db-journal
 chmod 660 %{_datadir}/dbspace/.menu_screen.db
 chmod 660 %{_datadir}/dbspace/.menu_screen.db-journal
 
-if [ -f /usr/lib/rpm-plugins/msm.so ]
-then
+#if [ -f /usr/lib/rpm-plugins/msm.so ]
+#then
 #	chsmack -a 'org.tizen.menu-screen' %{_datadir}/dbspace/.menu_screen.db*
-fi
+#fi
 
 %files
 %manifest %{name}.manifest
