@@ -1,0 +1,8 @@
+Change-Id: Ib3bd5551013685a16d1bfc67e5d5360dc84cdf87
+Code-Review+2: Ryan Ware <ware@linux.intel.com>
+Verified+1: Ryan Ware <ware@linux.intel.com>
+Submitted-by: Ryan Ware <ware@linux.intel.com>
+Submitted-at: Mon, 08 Jul 2013 10:14:22 -0700
+Reviewed-on: https://review.tizen.org/gerrit/4407
+Project: apps/core/preloaded/menu-screen
+Branch: refs/heads/tizen
