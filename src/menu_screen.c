@@ -186,77 +186,26 @@ static void _get_window_size(void)
 }
 
 
-
 static void _create_bg(void)
 {
-	char *buf;
-	Evas_Coord w;
-	Evas_Coord h;
 	Evas_Object *bg;
-	double f, wf, hf;
-	static int trigger = 0;
-	const char *key;
-	int width;
-	int height;
+	char *buf;
 
 	buf = vconf_get_str(VCONFKEY_BGSET);
 	ret_if(NULL == buf);
 
-	width = menu_screen_get_root_width();
-	height = menu_screen_get_root_height();
+   bg = evas_object_data_get(menu_screen_get_win(), "bg");
+   if (!bg) {
+   	bg = elm_bg_add(menu_screen_get_win());
+   	evas_object_size_hint_weight_set(bg, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+   	elm_win_resize_object_add(menu_screen_get_win(), bg);
+   	evas_object_show(bg);
+   }
 
-	bg = evas_object_data_get(menu_screen_get_win(), "bg");
-	if (NULL == bg) {
-		Evas_Object *rect;
-
-		rect = evas_object_rectangle_add(menu_screen_get_evas());
-		ret_if(NULL == rect);
-		evas_object_data_set(menu_screen_get_win(), "rect", rect);
-		evas_object_color_set(rect, 0, 0, 0, 255);
-		evas_object_size_hint_min_set(rect, width, height);
-		evas_object_size_hint_max_set(rect, width, height);
-		evas_object_resize(rect, width, height);
-		evas_object_show(rect);
-
-		bg = evas_object_image_add(menu_screen_get_evas());
-		if (NULL == bg) {
-			free(buf);
-			return;
-		}
-		evas_object_image_load_orientation_set(bg, EINA_TRUE);
-		evas_object_data_set(menu_screen_get_win(), "bg", bg);
-	}
-
-	if (trigger == 0) {
-		key = "/";
-		trigger = 1;
-	} else {
-		key = NULL;
-		trigger = 0;
-	}
-
-	evas_object_image_file_set(bg, buf, key);
-	evas_object_image_size_get(bg, &w, &h);
-	evas_object_image_filled_set(bg, 1);
-
-	wf = (double) width / (double) w;
-	hf = (double) height / (double) h;
-
-	f = wf < hf ? hf : wf;
-
-	w = (int) ((double) f * (double) w);
-	h = (int) ((double) f * (double) h);
-
-	evas_object_image_load_size_set(bg, w, h);
-	evas_object_image_fill_set(bg, 0, 0, w, h);
-	evas_object_move(bg, (width - w) / 2, (height - h) / 2);
-	evas_object_resize(bg, w, h);
-	evas_object_show(bg);
+   elm_bg_file_set(bg, buf, NULL);
 
 	free(buf);
 }
-
-
 
 
 static void _destroy_bg()
