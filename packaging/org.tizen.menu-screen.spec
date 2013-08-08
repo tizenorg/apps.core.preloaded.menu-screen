@@ -30,16 +30,9 @@ BuildRequires:  pkgconfig(bundle)
 BuildRequires:  pkgconfig(capi-appfw-application)
 BuildRequires:  pkgconfig(capi-system-info)
 BuildRequires:  pkgconfig(dlog)
-BuildRequires:  pkgconfig(ecore)
-BuildRequires:  pkgconfig(ecore-evas)
-BuildRequires:  pkgconfig(ecore-file)
-BuildRequires:  pkgconfig(ecore-imf)
-BuildRequires:  pkgconfig(ecore-input)
-BuildRequires:  pkgconfig(edje)
-BuildRequires:  pkgconfig(eet)
-BuildRequires:  pkgconfig(eina)
+BuildRequires:  efl
+BuildRequires:  efl-devel
 BuildRequires:  pkgconfig(elementary)
-BuildRequires:  pkgconfig(evas)
 BuildRequires:  pkgconfig(heynoti)
 BuildRequires:  pkgconfig(pkgmgr)
 BuildRequires:  pkgconfig(pkgmgr-info)
@@ -48,7 +41,6 @@ BuildRequires:  pkgconfig(sysman)
 BuildRequires:  pkgconfig(syspopup-caller)
 BuildRequires:  pkgconfig(utilX)
 BuildRequires:  cmake
-BuildRequires:  edje-tools
 BuildRequires:  gettext-tools
 
 
