@@ -1,3 +1,4 @@
+%bcond_without x
 %define _optdir /opt
 %define _usrdir /usr
 %define _appdir %{_usrdir}/apps
@@ -47,11 +48,12 @@ BuildRequires:  pkgconfig(pkgmgr-info)
 BuildRequires:  pkgconfig(shortcut)
 BuildRequires:  pkgconfig(sysman)
 BuildRequires:  pkgconfig(syspopup-caller)
-BuildRequires:  pkgconfig(utilX)
 BuildRequires:  cmake
 BuildRequires:  edje-tools
 BuildRequires:  gettext-tools
-
+%if !%{without x}
+BuildRequires:  pkgconfig(utilX)
+%endif
 
 %description
 An utility library for developers of the menu screen.

@@ -12,7 +12,37 @@ SET(EDJEDIR "${RESDIR}/edje")
 SET(LOCALEDIR "${RESDIR}/locale")
 SET(VERSION 0.1.0)
 
+OPTION(WITHOUT_X "Build without x" ON)
 INCLUDE(FindPkgConfig)
+IF(WITHOUT_X)
+ADD_DEFINITIONS("-DWAYLAND_PLATFORM")
+pkg_check_modules(MENU_PKGS REQUIRED
+        ail
+        appsvc
+        aul
+        badge
+        bundle
+        capi-appfw-application
+        capi-system-info
+        dlog
+        ecore
+        ecore-evas
+        ecore-file
+        ecore-imf
+        ecore-input
+        edje
+        eet
+        eina
+        elementary
+        evas
+        heynoti
+        pkgmgr
+        pkgmgr-info
+        shortcut
+        sysman
+        syspopup-caller
+)
+ELSE()
 pkg_check_modules(MENU_PKGS REQUIRED
 	ail
 	appsvc
@@ -41,6 +71,7 @@ pkg_check_modules(MENU_PKGS REQUIRED
 	syspopup-caller
 	utilX
 )
+ENDIF(WITHOUT_X)
 
 ADD_DEFINITIONS("-DENABLE_BGIMAGE")
 ADD_DEFINITIONS("-DLOG_TAG=\"MENU_SCREEN\"")
