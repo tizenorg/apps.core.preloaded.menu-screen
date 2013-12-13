@@ -1,3 +1,5 @@
+%bcond_with x
+%bcond_with wayland
 %define _optdir /opt
 %define _usrdir /usr
 %define _appdir %{_usrdir}/apps
@@ -47,11 +49,12 @@ BuildRequires:  pkgconfig(pkgmgr-info)
 BuildRequires:  pkgconfig(shortcut)
 BuildRequires:  pkgconfig(sysman)
 BuildRequires:  pkgconfig(syspopup-caller)
-BuildRequires:  pkgconfig(utilX)
 BuildRequires:  cmake
 BuildRequires:  edje-tools
 BuildRequires:  gettext-tools
-
+%if %{with x}
+BuildRequires:  pkgconfig(utilX)
+%endif
 
 %description
 An utility library for developers of the menu screen.
@@ -72,7 +75,12 @@ An utility library for developers of the menu screen (devel)
 cp %{SOURCE1001} .
 
 %build
+%if !%{with x} && %{with wayland}
+cmake . -DENABLE_WAYLAND=TRUE -DCMAKE_INSTALL_PREFIX=%{_prefix}
+%endif
+%if %{with x} && !%{with wayland}
 cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}
+%endif
 CFLAGS="${CFLAGS} -Wall -Werror" LDFLAGS="${LDFLAGS} -Wl,--hash-style=both -Wl,--as-needed"
 make %{?jobs:-j%jobs}
 

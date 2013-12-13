@@ -17,8 +17,10 @@
 
 
 #include <Elementary.h>
+#ifndef WAYLAND_PLATFORM
 #include <Ecore_X.h>
 #include <utilX.h>
+#endif
 #include <vconf.h>
 
 #include "menu_screen.h"
