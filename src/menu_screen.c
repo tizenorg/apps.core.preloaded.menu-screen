@@ -19,11 +19,9 @@
 #include <ail.h>
 #include <app.h>
 #include <aul.h>
-#include <Ecore_X.h>
 #include <Elementary.h>
 #include <stdbool.h>
 #include <system_info.h>
-#include <utilX.h>
 #include <vconf.h>
 
 #include "conf.h"
@@ -35,7 +33,10 @@
 #include "page.h"
 #include "page_scroller.h"
 #include "util.h"
-
+#ifndef WAYLAND_PLATFORM
+#include <Ecore_X.h>
+#include <utilX.h>
+#endif
 #define MENU_SCREEN_ENGINE "file/private/org.tizen.menu-screen/engine"
 
 #define LAYOUT_EDJE_PORTRAIT EDJEDIR"/layout_portrait.edj"
@@ -116,8 +117,9 @@ HAPI void menu_screen_set_done(bool is_done)
 
 static menu_screen_error_e _create_canvas(char *name, char *title)
 {
+	#ifndef WAYLAND_PLATFORM
 	Ecore_X_Atom ATOM_WM_WINDOW_ROLE;
-
+	#endif
 	menu_screen_info.win = elm_win_add(NULL, name, ELM_WIN_BASIC);
 	retv_if(NULL == menu_screen_info.win, MENU_SCREEN_ERROR_FAIL);
 
@@ -125,7 +127,7 @@ static menu_screen_error_e _create_canvas(char *name, char *title)
 		elm_win_title_set(menu_screen_info.win, title);
 	}
 	elm_win_borderless_set(menu_screen_info.win, EINA_TRUE);
-
+	#ifndef WAYLAND_PLATFORM
 	ecore_x_icccm_name_class_set(elm_win_xwindow_get(menu_screen_info.win), "MENU_SCREEN", "MENU_SCREEN");
 	ATOM_WM_WINDOW_ROLE = ecore_x_atom_get("WM_WINDOW_ROLE");
 	if (ATOM_WM_WINDOW_ROLE) {
@@ -133,7 +135,7 @@ static menu_screen_error_e _create_canvas(char *name, char *title)
 	} else {
 		_D("Failed to set the window role as MENU_SCREEN");
 	}
-
+	#endif
 	menu_screen_info.evas = evas_object_evas_get(menu_screen_info.win);
 	if (!menu_screen_info.evas) {
 		_E("[%s] Failed to get the evas object", __func__);
@@ -163,11 +165,12 @@ static void _destroy_canvas(void)
 
 static int _dead_cb(int pid, void *data)
 {
+	#ifndef WAYLAND_PLATFORM
 	utilx_hide_fake_effect(
 		ecore_x_display_get(),
 		ecore_x_window_root_get(ecore_evas_window_get(menu_screen_info.ee))
 	);
-
+	#endif
 	return EXIT_SUCCESS;
 }
 
@@ -175,13 +178,14 @@ static int _dead_cb(int pid, void *data)
 
 static void _get_window_size(void)
 {
+	#ifndef WAYLAND_PLATFORM
 	Ecore_X_Window focus_win;
 	Ecore_X_Window root_win;
 
 	focus_win = ecore_x_window_focus_get();
 	root_win = ecore_x_window_root_get(focus_win);
 	ecore_x_window_size_get(root_win, &menu_screen_info.root_width, &menu_screen_info.root_height);
-
+	#endif
 	_D("width:%d, height:%d", menu_screen_info.root_width, menu_screen_info.root_height);
 }
 
@@ -412,12 +416,12 @@ static void _resume_cb(void *data)
 	if (vconf_set_int(VCONFKEY_IDLE_SCREEN_TOP, VCONFKEY_IDLE_SCREEN_TOP_TRUE) < 0) {
 		_E("Failed to set %s to 1", VCONFKEY_IDLE_SCREEN_TOP);
 	}
-
+	#ifndef	WAYLAND_PLATFORM
 	utilx_hide_fake_effect(
 		ecore_x_display_get(),
 		ecore_x_window_root_get(ecore_evas_window_get(menu_screen_info.ee))
 	);
-
+	#endif
 	menu_screen_info.state = APP_STATE_RESUME;
 }
 
@@ -430,11 +434,12 @@ static void _service_cb(service_h service, void *data)
 	if (vconf_set_int(VCONFKEY_IDLE_SCREEN_TOP, VCONFKEY_IDLE_SCREEN_TOP_TRUE) < 0) {
 		_E("Failed to set %s to 1", VCONFKEY_IDLE_SCREEN_TOP);
 	}
-
+	#ifndef WAYLAND_PLATFORM
 	utilx_hide_fake_effect(
 		ecore_x_display_get(),
 		ecore_x_window_root_get(ecore_evas_window_get(menu_screen_info.ee))
 	);
+	#endif
 }
 
 
