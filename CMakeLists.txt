@@ -12,8 +12,7 @@ SET(EDJEDIR "${RESDIR}/edje")
 SET(LOCALEDIR "${RESDIR}/locale")
 SET(VERSION 0.1.0)
 
-INCLUDE(FindPkgConfig)
-pkg_check_modules(MENU_PKGS REQUIRED
+SET(MENU-SCREEN_PKG_CHECK_MODULE
 	ail
 	appsvc
 	aul
@@ -27,7 +26,6 @@ pkg_check_modules(MENU_PKGS REQUIRED
 	ecore-file
 	ecore-imf
 	ecore-input
-	ecore-x
 	edje
 	eet
 	eina
@@ -39,8 +37,14 @@ pkg_check_modules(MENU_PKGS REQUIRED
 	shortcut
 	sysman
 	syspopup-caller
-	utilX
-)
+	)
+INCLUDE(FindPkgConfig)
+IF(ENABLE_WAYLAND)
+ADD_DEFINITIONS("-DWAYLAND_PLATFORM")
+pkg_check_modules(MENU_PKGS REQUIRED ${MENU-SCREEN_PKG_CHECK_MODULE})
+ELSE(ENABLE_WAYLAND)
+pkg_check_modules(MENU_PKGS REQUIRED ecore-x utilX ${MENU-SCREEN_PKG_CHECK_MODULE})
+ENDIF(ENABLE_WAYLAND)
 
 ADD_DEFINITIONS("-DENABLE_BGIMAGE")
 ADD_DEFINITIONS("-DLOG_TAG=\"MENU_SCREEN\"")
