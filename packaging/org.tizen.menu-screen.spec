@@ -1,3 +1,5 @@
+%bcond_with x
+%bcond_with wayland
 %define _optdir /opt
 %define _usrdir /usr
 %define _appdir %{_usrdir}/apps
@@ -47,11 +49,12 @@ BuildRequires:  pkgconfig(pkgmgr-info)
 BuildRequires:  pkgconfig(shortcut)
 BuildRequires:  pkgconfig(sysman)
 BuildRequires:  pkgconfig(syspopup-caller)
-BuildRequires:  pkgconfig(utilX)
 BuildRequires:  cmake
 BuildRequires:  edje-tools
 BuildRequires:  gettext-tools
-
+%if %{with x}
+BuildRequires:  pkgconfig(utilX)
+%endif
 
 %description
 An utility library for developers of the menu screen.
@@ -72,7 +75,11 @@ An utility library for developers of the menu screen (devel)
 cp %{SOURCE1001} .
 
 %build
+%if !%{with x} && %{with wayland}
+cmake . -DENABLE_WAYLAND=TRUE -DCMAKE_INSTALL_PREFIX=%{_prefix}
+%else
 cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}
+%endif
 CFLAGS="${CFLAGS} -Wall -Werror" LDFLAGS="${LDFLAGS} -Wl,--hash-style=both -Wl,--as-needed"
 make %{?jobs:-j%jobs}
 
@@ -87,8 +94,12 @@ INHOUSE_ID="5000"
 init_vconf()
 {
 	vconftool set -t int memory/idle-screen/top 0 -i -u 5000 -f
+%if !%{with x} && %{with wayland}
+        vconftool set -t string file/private/org.tizen.menu-screen/engine "wayland_egl" -i -u 5000 -f
+%else
 	vconftool set -t string file/private/org.tizen.menu-screen/engine "gl" -i -u 5000 -f
-	vconftool set -t string db/setting/menuscreen/package_name "org.tizen.menu-screen" -i -u 5000 -f
+%endif	
+        vconftool set -t string db/setting/menuscreen/package_name "org.tizen.menu-screen" -i -u 5000 -f
 }
 init_vconf
 
