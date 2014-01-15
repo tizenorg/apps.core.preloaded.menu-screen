@@ -47,8 +47,6 @@
 extern int aul_listen_app_dead_signal(int (*func)(int signal, void *data), void *data);
 static struct {
 	int state;
-	int root_width;
-	int root_height;
 	Evas *evas;
 	Ecore_Evas *ee;
 	Evas_Object *win;
@@ -71,17 +69,20 @@ HAPI Evas *menu_screen_get_evas(void)
 }
 
 
-
 HAPI int menu_screen_get_root_width(void)
 {
-	return menu_screen_info.root_width;
+	int width = 0;
+	elm_win_screen_size_get(menu_screen_get_win(), NULL, NULL, &width, NULL);
+	return width;
 }
 
 
 
 HAPI int menu_screen_get_root_height(void)
 {
-	return menu_screen_info.root_height;
+	int height = 0;
+	elm_win_screen_size_get(menu_screen_get_win(), NULL, NULL, NULL, &height);
+	return height;
 }
 
 
@@ -144,9 +145,6 @@ static menu_screen_error_e _create_canvas(char *name, char *title)
 		_E("[%s] Failed to get ecore_evas object", __func__);
 	}
 
-	evas_object_size_hint_min_set(menu_screen_info.win, menu_screen_info.root_width, menu_screen_info.root_height);
-	evas_object_size_hint_max_set(menu_screen_info.win, menu_screen_info.root_width, menu_screen_info.root_height);
-	evas_object_resize(menu_screen_info.win, menu_screen_info.root_width, menu_screen_info.root_height);
 	evas_object_show(menu_screen_info.win);
 
 	return MENU_SCREEN_ERROR_OK;
@@ -169,20 +167,6 @@ static int _dead_cb(int pid, void *data)
 	);
 
 	return EXIT_SUCCESS;
-}
-
-
-
-static void _get_window_size(void)
-{
-	Ecore_X_Window focus_win;
-	Ecore_X_Window root_win;
-
-	focus_win = ecore_x_window_focus_get();
-	root_win = ecore_x_window_root_get(focus_win);
-	ecore_x_window_size_get(root_win, &menu_screen_info.root_width, &menu_screen_info.root_height);
-
-	_D("width:%d, height:%d", menu_screen_info.root_width, menu_screen_info.root_height);
 }
 
 
@@ -332,7 +316,6 @@ static bool _create_cb(void *data)
 {
 	Evas_Object *conformant;
 
-	_get_window_size();
 	_init_theme();
 	retv_if(MENU_SCREEN_ERROR_FAIL == _create_canvas(PACKAGE, PACKAGE), false);
 	elm_win_indicator_mode_set(menu_screen_info.win, ELM_WIN_INDICATOR_SHOW);
