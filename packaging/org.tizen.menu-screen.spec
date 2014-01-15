@@ -47,7 +47,6 @@ BuildRequires:  pkgconfig(pkgmgr-info)
 BuildRequires:  pkgconfig(shortcut)
 BuildRequires:  pkgconfig(sysman)
 BuildRequires:  pkgconfig(syspopup-caller)
-BuildRequires:  pkgconfig(utilX)
 BuildRequires:  cmake
 BuildRequires:  edje-tools
 BuildRequires:  gettext-tools

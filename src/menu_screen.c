@@ -23,7 +23,6 @@
 #include <Elementary.h>
 #include <stdbool.h>
 #include <system_info.h>
-#include <utilX.h>
 #include <vconf.h>
 
 #include "conf.h"
@@ -47,15 +46,11 @@
 extern int aul_listen_app_dead_signal(int (*func)(int signal, void *data), void *data);
 static struct {
 	int state;
-	Evas *evas;
-	Ecore_Evas *ee;
 	Evas_Object *win;
 	Elm_Theme *theme;
 	bool is_done;
 } menu_screen_info = {
 	.state = APP_STATE_PAUSE,
-	.evas = NULL,
-	.ee = NULL,
 	.win = NULL,
 	.theme = NULL,
 	.is_done = false,
@@ -65,7 +60,7 @@ static struct {
 
 HAPI Evas *menu_screen_get_evas(void)
 {
-	return menu_screen_info.evas;
+	return evas_object_evas_get(menu_screen_info.win);
 }
 
 
@@ -135,16 +130,6 @@ static menu_screen_error_e _create_canvas(char *name, char *title)
 		_D("Failed to set the window role as MENU_SCREEN");
 	}
 
-	menu_screen_info.evas = evas_object_evas_get(menu_screen_info.win);
-	if (!menu_screen_info.evas) {
-		_E("[%s] Failed to get the evas object", __func__);
-	}
-
-	menu_screen_info.ee = ecore_evas_ecore_evas_get(menu_screen_info.evas);
-	if (!menu_screen_info.ee) {
-		_E("[%s] Failed to get ecore_evas object", __func__);
-	}
-
 	evas_object_show(menu_screen_info.win);
 
 	return MENU_SCREEN_ERROR_OK;
@@ -161,11 +146,7 @@ static void _destroy_canvas(void)
 
 static int _dead_cb(int pid, void *data)
 {
-	utilx_hide_fake_effect(
-		ecore_x_display_get(),
-		ecore_x_window_root_get(ecore_evas_window_get(menu_screen_info.ee))
-	);
-
+	evas_object_show(menu_screen_get_win());
 	return EXIT_SUCCESS;
 }
 
@@ -396,10 +377,7 @@ static void _resume_cb(void *data)
 		_E("Failed to set %s to 1", VCONFKEY_IDLE_SCREEN_TOP);
 	}
 
-	utilx_hide_fake_effect(
-		ecore_x_display_get(),
-		ecore_x_window_root_get(ecore_evas_window_get(menu_screen_info.ee))
-	);
+	evas_object_show(menu_screen_get_win());
 
 	menu_screen_info.state = APP_STATE_RESUME;
 }
@@ -414,10 +392,7 @@ static void _service_cb(service_h service, void *data)
 		_E("Failed to set %s to 1", VCONFKEY_IDLE_SCREEN_TOP);
 	}
 
-	utilx_hide_fake_effect(
-		ecore_x_display_get(),
-		ecore_x_window_root_get(ecore_evas_window_get(menu_screen_info.ee))
-	);
+	evas_object_show(menu_screen_get_win());
 }
 
 

@@ -39,7 +39,6 @@ pkg_check_modules(MENU_PKGS REQUIRED
 	shortcut
 	sysman
 	syspopup-caller
-	utilX
 )
 
 ADD_DEFINITIONS("-DENABLE_BGIMAGE")
