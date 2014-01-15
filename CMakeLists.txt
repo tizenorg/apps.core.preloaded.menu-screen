@@ -27,7 +27,6 @@ pkg_check_modules(MENU_PKGS REQUIRED
 	ecore-file
 	ecore-imf
 	ecore-input
-	ecore-x
 	edje
 	eet
 	eina

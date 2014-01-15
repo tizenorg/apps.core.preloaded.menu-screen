@@ -17,7 +17,6 @@
 
 
 #include <Elementary.h>
-#include <Ecore_X.h>
 #include <vconf.h>
 
 #include "menu_screen.h"

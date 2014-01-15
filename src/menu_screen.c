@@ -19,7 +19,6 @@
 #include <ail.h>
 #include <app.h>
 #include <aul.h>
-#include <Ecore_X.h>
 #include <Elementary.h>
 #include <stdbool.h>
 #include <system_info.h>
@@ -112,7 +111,6 @@ HAPI void menu_screen_set_done(bool is_done)
 
 static menu_screen_error_e _create_canvas(char *name, char *title)
 {
-	Ecore_X_Atom ATOM_WM_WINDOW_ROLE;
 
 	menu_screen_info.win = elm_win_add(NULL, name, ELM_WIN_BASIC);
 	retv_if(NULL == menu_screen_info.win, MENU_SCREEN_ERROR_FAIL);
@@ -122,13 +120,7 @@ static menu_screen_error_e _create_canvas(char *name, char *title)
 	}
 	elm_win_borderless_set(menu_screen_info.win, EINA_TRUE);
 
-	ecore_x_icccm_name_class_set(elm_win_xwindow_get(menu_screen_info.win), "MENU_SCREEN", "MENU_SCREEN");
-	ATOM_WM_WINDOW_ROLE = ecore_x_atom_get("WM_WINDOW_ROLE");
-	if (ATOM_WM_WINDOW_ROLE) {
-		ecore_x_window_prop_string_set(elm_win_xwindow_get(menu_screen_info.win), ATOM_WM_WINDOW_ROLE, "MENU_SCREEN");
-	} else {
-		_D("Failed to set the window role as MENU_SCREEN");
-	}
+	elm_win_role_set(menu_screen_info.win, "MENU_SCREEN");
 
 	evas_object_show(menu_screen_info.win);
 
@@ -298,7 +290,7 @@ static bool _create_cb(void *data)
 	Evas_Object *conformant;
 
 	_init_theme();
-	retv_if(MENU_SCREEN_ERROR_FAIL == _create_canvas(PACKAGE, PACKAGE), false);
+	retv_if(MENU_SCREEN_ERROR_FAIL == _create_canvas("MENU_SCREEN", PACKAGE), false);
 	elm_win_indicator_mode_set(menu_screen_info.win, ELM_WIN_INDICATOR_SHOW);
 
 	if (vconf_notify_key_changed(VCONFKEY_BGSET, _change_bg_cb, NULL) < 0) {
