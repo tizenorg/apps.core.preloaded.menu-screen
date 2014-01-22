@@ -121,6 +121,7 @@ static menu_screen_error_e _create_canvas(char *name, char *title)
 	elm_win_borderless_set(menu_screen_info.win, EINA_TRUE);
 
 	elm_win_role_set(menu_screen_info.win, "MENU_SCREEN");
+        evas_object_resize(menu_screen_info.win, menu_screen_get_root_width(), menu_screen_get_root_height());
 
 	evas_object_show(menu_screen_info.win);
 
