@@ -25,9 +25,11 @@
 #include "util.h"
 #include "all_apps/db.h"
 
+#include <tzplatform_config.h>
+
 #define QUERY_LEN 1024
 
-#define MENU_SCREEN_DB_FILE "/opt/usr/apps/com.samsung.menu-screen/data/dbspace/.menu_screen.db"
+#define MENU_SCREEN_DB_FILE tzplatform_mkpath(TZ_USER_APP, "com.samsung.menu-screen/data/dbspace/.menu_screen.db")
 #define SHORTCUT_TABLE "shortcut"
 #define QUERY_INSERT_SHORTCUT "INSERT INTO "SHORTCUT_TABLE" ("\
 	"appid,"\

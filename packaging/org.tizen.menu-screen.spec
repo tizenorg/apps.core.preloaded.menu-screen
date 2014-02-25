@@ -7,9 +7,9 @@
 %define _package_name org.tizen.%{_project_name}
 
 %define _packagedir %{_appdir}/%{_package_name}
-%define _bindir %{_packagedir}/bin
-%define _datadir %{_optdir}%{_packagedir}/data
-%define _resdir %{_packagedir}/res
+%define _appsbindir %{TZ_SYS_RO_APP}/%{_package_name}/bin
+%define _optdatadir %{_optdir}%{_packagedir}/data
+%define _resdir %{TZ_SYS_RO_APP}/%{_package_name}/res
 %define _sharedir %{_packagedir}/share
 
 %define _localedir %{_resdir}/locale
@@ -22,6 +22,7 @@ Group:      TO_BE/FILLED_IN
 License:    Flora Software License
 Source0:    %{name}-%{version}.tar.gz
 Source1001: 	org.tizen.menu-screen.manifest
+Source1002: 	init_menu-screen_DB.sh
 BuildRequires:  pkgconfig(ail)
 BuildRequires:  pkgconfig(appcore-efl)
 BuildRequires:  pkgconfig(appsvc)
@@ -50,7 +51,7 @@ BuildRequires:  pkgconfig(syspopup-caller)
 BuildRequires:  cmake
 BuildRequires:  edje-tools
 BuildRequires:  gettext-tools
-
+BuildRequires:  pkgconfig(libtzplatform-config)
 
 %description
 An utility library for developers of the menu screen.
@@ -71,61 +72,40 @@ An utility library for developers of the menu screen (devel)
 cp %{SOURCE1001} .
 
 %build
-cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}
+cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix} \
+-DTZ_SYS_ETC=%TZ_SYS_ETC \
+-DTZ_SYS_RO_PACKAGES=%TZ_SYS_RO_PACKAGES \
+-DTZ_SYS_RO_APP=%TZ_SYS_RO_APP \
+-DTZ_SYS_RW_APP=%TZ_SYS_RW_APP \
+-DTZ_SYS_RW_PACKAGES=%TZ_SYS_RW_PACKAGES \
+-DTZ_SYS_USER_GROUP=%TZ_SYS_USER_GROUP
 CFLAGS="${CFLAGS} -Wall -Werror" LDFLAGS="${LDFLAGS} -Wl,--hash-style=both -Wl,--as-needed"
 make %{?jobs:-j%jobs}
 
 %install
 %make_install
-mkdir -p %{buildroot}%{_datadir}
+mkdir -p %{buildroot}%{_optdatadir}
 mkdir -p %{buildroot}/usr/share/license
+install -D -m 0750 %{SOURCE1002} %{buildroot}%{_datadir}/%{name}/init_menu-screen_DB.sh
 
 %post
-INHOUSE_ID="5000"
+users_gid=$(getent group $TZ_SYS_USER_GROUP | cut -f3 -d':')
+INHOUSE_ID="$users_gid"
 
 init_vconf()
 {
-	vconftool set -t int memory/idle-screen/top 0 -i -u 5000 -f
-	vconftool set -t string file/private/org.tizen.menu-screen/engine "gl" -i -u 5000 -f
-	vconftool set -t string db/setting/menuscreen/package_name "org.tizen.menu-screen" -i -u 5000 -f
+	vconftool set -t int memory/idle-screen/top 0 -i -u $users_gid -f
+	vconftool set -t string file/private/org.tizen.menu-screen/engine "gl" -i -u $users_gid -f
+	vconftool set -t string db/setting/menuscreen/package_name "org.tizen.menu-screen" -i -u $users_gid -f
 }
 init_vconf
 
-if [ ! -d %{_datadir}/dbspace ]
-then
-	mkdir -p %{_datadir}/dbspace
-fi
-
-if [ ! -d %{_datadir}/shortcut ]
-then
-	mkdir -p %{_datadir}/shortcut
-else
-	rm -rf %{_datadir}/shortcut/*
-fi
-
-sqlite3 %{_datadir}/dbspace/.menu_screen.db 'PRAGMA journal_mode = PERSIST;
-	create table if not exists shortcut (
-		ROWID INTEGER PRIMARY KEY AUTOINCREMENT,
-		appid TEXT,
-		name TEXT,
-		type INTEGER,
-		content_info TEXT,
-		icon TEXT
-	);
-'
-
-INHOUSE_ID="5000"
-chown -R $INHOUSE_ID:$INHOUSE_ID %{_datadir}
-chown root:$INHOUSE_ID %{_datadir}/dbspace/.menu_screen.db
-chown root:$INHOUSE_ID %{_datadir}/dbspace/.menu_screen.db-journal
-
-chmod 660 %{_datadir}/dbspace/.menu_screen.db
-chmod 660 %{_datadir}/dbspace/.menu_screen.db-journal
+%{_datadir}/%{name}/init_menu_screen_DB.sh %{_datadir}
 
 %files
 %manifest %{name}.manifest
 %defattr(-,root,root,-)
-%{_bindir}/menu-screen
+%{_appsbindir}/menu-screen
 %{_resdir}/edje/all_apps_portrait.edj
 %{_resdir}/edje/button_edit.edj
 %{_resdir}/edje/group_4x4_portrait.edj
@@ -136,4 +116,5 @@ chmod 660 %{_datadir}/dbspace/.menu_screen.db-journal
 %{_localedir}/*/*/*.mo
 %{_usr_datadir}/packages/org.tizen.menu-screen.xml
 %{_usr_datadir}/license/%{name}
-/opt/etc/smack/accesses.d/%{_package_name}.rule
+%{TZ_SYS_ETC}/smack/accesses.d/%{_package_name}.rule
+%{_datadir}/%{name}/init_menu-screen_DB.sh
