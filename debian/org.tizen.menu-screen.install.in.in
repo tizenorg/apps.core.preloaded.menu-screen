@@ -1,0 +1,3 @@
+/usr/share/*
+@TZ_SYS_RW_APP@/org.tizen.menu-screen/*
+@TZ_SYS_RW_PACKAGES@/*

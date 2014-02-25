@@ -2,7 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 PROJECT(menu-screen C)
 
 SET(PACKAGE_NAME "org.tizen.${PROJECT_NAME}")
-SET(PREFIX "/usr/apps/${PACKAGE_NAME}")
+SET(PREFIX "${TZ_SYS_RO_APP}/${PACKAGE_NAME}")
 SET(EXEC_PREFIX "${PREFIX}/bin")
 SET(LIBDIR "${PREFIX}/lib")
 SET(DATADIR "/opt${PREFIX}/data")
@@ -37,6 +37,7 @@ pkg_check_modules(MENU_PKGS REQUIRED
 	pkgmgr-info
 	shortcut
 	syspopup-caller
+	libtzplatform-config
 )
 
 ADD_DEFINITIONS("-DENABLE_BGIMAGE")
