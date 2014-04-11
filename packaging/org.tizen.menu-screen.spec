@@ -136,4 +136,3 @@ chmod 660 %{_datadir}/dbspace/.menu_screen.db-journal
 %{_localedir}/*/*/*.mo
 %{_usr_datadir}/packages/org.tizen.menu-screen.xml
 %{_usr_datadir}/license/%{name}
-/opt/etc/smack/accesses.d/%{_package_name}.rule
