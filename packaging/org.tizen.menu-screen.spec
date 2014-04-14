@@ -88,4 +88,3 @@ chmod 660 %{_datadir}/dbspace/.menu_screen.db-journal
 %{_prefix}/apps/%{name}/*
 %{_datarootdir}/packages/%{name}.xml
 %{_datarootdir}/license/%{name}
-/opt/etc/smack/accesses.d/%{name}.rule
