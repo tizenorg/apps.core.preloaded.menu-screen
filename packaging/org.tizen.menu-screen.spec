@@ -1,11 +1,11 @@
-Name: org.tizen.menu-screen
-Summary: Menu screen
-Version: 1.1.1
-Release: 1.1
-Group: Applications/Core Applications
-License: Flora
-Source0: %{name}-%{version}.tar.gz
-Source1001: %{name}.manifest
+Name:       org.tizen.menu-screen
+Summary:    Menu screen
+Version:    1.1.1
+Release:    1.1
+Group:      Applications/Core Application
+License:    Flora
+Source0:    %{name}-%{version}.tar.gz
+Source1001: 	%{name}.manifest
 BuildRequires: pkgconfig(ail)
 BuildRequires: pkgconfig(appcore-efl)
 BuildRequires: pkgconfig(appsvc)
@@ -29,10 +29,12 @@ BuildRequires: pkgconfig(heynoti)
 BuildRequires: pkgconfig(pkgmgr)
 BuildRequires: pkgconfig(pkgmgr-info)
 BuildRequires: pkgconfig(shortcut)
+BuildRequires: pkgconfig(sysman)
 BuildRequires: pkgconfig(syspopup-caller)
 BuildRequires: cmake
 BuildRequires: edje-tools
 BuildRequires: gettext-tools
+
 
 %description
 Tizen 2.x Reference Application.
@@ -43,7 +45,7 @@ User application for launching apps.
 cp %{SOURCE1001} .
 
 %build
-%cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}/apps/%{name}/
+cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}/apps/%{name}/
 make %{?jobs:-j%jobs}
 
 %install
