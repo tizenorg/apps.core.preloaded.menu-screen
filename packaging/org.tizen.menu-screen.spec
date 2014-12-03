@@ -80,5 +80,4 @@ init_vconf
 %defattr(-,root,root,-)
 %{_prefix}/apps/%{name}/*
 %{_datarootdir}/packages/%{name}.xml
-%{_datarootdir}/license/%{name}
 %{_datadir}/%{name}/init_menu-screen_DB.sh
