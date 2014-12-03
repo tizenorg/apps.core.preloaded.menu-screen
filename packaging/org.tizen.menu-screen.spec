@@ -4,7 +4,7 @@ Summary: Menu screen
 Version: 1.1.1
 Release: 1.1
 Group: Applications/Core Applications
-License: Flora
+License: Apache
 Source0: %{name}-%{version}.tar.gz
 Source1001: %{name}.manifest
 Source1002:   init_menu-screen_DB.sh
