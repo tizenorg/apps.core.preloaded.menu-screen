@@ -479,15 +479,25 @@ static void _fini(void)
 #define QP_EMUL_STR		"Emulator"
 static bool _is_emulator_on(void)
 {
-	char *info;
+	int ret;
+	char *model;
 
-	if (system_info_get_value_string(SYSTEM_INFO_KEY_MODEL, &info) == 0) {
-		if (info == NULL) return false;
-		if (!strncmp(QP_EMUL_STR, info, strlen(info))) {
-			return true;
+	ret = system_info_get_platform_string("tizen.org/system/model_name", &model);
+	if (SYSTEM_INFO_ERROR_NONE != ret) {
+		if (model) {
+			free(model);
 		}
+		return false;
 	}
 
+	if (!strncmp(model, QP_EMUL_STR, strlen(model))) {
+		_D("This model is on Emulator");
+		free(model);
+		return true;
+	}
+
+	_D("This model is NOT on Emulator");
+	free(model);
 	return false;
 }
 
