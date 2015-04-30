@@ -82,7 +82,7 @@ An utility library for developers of the menu screen (devel)
 %setup -q
 
 %build
-CFLAGS+=" -fPIC -fPIE ";export CFLAGS
+CFLAGS+=" -fPIC -fPIE -fgnu89-inline ";export CFLAGS
 CXXFLAGS+=" -fPIC -fPIE -fvisibility=hidden -fvisibility-inlines-hidden ";export CXXFLAGS
 LDFLAGS+=" -Wl,--hash-style=both -Wl,--as-needed -pie ";export LDFLAGS
 
