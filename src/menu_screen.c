@@ -508,6 +508,7 @@ int main(int argc, char *argv[])
 	char *buf;
 	app_event_callback_s event_callback;
 
+	/*
 	if (_is_emulator_on()) {
 		_D("ELM_ENGINE is set as [software_x11]");
 		setenv("ELM_ENGINE", "software_x11", 1);
@@ -521,7 +522,7 @@ int main(int argc, char *argv[])
 			_D("ELM_ENGINE is set as [gl]");
 			setenv("ELM_ENGINE", "gl", 1);
 		}
-	}
+	}*/
 
 	_init(&event_callback);
 	app_efl_main(&argc, &argv, &event_callback, NULL);

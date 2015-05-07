@@ -30,7 +30,7 @@ BuildRequires: pkgconfig(evas)
 BuildRequires: pkgconfig(heynoti)
 BuildRequires: pkgconfig(pkgmgr)
 BuildRequires: pkgconfig(pkgmgr-info)
-BuildRequires: pkgconfig(shortcut)
+#BuildRequires: pkgconfig(shortcut)
 BuildRequires: pkgconfig(syspopup-caller)
 BuildRequires: cmake
 BuildRequires: edje-tools

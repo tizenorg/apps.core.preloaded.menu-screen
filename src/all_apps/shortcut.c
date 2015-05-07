@@ -17,7 +17,7 @@
  *
  */
 
-#include <shortcut.h>
+//#include <shortcut.h>
 #include <stdbool.h>
 
 #include "item.h"
@@ -39,6 +39,7 @@ HAPI Evas_Object *all_apps_shortcut_add(
 		int type)
 {
 	_D("Shortcut : pkgname(%s) exec(%s) name(%s) icon(%s)", pkgname, exec, name, icon);
+	return NULL;
 
 	app_info_t ai = {0, };
 	ai.package = (char *) pkgname;
@@ -65,13 +66,13 @@ HAPI Evas_Object *all_apps_shortcut_add(
 		return NULL;
 	}
 
-	if (LAUNCH_BY_PACKAGE == type) {
-		_D("This is a package");
-		evas_object_data_set(item, "shortcut_launch_package", (void *) true);
-	} else {
+	//if (LAUNCH_BY_PACKAGE == type) {
+	//	_D("This is a package");
+	//	evas_object_data_set(item, "shortcut_launch_package", (void *) true);
+	//} else {
 		_D("This is a shortcut");
 		evas_object_data_set(item, "shortcut_launch_package", (void *) false);
-	}
+	//}
 
 	*tmp = rowid;
 	evas_object_data_set(item, "is_shortcut", (void *) true);
@@ -220,7 +221,8 @@ HAPI bool all_apps_shortcut_init(Evas_Object *all_apps)
 	retv_if(NULL == scroller, false);
 
 	int ret;
-	ret = shortcut_set_request_cb(_shorcut_request_cb, scroller);
+	ret = 0;
+	//ret = shortcut_set_request_cb(_shorcut_request_cb, scroller);
 
 	return 0 == ret ? true : false;
 }

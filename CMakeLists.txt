@@ -35,7 +35,7 @@ pkg_check_modules(MENU_PKGS REQUIRED
 	heynoti
 	pkgmgr
 	pkgmgr-info
-	shortcut
+#	shortcut
 	syspopup-caller
 	libtzplatform-config
 )
