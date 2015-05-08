@@ -3,6 +3,9 @@
  *
  * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
+ * Contact: Jin Yoon <jinny.yoon@samsung.com>
+ *          Junkyu Han <junkyu.han@samsung.com>
+
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,14 +20,18 @@
  *
  */
 
+#include "conf.edc"
+
+#define _BASE_HEIGHT 1280
 
 collections {
+	base_scale: 1.8;
 	group {
 		name: "all_apps";
 		parts {
 			part {
 				name: "bg";
-				type: RECT;
+				type: SWALLOW;
 				scale: 1;
 				mouse_events: 1;
 				description {
@@ -34,7 +41,17 @@ collections {
 					visible: 0;
 				}
 			}
-
+			part {
+				name: "indicator_spacer";
+				type: SPACER;
+				scale: 1;
+				mouse_events: 0;
+				description {
+					state: "default" 0.0;
+					rel1 { relative: 0.0 0.0; to, "bg"; }
+					rel2 { relative: 1.0 INDICATOR_HEIGHT_PROP; to, "bg"; }
+				}
+			}
 			part {
 				name: "index_bg";
 				type: RECT;
@@ -42,9 +59,8 @@ collections {
 				mouse_events: 0;
 				description {
 					state: "default" 0.0;
-					rel1 { relative: 0.0 20/1210; to, "bg";} // 1280 - 70(indicator)
-					rel2 { relative: 1.0 124/1210; to, "bg";} // 174 - 70
-					color: 0 0 0 255;
+					rel1 { relative: 0.0 80/_BASE_HEIGHT; to, "bg";} // 1280 - 70(indicator)
+					rel2 { relative: 1.0 184/_BASE_HEIGHT; to, "bg";} // 174 - 70
 					visible: 0;
 				}
 			}
@@ -70,6 +86,7 @@ collections {
 					align: 0.5 0.5;
 					rel1 { relative: 16/720 8/70; to, "index_bg";}
 					rel2 { relative: 144/720 62/70; to, "index_bg";}
+					fixed: 1 1;
 					visible: 1;
 				}
 			}
@@ -80,8 +97,8 @@ collections {
 				mouse_events: 1;
 				description {
 					state: "default" 0.0;
-					rel1 { relative: 0.0 134/1210; to, "bg"; } // 154 - 70
-					rel2 { relative: 1.0 1194/1210; to, "bg"; }
+					rel1 { relative: 0.0 194/_BASE_HEIGHT; to, "bg"; } // 154 - 70
+					rel2 { relative: 1.0 1224/_BASE_HEIGHT; to, "bg"; }
 					color: 34 34 34 255;
 					visible: 0;
 				}

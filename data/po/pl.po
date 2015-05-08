@@ -3,3 +3,7 @@ msgstr "Gotowe"
 
 msgid "IDS_AT_POP_UNINSTALL_PS_Q"
 msgstr "Odinstalować %s?"
+
+msgid "IDS_AT_BODY_UNINSTALL"
+msgstr "Odinstaluj"
+

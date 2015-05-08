@@ -1,0 +1,526 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ACCESS_BUTTON	include/util.h	40;"	d
+ACCESS_EDIT	include/util.h	41;"	d
+ALL_APPS_EDIT_BUTTON_EDJE	src/all_apps/layout.c	44;"	d	file:
+ALL_APPS_EDIT_BUTTON_GROUP	src/all_apps/layout.c	45;"	d	file:
+ALL_APPS_EDIT_BUTTON_PART	src/all_apps/layout.c	46;"	d	file:
+ALL_APPS_EDJE_PORTRAIT	src/all_apps/layout.c	39;"	d	file:
+ALL_APPS_GROUP	src/all_apps/layout.c	40;"	d	file:
+ALL_APPS_TABLE	include/util.h	33;"	d
+APP_STATE_PAUSE	include/util.h	/^	APP_STATE_PAUSE = 1,$/;"	e	enum:__anon14
+APP_STATE_RESUME	include/util.h	/^	APP_STATE_RESUME,$/;"	e	enum:__anon14
+BASE_HEIGHT	include/conf.h	28;"	d
+BASE_WIDTH	include/conf.h	29;"	d
+BOOTING_STATE_DONE	include/util.h	34;"	d
+BUFSZE	src/item.c	62;"	d	file:
+BUFSZE	src/item_event.c	42;"	d	file:
+BUFSZE	src/page_scroller.c	41;"	d	file:
+BUFSZE	src/popup.c	32;"	d	file:
+BUNDLE_KEY_OPERATION	src/item.c	919;"	d	file:
+CHAGNE_POSITION_TIME	src/mouse.c	37;"	d	file:
+CHANGE_POSITION_COUNT	src/mouse.c	38;"	d	file:
+DATA_KEY_ITEM_LAUNCH_MAIN_OPERATION	src/item.c	50;"	d	file:
+DATA_KEY_MAIN_OPERATION_LIST	include/util.h	37;"	d
+DEFAULT_ICON	include/util.h	76;"	d
+D_	include/util.h	44;"	d
+D_	include/util.h	70;"	d
+ELLIPSIS	src/popup.c	33;"	d	file:
+GROUP_4X4_EDJE_PORTRAIT	src/all_apps/layout.c	42;"	d	file:
+HAPI	include/util.h	73;"	d
+IDS_AT_BODY_UNINSTALL	src/item.c	682;"	d	file:
+IDS_AT_POP_UNINSTALL_PS_Q	src/popup.c	191;"	d	file:
+IDS_HS_BUTTON_DONE	src/all_apps/layout.c	48;"	d	file:
+INDEX_HEIGHT	include/conf.h	35;"	d
+INDICATOR_HEIGHT_PROP	include/conf.h	32;"	d
+INDICATOR_PORT_HEIGHT	include/conf.h	31;"	d
+ITEM_GROUP_NAME	src/item.c	48;"	d	file:
+ITEM_HEIGHT	include/conf.h	40;"	d
+ITEM_HEIGHT_PROP	include/conf.h	42;"	d
+ITEM_WIDTH	include/conf.h	37;"	d
+ITEM_WIDTH_PROP	include/conf.h	39;"	d
+KEY_DOWN	src/key.c	59;"	d	file:
+KEY_ESC	src/key.c	60;"	d	file:
+KEY_LEFT	src/key.c	56;"	d	file:
+KEY_RIGHT	src/key.c	57;"	d	file:
+KEY_UP	src/key.c	58;"	d	file:
+LAYOUT_BLOCK_INTERVAL	src/item.c	47;"	d	file:
+LAYOUT_EDJE_PORTRAIT	src/menu_screen.c	50;"	d	file:
+LAYOUT_GROUP_NAME	src/menu_screen.c	51;"	d	file:
+LINE_SIZE	src/item.c	46;"	d	file:
+LITE_ITEM_HEIGHT	include/conf.h	41;"	d
+LITE_ITEM_WIDTH	include/conf.h	38;"	d
+LONG_PRESS_TIME	src/item_event.c	41;"	d	file:
+MAX_PAGE_NO	include/conf.h	26;"	d
+MENU_SCREEN_COMMIT_TRY_MAX	src/db.c	283;"	d	file:
+MENU_SCREEN_DB_FILE	src/all_apps/db.c	34;"	d	file:
+MENU_SCREEN_ENGINE	src/menu_screen.c	48;"	d	file:
+MENU_SCREEN_ERROR_DB_FAILED	include/util.h	/^	MENU_SCREEN_ERROR_DB_FAILED = -2,$/;"	e	enum:__anon12
+MENU_SCREEN_ERROR_FAIL	include/util.h	/^	MENU_SCREEN_ERROR_FAIL = -1,$/;"	e	enum:__anon12
+MENU_SCREEN_ERROR_INVALID_PARAMETER	include/util.h	/^	MENU_SCREEN_ERROR_INVALID_PARAMETER = -4,$/;"	e	enum:__anon12
+MENU_SCREEN_ERROR_NO_DATA	include/util.h	/^	MENU_SCREEN_ERROR_NO_DATA = -5,$/;"	e	enum:__anon12
+MENU_SCREEN_ERROR_OK	include/util.h	/^	MENU_SCREEN_ERROR_OK = 0,$/;"	e	enum:__anon12
+MENU_SCREEN_ERROR_OUT_OF_MEMORY	include/util.h	/^	MENU_SCREEN_ERROR_OUT_OF_MEMORY = -3,$/;"	e	enum:__anon12
+MENU_SCREEN_ROTATE_LANDSCAPE	include/util.h	/^	MENU_SCREEN_ROTATE_LANDSCAPE,$/;"	e	enum:__anon15
+MENU_SCREEN_ROTATE_PORTRAIT	include/util.h	/^	MENU_SCREEN_ROTATE_PORTRAIT = 0,$/;"	e	enum:__anon15
+MOVE_THRESHOLD	src/mouse.c	39;"	d	file:
+N_	include/util.h	69;"	d
+PAGE_CONTROLLER_GROUP_NAME	src/index.c	31;"	d	file:
+PAGE_GROUP_NAME	src/page.c	36;"	d	file:
+PAGE_MAX_APP	include/all_apps/layout.h	28;"	d
+PAGE_PORTRAIT_HEIGHT	include/conf.h	34;"	d
+PAGE_SCROLLER_SORT_BY_DEFAULT	include/page_scroller.h	/^	PAGE_SCROLLER_SORT_BY_DEFAULT = 0,$/;"	e	enum:__anon11
+PAGE_SCROLLER_SORT_BY_NAME	include/page_scroller.h	/^	PAGE_SCROLLER_SORT_BY_NAME,$/;"	e	enum:__anon11
+PAGE_SCROLLER_SORT_BY_PACKAGE	include/page_scroller.h	/^	PAGE_SCROLLER_SORT_BY_PACKAGE,$/;"	e	enum:__anon11
+PAGE_SCROLLER_SORT_MAX	include/page_scroller.h	/^	PAGE_SCROLLER_SORT_MAX,$/;"	e	enum:__anon11
+PAGE_SCROLL_SENSITIVE	src/page_scroller.c	42;"	d	file:
+PRINT_APPFWK	include/util.h	79;"	d
+PRINT_APPFWK	include/util.h	88;"	d
+PRINT_TIME	include/util.h	92;"	d
+PRINT_TIME	include/util.h	98;"	d
+PROP_PORTRAIT_HEIGHT	src/page.c	37;"	d	file:
+PROP_PORTRAIT_HEIGHT	src/page_scroller.c	43;"	d	file:
+QUERY_COUNT_SHORTCUT	src/all_apps/db.c	46;"	d	file:
+QUERY_DELETE_SHORTCUT	src/all_apps/db.c	44;"	d	file:
+QUERY_GET_ALL	src/all_apps/db.c	45;"	d	file:
+QUERY_INSERT_SHORTCUT	src/all_apps/db.c	36;"	d	file:
+QUERY_LEN	src/all_apps/db.c	32;"	d	file:
+SHORTCUT_TABLE	src/all_apps/db.c	35;"	d	file:
+STRSZE	src/popup.c	34;"	d	file:
+STR_ANI_RETURN	include/util.h	30;"	d
+STR_ATTRIBUTE_DESKTOP	src/item.c	56;"	d	file:
+STR_ATTRIBUTE_ICON	src/item.c	53;"	d	file:
+STR_ATTRIBUTE_NAME	src/item.c	52;"	d	file:
+STR_ATTRIBUTE_PAGE	src/item.c	58;"	d	file:
+STR_ATTRIBUTE_PKGID	src/item.c	51;"	d	file:
+STR_ATTRIBUTE_PKG_NAME	src/item.c	54;"	d	file:
+STR_ATTRIBUTE_REMOVABLE	src/item.c	55;"	d	file:
+STR_ATTRIBUTE_TYPE	src/item.c	57;"	d	file:
+STR_ENV_MAPBUF	include/util.h	31;"	d
+STR_ICON_IMAGE_TYPE_EDJE	src/item.c	60;"	d	file:
+STR_ICON_IMAGE_TYPE_OBJECT	src/item.c	59;"	d	file:
+STR_MOVE_NEXT	include/util.h	29;"	d
+STR_MOVE_PREV	include/util.h	28;"	d
+TRAY_TYPE_ALL_APPS	include/util.h	/^	TRAY_TYPE_ALL_APPS = 0,$/;"	e	enum:__anon13
+TRAY_TYPE_DOWNLOADED_APPS	include/util.h	/^	TRAY_TYPE_DOWNLOADED_APPS,$/;"	e	enum:__anon13
+TRAY_TYPE_FAVORITE_APPS	include/util.h	/^	TRAY_TYPE_FAVORITE_APPS,$/;"	e	enum:__anon13
+TRAY_TYPE_FREQUENTLY_USED_APPS	include/util.h	/^	TRAY_TYPE_FREQUENTLY_USED_APPS,$/;"	e	enum:__anon13
+TRAY_TYPE_MAX	include/util.h	/^	TRAY_TYPE_MAX,$/;"	e	enum:__anon13
+TRAY_TYPE_RUNNING_APPS	include/util.h	/^	TRAY_TYPE_RUNNING_APPS,$/;"	e	enum:__anon13
+_	include/util.h	65;"	d
+_D	include/util.h	52;"	d
+_E	include/util.h	56;"	d
+_EDJ	include/util.h	137;"	d
+_MENU_SCREEN_ALL_APPS_SHORTCUT_H_	include/all_apps/shortcut.h	24;"	d
+_MENU_SCREEN_CONF_H_	include/conf.h	24;"	d
+_MENU_SCREEN_CONTROLBAR_ALL_APPS_H_	include/all_apps/layout.h	24;"	d
+_T	include/util.h	60;"	d
+_W	include/util.h	48;"	d
+__MENU_SCREEN_ALL_APPS_DB_H__	include/all_apps/db.h	24;"	d
+__MENU_SCREEN_BADGE_H__	include/item_badge.h	24;"	d
+__MENU_SCREEN_DB_H__	include/db.h	24;"	d
+__MENU_SCREEN_EVENT_H__	include/mouse.h	24;"	d
+__MENU_SCREEN_H__	include/menu_screen.h	24;"	d
+__MENU_SCREEN_INPUT_KEY_H__	include/key.h	24;"	d
+__MENU_SCREEN_ITEM_EVENT_H__	include/item_event.h	24;"	d
+__MENU_SCREEN_ITEM_H__	include/item.h	24;"	d
+__MENU_SCREEN_LAYOUT_H__	include/layout.h	24;"	d
+__MENU_SCREEN_LIST_ALL_APPS_H__	include/all_apps/list.h	24;"	d
+__MENU_SCREEN_LIST_H__	include/list.h	24;"	d
+__MENU_SCREEN_MAPBUF_H__	include/mapbuf.h	24;"	d
+__MENU_SCREEN_PAGE_CONTROL_H__	include/index.h	24;"	d
+__MENU_SCREEN_PAGE_H__	include/page.h	24;"	d
+__MENU_SCREEN_PAGE_SCROLLER_H__	include/page_scroller.h	24;"	d
+__MENU_SCREEN_PKGMGR_H__	include/pkgmgr.h	24;"	d
+__MENU_SCREEN_POPUP_H__	include/popup.h	24;"	d
+__MENU_SCREEN_UTIL_H__	include/util.h	24;"	d
+_access_info_cb	src/all_apps/layout.c	/^static char *_access_info_cb(void *data, Evas_Object *obj)$/;"	f	file:
+_access_info_cb	src/item.c	/^static char *_access_info_cb(void *data, Evas_Object *obj)$/;"	f	file:
+_access_uninstall_cb	src/item.c	/^static char *_access_uninstall_cb(void *data, Evas_Object *obj)$/;"	f	file:
+_add_edit_button	src/all_apps/layout.c	/^static Evas_Object *_add_edit_button(Evas_Object *parent, Evas_Object *scroller)$/;"	f	file:
+_add_edje_icon	src/item.c	/^static Evas_Object *_add_edje_icon(Evas_Object *item, const char *icon_file)$/;"	f	file:
+_add_icon_image	src/item.c	/^static Evas_Object *_add_icon_image(Evas_Object *item, const char *icon_file)$/;"	f	file:
+_all_apps_cb	src/all_apps/list.c	/^static ail_cb_ret_e _all_apps_cb(ail_appinfo_h ai, void *data)$/;"	f	file:
+_all_apps_installed_time_sort_cb	src/all_apps/list.c	/^static int _all_apps_installed_time_sort_cb(const void *d1, const void *d2)$/;"	f	file:
+_all_apps_sort_cb	src/all_apps/list.c	/^static int _all_apps_sort_cb(const void *d1, const void *d2)$/;"	f	file:
+_anim_start_cb	src/page_scroller.c	/^static void _anim_start_cb(void *data, Evas_Object *scroller, void *event_info)$/;"	f	file:
+_anim_stop_cb	src/page_scroller.c	/^static void _anim_stop_cb(void *data, Evas_Object *scroller, void *event_info)$/;"	f	file:
+_animated_pack_item	src/page_scroller.c	/^static menu_screen_error_e _animated_pack_item(Evas_Object *item, Evas_Object *scroller, Evas_Object *page, int from)$/;"	f	file:
+_animated_unpack_item	src/layout.c	/^static Evas_Object *_animated_unpack_item(Evas_Object *scroller, Evas_Object *page, unsigned int pos)$/;"	f	file:
+_app_control_cb	src/menu_screen.c	/^static void _app_control_cb(app_control_h service, void *data)$/;"	f	file:
+_app_list	include/list.h	/^typedef struct _app_list {$/;"	s
+_app_list_item	include/list.h	/^typedef struct _app_list_item {$/;"	s
+_appcore_flush_cb	src/menu_screen.c	/^static Eina_Bool _appcore_flush_cb(void *data)$/;"	f	file:
+_append_request_in_list	src/pkgmgr.c	/^static menu_screen_error_e _append_request_in_list(const char *package, const char *status)$/;"	f	file:
+_badge_change_cb	src/item_badge.c	/^static void _badge_change_cb(unsigned int action, const char *pkgname, unsigned int count, void *data)$/;"	f	file:
+_change_bg_cb	src/menu_screen.c	/^static void _change_bg_cb(keynode_t *node, void *data)$/;"	f	file:
+_change_pkg_name	src/pkgmgr.c	/^static menu_screen_error_e _change_pkg_name(const char *package, const char *val, void *scroller)$/;"	f	file:
+_create_bg	src/menu_screen.c	/^static void _create_bg(void)$/;"	f	file:
+_create_canvas	src/menu_screen.c	/^static menu_screen_error_e _create_canvas(char *name, char *title)$/;"	f	file:
+_create_cb	src/menu_screen.c	/^static bool _create_cb(void *data)$/;"	f	file:
+_create_conformant	src/menu_screen.c	/^static Evas_Object *_create_conformant(Evas_Object *win)$/;"	f	file:
+_create_main_operation_list	src/page_scroller.c	/^static int _create_main_operation_list(Evas_Object *scroller)$/;"	f	file:
+_db_info	include/all_apps/db.h	/^typedef struct _db_info {$/;"	s
+_dead_cb	src/menu_screen.c	/^static int _dead_cb(int pid, void *data)$/;"	f	file:
+_destroy_bg	src/menu_screen.c	/^static void _destroy_bg()$/;"	f	file:
+_destroy_canvas	src/menu_screen.c	/^static void _destroy_canvas(void)$/;"	f	file:
+_destroy_conformant	src/menu_screen.c	/^static void _destroy_conformant(Evas_Object *conformant)$/;"	f	file:
+_destroy_main_operation_list	src/page_scroller.c	/^static void _destroy_main_operation_list(Evas_Object *scroller)$/;"	f	file:
+_dim_down_cb	src/page.c	/^static void _dim_down_cb(void *data, Evas_Object *obj, const char* emission, const char* source)$/;"	f	file:
+_dim_up_cb	src/page.c	/^static void _dim_up_cb(void *data, Evas_Object *obj, const char* emission, const char* source)$/;"	f	file:
+_down_cb	src/mouse.c	/^static Eina_Bool _down_cb(void *data, int type, void *event)$/;"	f	file:
+_download_percent	src/pkgmgr.c	/^static menu_screen_error_e _download_percent(const char *package, const char *val, void *scroller)$/;"	f	file:
+_drag_start_cb	src/page_scroller.c	/^static void _drag_start_cb(void *data, Evas_Object *scroller, void *event_info)$/;"	f	file:
+_drag_stop_cb	src/page_scroller.c	/^static void _drag_stop_cb(void *data, Evas_Object *scroller, void *event_info)$/;"	f	file:
+_edit_button_down_cb	src/all_apps/layout.c	/^static void _edit_button_down_cb(void *data, Evas_Object *obj, const char* emission, const char* source)$/;"	f	file:
+_edit_button_up_cb	src/all_apps/layout.c	/^static void _edit_button_up_cb(void *data, Evas_Object *obj, const char* emission, const char* source)$/;"	f	file:
+_end	src/pkgmgr.c	/^static menu_screen_error_e _end(const char *package, const char *val, void *data)$/;"	f	file:
+_end_cb	src/pkgmgr.c	/^static int _end_cb(pkgmgrinfo_appinfo_h handle, void *user_data)$/;"	f	file:
+_error	src/pkgmgr.c	/^static menu_screen_error_e _error(const char *package, const char *val, void *scroller)$/;"	f	file:
+_evas_object_event_del_cb	src/util.c	/^HAPI void _evas_object_event_del_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)$/;"	f
+_evas_object_event_move_cb	src/util.c	/^HAPI void _evas_object_event_move_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)$/;"	f
+_evas_object_event_show_cb	src/util.c	/^HAPI void _evas_object_event_show_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)$/;"	f
+_evas_object_resize_cb	src/util.c	/^HAPI void _evas_object_resize_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)$/;"	f
+_exist_request_in_list	src/pkgmgr.c	/^static int _exist_request_in_list(const char *package)$/;"	f	file:
+_find_position_all_page	src/page_scroller.c	/^static menu_screen_error_e _find_position_all_page(Evas_Object *scroller, int *candidate_page, int *candidate_pos, void *data)$/;"	f	file:
+_find_position_by_default	src/page_scroller.c	/^static menu_screen_error_e _find_position_by_default(Evas_Object *scroller, int *candidate_page, int *candidate_pos, void *data)$/;"	f	file:
+_find_position_by_name	src/page_scroller.c	/^static menu_screen_error_e _find_position_by_name(Evas_Object *scroller, int *candidate_page, int *candidate_pos, void *data)$/;"	f	file:
+_find_position_by_package	src/page_scroller.c	/^static menu_screen_error_e _find_position_by_package(Evas_Object *scroller, int *candidate_page, int *candidate_pos, void *data)$/;"	f	file:
+_fini	src/menu_screen.c	/^static void _fini(app_event_handler_h *event_handlers)$/;"	f	file:
+_fini_theme	src/menu_screen.c	/^static void _fini_theme(void)$/;"	f	file:
+_focus_clicked_cb	src/all_apps/layout.c	/^static void _focus_clicked_cb(void *data, Evas_Object *obj, void *event_info)$/;"	f	file:
+_focus_clicked_cb	src/item.c	/^static void _focus_clicked_cb(void *data, Evas_Object *obj, void *event_info)$/;"	f	file:
+_get_request_in_list	src/pkgmgr.c	/^static pkgmgr_request_s *_get_request_in_list(const char *package)$/;"	f	file:
+_icon_path	src/pkgmgr.c	/^static menu_screen_error_e _icon_path(const char *package, const char *val, void *scroller)$/;"	f	file:
+_idler_cb	src/item_badge.c	/^static Eina_Bool _idler_cb(void *data)$/;"	f	file:
+_init	src/menu_screen.c	/^static void _init(ui_app_lifecycle_callback_s *lifecycle_callback, app_event_handler_h *event_handlers)$/;"	f	file:
+_init_reference_value	src/menu_screen.c	/^static void _init_reference_value(void)$/;"	f	file:
+_init_theme	src/menu_screen.c	/^static void _init_theme(void)$/;"	f	file:
+_insert_page_at	src/page.c	/^static menu_screen_error_e _insert_page_at(Evas_Object *scroller, Evas_Object *page, int index)$/;"	f	file:
+_install_percent	src/pkgmgr.c	/^static menu_screen_error_e _install_percent(const char *package, const char *val, void *scroller)$/;"	f	file:
+_is_emulator_on	src/menu_screen.c	/^static bool _is_emulator_on(void)$/;"	f	file:
+_is_main_operation_launch	src/item.c	/^static int _is_main_operation_launch(Evas_Object *scroller, const char *package)$/;"	f	file:
+_item_down_cb	src/item_event.c	/^static void _item_down_cb(void *data, Evas_Object *obj, const char* emission, const char* source)$/;"	f	file:
+_item_up_cb	src/item_event.c	/^static void _item_up_cb(void *data, Evas_Object *obj, const char* emission, const char* source)$/;"	f	file:
+_key_press_cb	src/key.c	/^static Eina_Bool _key_press_cb(void *data, int type, void *event)$/;"	f	file:
+_key_release_cb	src/key.c	/^static Eina_Bool _key_release_cb(void *data, int type, void *event)$/;"	f	file:
+_language_changed_cb	src/menu_screen.c	/^static void _language_changed_cb(app_event_info_h event_info, void *data)$/;"	f	file:
+_load_item	src/all_apps/layout.c	/^static menu_screen_error_e _load_item(Evas_Object *scroller, app_list_item *item)$/;"	f	file:
+_ltrim	src/page_scroller.c	/^static inline char *_ltrim(char *str)$/;"	f	file:
+_mouse_wheel_cb	src/page_scroller.c	/^static void _mouse_wheel_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)$/;"	f	file:
+_move_cb	src/mouse.c	/^static Eina_Bool _move_cb(void *data, int type, void *event)$/;"	f	file:
+_move_pages	src/mapbuf.c	/^static void _move_pages(Evas_Object *page)$/;"	f	file:
+_pause_cb	src/menu_screen.c	/^static void _pause_cb(void *data)$/;"	f	file:
+_pkgmgr_cb	src/pkgmgr.c	/^static menu_screen_error_e _pkgmgr_cb(int req_id, const char *pkg_type, const char *package, const char *key, const char *val, const void *pmsg, void *data)$/;"	f	file:
+_popup_set_name	src/popup.c	/^static char *_popup_set_name(Evas_Object *item)$/;"	f	file:
+_push_items	src/all_apps/layout.c	/^static menu_screen_error_e _push_items(Evas_Object *all_apps)$/;"	f	file:
+_push_items_idler_cb	src/all_apps/layout.c	/^static Eina_Bool _push_items_idler_cb(void *all_apps)$/;"	f	file:
+_push_items_idler_cb	src/all_apps/shortcut.c	/^static Eina_Bool _push_items_idler_cb(void *data)$/;"	f	file:
+_remove_edit_button	src/all_apps/layout.c	/^static void _remove_edit_button(Evas_Object *button)$/;"	f	file:
+_remove_request_in_list	src/pkgmgr.c	/^static menu_screen_error_e _remove_request_in_list(const char *package)$/;"	f	file:
+_replace_str	src/menu_screen.c	/^static char *_replace_str(char *str, const char *before, const char *after)$/;"	f	file:
+_response_cb	src/popup.c	/^static void _response_cb(void *data, Evas_Object *obj, void *event_info)$/;"	f	file:
+_resume_cb	src/menu_screen.c	/^static void _resume_cb(void *data)$/;"	f	file:
+_rtrim	src/page_scroller.c	/^static inline int _rtrim(char *str)$/;"	f	file:
+_run_cb	src/item.c	/^static void _run_cb(bundle *b, int request_code, appsvc_result_val result, void *data)$/;"	f	file:
+_scroll_cb	src/page_scroller.c	/^static void _scroll_cb(void *data, Evas_Object *scroller, void *event_info)$/;"	f	file:
+_set_removable_cb	src/pkgmgr.c	/^static Eina_Bool _set_removable_cb(const char *app_id, Evas_Object *item, void *data)$/;"	f	file:
+_shorcut_request_cb	src/all_apps/shortcut.c	/^static int _shorcut_request_cb($/;"	f	file:
+_start	src/pkgmgr.c	/^static menu_screen_error_e _start(const char *package, const char *val, void *scroller)$/;"	f	file:
+_start_download	src/pkgmgr.c	/^static menu_screen_error_e _start_download(const char *package, void *scroller)$/;"	f	file:
+_start_install	src/pkgmgr.c	/^static menu_screen_error_e _start_install(const char *package, void *scroller)$/;"	f	file:
+_start_recover	src/pkgmgr.c	/^static menu_screen_error_e _start_recover(const char *package, void *scroller)$/;"	f	file:
+_start_uninstall	src/pkgmgr.c	/^static menu_screen_error_e _start_uninstall(const char *package, void *scroller)$/;"	f	file:
+_start_update	src/pkgmgr.c	/^static menu_screen_error_e _start_update(const char *package, void *scroller)$/;"	f	file:
+_terminate_cb	src/menu_screen.c	/^static void _terminate_cb(void *data)$/;"	f	file:
+_unblock_cb	src/item.c	/^static Eina_Bool _unblock_cb(void *data)$/;"	f	file:
+_uninstall_cb	src/pkgmgr.c	/^static Eina_Bool _uninstall_cb(const char *app_id, Evas_Object *item, void *data)$/;"	f	file:
+_uninstall_down_cb	src/item_event.c	/^static void _uninstall_down_cb(void *data, Evas_Object *obj, const char* emission, const char* source)$/;"	f	file:
+_uninstall_focus_clicked_cb	src/item.c	/^static void _uninstall_focus_clicked_cb(void *data, Evas_Object *obj, void *event_info)$/;"	f	file:
+_uninstall_no_cb	src/popup.c	/^static void _uninstall_no_cb(void *data, Evas_Object *obj, void *event_info)$/;"	f	file:
+_uninstall_up_cb	src/item_event.c	/^static void _uninstall_up_cb(void *item, Evas_Object *obj, const char* emission, const char* source)$/;"	f	file:
+_uninstall_yes_cb	src/popup.c	/^static void _uninstall_yes_cb(void *data, Evas_Object *obj, void *event_info)$/;"	f	file:
+_up_cb	src/mouse.c	/^static Eina_Bool _up_cb(void *data, int type, void *event)$/;"	f	file:
+all_apps_db_count_shortcut	src/all_apps/db.c	/^HAPI int all_apps_db_count_shortcut(const char *appid, const char *name)$/;"	f
+all_apps_db_delete_shortcut	src/all_apps/db.c	/^HAPI menu_screen_error_e all_apps_db_delete_shortcut(long long rowid)$/;"	f
+all_apps_db_fini	src/all_apps/db.c	/^HAPI void all_apps_db_fini(void)$/;"	f
+all_apps_db_init	src/all_apps/db.c	/^HAPI menu_screen_error_e all_apps_db_init(void)$/;"	f
+all_apps_db_insert_shortcut	src/all_apps/db.c	/^HAPI long long all_apps_db_insert_shortcut(const char *appid, const char *name, int type, const char *content_info, const char *icon)$/;"	f
+all_apps_db_retrieve_all_info	src/all_apps/db.c	/^HAPI Eina_List *all_apps_db_retrieve_all_info(void)$/;"	f
+all_apps_db_unretrieve_all_info	src/all_apps/db.c	/^HAPI void all_apps_db_unretrieve_all_info(Eina_List *list)$/;"	f
+all_apps_db_unretrieve_info	src/all_apps/db.c	/^HAPI void all_apps_db_unretrieve_info(db_info *info)$/;"	f
+all_apps_layout_create	src/all_apps/layout.c	/^HAPI Evas_Object *all_apps_layout_create(Evas_Object *controlbar, int rotate)$/;"	f
+all_apps_layout_destroy	src/all_apps/layout.c	/^HAPI void all_apps_layout_destroy(Evas_Object *all_apps)$/;"	f
+all_apps_layout_edit	src/all_apps/layout.c	/^HAPI void all_apps_layout_edit(Evas_Object *all_apps)$/;"	f
+all_apps_layout_is_edited	src/all_apps/layout.c	/^HAPI bool all_apps_layout_is_edited(Evas_Object *all_apps)$/;"	f
+all_apps_layout_unedit	src/all_apps/layout.c	/^HAPI void all_apps_layout_unedit(Evas_Object *all_apps)$/;"	f
+all_apps_list_create	src/all_apps/list.c	/^HAPI app_list *all_apps_list_create(void)$/;"	f
+all_apps_list_destroy	src/all_apps/list.c	/^HAPI void all_apps_list_destroy(app_list *list)$/;"	f
+all_apps_list_find_installed_time	src/all_apps/list.c	/^HAPI int all_apps_list_find_installed_time(const char *id)$/;"	f
+all_apps_shortcut_add	src/all_apps/shortcut.c	/^HAPI Evas_Object *all_apps_shortcut_add($/;"	f
+all_apps_shortcut_add_all	src/all_apps/shortcut.c	/^HAPI menu_screen_error_e all_apps_shortcut_add_all(Evas_Object *scroller)$/;"	f
+all_apps_shortcut_fini	src/all_apps/shortcut.c	/^HAPI void all_apps_shortcut_fini(void)$/;"	f
+all_apps_shortcut_init	src/all_apps/shortcut.c	/^HAPI bool all_apps_shortcut_init(Evas_Object *all_apps)$/;"	f
+all_apps_shortcut_remove	src/all_apps/shortcut.c	/^HAPI void all_apps_shortcut_remove(Evas_Object *item)$/;"	f
+app_id	src/pkgmgr.c	/^	char* app_id;$/;"	m	struct:__anon3	file:
+app_info_t	include/list.h	/^} app_info_t;$/;"	t	typeref:struct:__anon16
+app_list	include/list.h	/^} app_list;$/;"	t	typeref:struct:_app_list
+app_list_item	include/list.h	/^} app_list_item;$/;"	t	typeref:struct:_app_list_item
+appid	include/all_apps/db.h	/^	char *appid;$/;"	m	struct:_db_info
+booting_state	src/menu_screen.c	/^	int booting_state;$/;"	m	struct:__anon10	file:
+break_if	include/util.h	122;"	d
+content_info	include/all_apps/db.h	/^	char *content_info;$/;"	m	struct:_db_info
+continue_if	include/util.h	129;"	d
+cur_idx	include/list.h	/^	unsigned int cur_idx;$/;"	m	struct:_app_list
+data	include/list.h	/^	void *data;$/;"	m	struct:_app_list_item
+db	src/db.c	/^	sqlite3 *db;$/;"	m	struct:__anon9	file:
+db_begin_transaction	src/db.c	/^HAPI menu_screen_error_e db_begin_transaction(void)$/;"	f
+db_bind_bool	src/db.c	/^HAPI menu_screen_error_e db_bind_bool(stmt_h *handle, int idx, bool value)$/;"	f
+db_bind_int	src/db.c	/^HAPI menu_screen_error_e db_bind_int(stmt_h *handle, int idx, int value)$/;"	f
+db_bind_str	src/db.c	/^HAPI menu_screen_error_e db_bind_str(stmt_h *handle, int idx, const char *str)$/;"	f
+db_close	src/db.c	/^HAPI void db_close(void)$/;"	f
+db_end_transaction	src/db.c	/^HAPI menu_screen_error_e db_end_transaction(bool success)$/;"	f
+db_exec	src/db.c	/^HAPI menu_screen_error_e db_exec(const char *query)$/;"	f
+db_finalize	src/db.c	/^HAPI menu_screen_error_e db_finalize(stmt_h *handle)$/;"	f
+db_get_bool	src/db.c	/^HAPI bool db_get_bool(stmt_h *handle, int index)$/;"	f
+db_get_int	src/db.c	/^HAPI int db_get_int(stmt_h *handle, int index)$/;"	f
+db_get_long_long	src/db.c	/^HAPI long long db_get_long_long(stmt_h *handle, int index)$/;"	f
+db_get_str	src/db.c	/^HAPI const char *db_get_str(stmt_h *handle, int index)$/;"	f
+db_info	include/all_apps/db.h	/^} db_info;$/;"	t	typeref:struct:_db_info
+db_info	src/db.c	/^} db_info = {$/;"	v	typeref:struct:__anon9	file:
+db_last_insert_rowid	src/db.c	/^HAPI long long db_last_insert_rowid(void)$/;"	f
+db_next	src/db.c	/^HAPI menu_screen_error_e db_next(stmt_h *handle)$/;"	f
+db_open	src/db.c	/^HAPI menu_screen_error_e db_open(const char *db_file)$/;"	f
+db_prepare	src/db.c	/^HAPI stmt_h *db_prepare(const char *query)$/;"	f
+db_reset	src/db.c	/^HAPI menu_screen_error_e db_reset(stmt_h *handle)$/;"	f
+desktop	include/list.h	/^	char *desktop;$/;"	m	struct:__anon16
+down_x	src/mouse.c	/^	Evas_Coord down_x;$/;"	m	struct:__anon7	file:
+down_y	src/mouse.c	/^	Evas_Coord down_y;$/;"	m	struct:__anon7	file:
+ee	src/menu_screen.c	/^	Ecore_Evas *ee;$/;"	m	struct:__anon10	file:
+enabled	include/list.h	/^	bool enabled;$/;"	m	struct:__anon16
+evas	src/menu_screen.c	/^	Evas *evas;$/;"	m	struct:__anon10	file:
+exec	include/list.h	/^	char *exec;$/;"	m	struct:__anon16
+func	src/pkgmgr.c	/^	int (*func)(const char *package, const char *val, void *data);$/;"	m	struct:pkgmgr_handler	file:
+gettext_noop	include/util.h	68;"	d
+goto_if	include/util.h	115;"	d
+home_grabbed	src/key.c	/^	Eina_Bool home_grabbed;$/;"	m	struct:__anon8	file:
+icon	include/all_apps/db.h	/^	char *icon;$/;"	m	struct:_db_info
+icon	include/list.h	/^	char *icon;$/;"	m	struct:__anon16
+image	include/list.h	/^	Evas_Object *image;$/;"	m	struct:__anon16
+index_bring_in	src/index.c	/^HAPI inline void index_bring_in(Evas_Object *index, int idx)$/;"	f
+index_create	src/index.c	/^HAPI Evas_Object *index_create(Evas_Object *tab, unsigned int count, unsigned int current_idx)$/;"	f
+index_destroy	src/index.c	/^HAPI void index_destroy(Evas_Object *index)$/;"	f
+index_hide	src/index.c	/^HAPI void index_hide(Evas_Object *index)$/;"	f
+index_show	src/index.c	/^HAPI void index_show(Evas_Object *index)$/;"	f
+index_update	src/index.c	/^HAPI Evas_Object *index_update(Evas_Object *layout, Evas_Object *index, unsigned int count)$/;"	f
+installed_time	include/list.h	/^	int installed_time;$/;"	m	struct:_app_list_item
+is_done	src/menu_screen.c	/^	bool is_done;$/;"	m	struct:__anon10	file:
+is_initialized	src/mouse.c	/^	bool is_initialized;$/;"	m	struct:__anon7	file:
+is_tts	src/menu_screen.c	/^	int is_tts;$/;"	m	struct:__anon10	file:
+item	src/pkgmgr.c	/^	Evas_Object *item;$/;"	m	struct:__anon3	file:
+item_badge_count	src/item_badge.c	/^HAPI int item_badge_count(char *package)$/;"	f
+item_badge_is_registered	src/item_badge.c	/^HAPI bool item_badge_is_registered(Evas_Object *item)$/;"	f
+item_badge_register	src/item_badge.c	/^HAPI menu_screen_error_e item_badge_register(Evas_Object *item)$/;"	f
+item_badge_register_changed_cb	src/item_badge.c	/^HAPI void item_badge_register_changed_cb(Evas_Object *scroller)$/;"	f
+item_badge_unregister	src/item_badge.c	/^HAPI void item_badge_unregister(Evas_Object *item)$/;"	f
+item_badge_unregister_changed_cb	src/item_badge.c	/^HAPI void item_badge_unregister_changed_cb(void)$/;"	f
+item_create	src/item.c	/^HAPI Evas_Object *item_create(Evas_Object *scroller, app_info_t* ai)$/;"	f
+item_destroy	src/item.c	/^HAPI void item_destroy(Evas_Object *item)$/;"	f
+item_disable_delete	src/item.c	/^HAPI void item_disable_delete(Evas_Object *item)$/;"	f
+item_disable_progress	src/item.c	/^HAPI void item_disable_progress(Evas_Object *obj)$/;"	f
+item_edit	src/item.c	/^HAPI void item_edit(Evas_Object *item)$/;"	f
+item_enable_delete	src/item.c	/^HAPI void item_enable_delete(Evas_Object *item)$/;"	f
+item_enable_progress	src/item.c	/^HAPI void item_enable_progress(Evas_Object *obj)$/;"	f
+item_event_info	src/item_event.c	/^} item_event_info = {$/;"	v	typeref:struct:__anon6	file:
+item_event_register	src/item_event.c	/^HAPI void item_event_register(Evas_Object *item)$/;"	f
+item_event_unregister	src/item_event.c	/^HAPI void item_event_unregister(Evas_Object *item)$/;"	f
+item_get_desktop	src/item.c	/^HAPI inline char *item_get_desktop(Evas_Object *edje)$/;"	f
+item_get_icon	src/item.c	/^HAPI char *item_get_icon(Evas_Object *edje)$/;"	f
+item_get_name	src/item.c	/^HAPI inline char *item_get_name(Evas_Object *edje)$/;"	f
+item_get_package	src/item.c	/^HAPI char *item_get_package(Evas_Object *edje)$/;"	f
+item_get_page	src/item.c	/^HAPI Evas_Object *item_get_page(Evas_Object *edje)$/;"	f
+item_get_pkgid	src/item.c	/^HAPI char *item_get_pkgid(Evas_Object *edje)$/;"	f
+item_get_position	src/item.c	/^HAPI int item_get_position(Evas_Object *item)$/;"	f
+item_get_removable	src/item.c	/^HAPI int item_get_removable(Evas_Object *edje)$/;"	f
+item_get_type	src/item.c	/^HAPI inline int item_get_type(Evas_Object *edje)$/;"	f
+item_hide_badge	src/item.c	/^HAPI void item_hide_badge(Evas_Object *obj)$/;"	f
+item_is_dirty	src/item.c	/^HAPI int item_is_dirty(Evas_Object *item)$/;"	f
+item_is_edje_icon	src/item.c	/^HAPI menu_screen_error_e item_is_edje_icon(const char *icon)$/;"	f
+item_is_enabled_badge	src/item.c	/^HAPI int item_is_enabled_badge(Evas_Object *obj)$/;"	f
+item_is_enabled_progress	src/item.c	/^HAPI int item_is_enabled_progress(Evas_Object *obj)$/;"	f
+item_launch	src/item.c	/^HAPI void item_launch(Evas_Object *obj)$/;"	f
+item_list	src/pkgmgr.c	/^	Eina_List *item_list;$/;"	m	struct:__anon4	file:
+item_mark_dirty	src/item.c	/^HAPI void item_mark_dirty(Evas_Object *item)$/;"	f
+item_set_desktop	src/item.c	/^HAPI void item_set_desktop(Evas_Object *edje, char *name, int sync)$/;"	f
+item_set_icon	src/item.c	/^HAPI void item_set_icon(Evas_Object *edje, char *icon, int sync)$/;"	f
+item_set_name	src/item.c	/^HAPI void item_set_name(Evas_Object *edje, char *name, int sync)$/;"	f
+item_set_package	src/item.c	/^HAPI void item_set_package(Evas_Object *edje, char *package, int sync)$/;"	f
+item_set_page	src/item.c	/^HAPI void item_set_page(Evas_Object *edje, Evas_Object *page, int sync)$/;"	f
+item_set_pkgid	src/item.c	/^HAPI void item_set_pkgid(Evas_Object *edje, char *package, int sync)$/;"	f
+item_set_removable	src/item.c	/^HAPI void item_set_removable(Evas_Object *edje, int removable, int sync)$/;"	f
+item_set_type	src/item.c	/^HAPI void item_set_type(Evas_Object *edje, int type, int sync)$/;"	f
+item_show_badge	src/item.c	/^HAPI void item_show_badge(Evas_Object *obj, int value)$/;"	f
+item_unedit	src/item.c	/^HAPI void item_unedit(Evas_Object *item)$/;"	f
+item_unmark_dirty	src/item.c	/^HAPI void item_unmark_dirty(Evas_Object *item)$/;"	f
+item_update	src/item.c	/^HAPI void item_update(Evas_Object *item, app_info_t *ai)$/;"	f
+item_update_progress	src/item.c	/^HAPI void item_update_progress(Evas_Object *obj, int value)$/;"	f
+key	src/pkgmgr.c	/^	char* key;$/;"	m	struct:__anon1	file:
+key	src/pkgmgr.c	/^	const char *key;$/;"	m	struct:pkgmgr_handler	file:
+key_grab_home	src/key.c	/^HAPI void key_grab_home(void)$/;"	f
+key_info	src/key.c	/^} key_info = {$/;"	v	typeref:struct:__anon8	file:
+key_register	src/key.c	/^HAPI void key_register(void)$/;"	f
+key_ungrab_home	src/key.c	/^HAPI void key_ungrab_home(void)$/;"	f
+key_unregister	src/key.c	/^HAPI void key_unregister(void)$/;"	f
+launch_time	include/list.h	/^	time_t launch_time;$/;"	m	struct:_app_list_item
+layout_create	src/layout.c	/^HAPI Evas_Object *layout_create(Evas_Object *conformant, const char *file, const char *group, int rotate)$/;"	f
+layout_create_package	src/layout.c	/^HAPI void layout_create_package(Evas_Object *layout, const char *package)$/;"	f
+layout_delete_package	src/layout.c	/^HAPI void layout_delete_package(Evas_Object *layout, const char *package)$/;"	f
+layout_destroy	src/layout.c	/^HAPI void layout_destroy(Evas_Object *layout)$/;"	f
+layout_disable_block	src/layout.c	/^HAPI void layout_disable_block(Evas_Object *layout)$/;"	f
+layout_enable_block	src/layout.c	/^HAPI void layout_enable_block(Evas_Object *layout)$/;"	f
+layout_load_edj	src/layout.c	/^HAPI Evas_Object* layout_load_edj(Evas_Object *parent, const char *edjname, const char *grpname)$/;"	f
+layout_unload_edj	src/layout.c	/^HAPI void layout_unload_edj(Evas_Object *layout)$/;"	f
+layout_update_package	src/layout.c	/^HAPI void layout_update_package(Evas_Object *layout, const char *package)$/;"	f
+list	include/list.h	/^	Eina_List *list;$/;"	m	struct:_app_list
+list_append_item	src/list.c	/^HAPI menu_screen_error_e list_append_item(app_list *list, app_list_item *item)$/;"	f
+list_count	src/list.c	/^HAPI menu_screen_error_e list_count(app_list *list, int *count)$/;"	f
+list_first	src/list.c	/^HAPI menu_screen_error_e list_first(app_list *list)$/;"	f
+list_free_values	src/list.c	/^HAPI void list_free_values(app_info_t *ai)$/;"	f
+list_get_item	src/list.c	/^HAPI menu_screen_error_e list_get_item(app_list *list, app_list_item **item)$/;"	f
+list_get_values	src/list.c	/^HAPI menu_screen_error_e list_get_values(const char *package, app_info_t *ai)$/;"	f
+list_is_ended	src/list.c	/^HAPI menu_screen_error_e list_is_ended(app_list *list, bool *flag)$/;"	f
+list_next	src/list.c	/^HAPI menu_screen_error_e list_next(app_list *list)$/;"	f
+list_nth	src/list.c	/^HAPI app_list_item *list_nth(app_list *parent, unsigned int nth)$/;"	f
+list_remove_item	src/list.c	/^HAPI menu_screen_error_e list_remove_item(app_list *list, app_list_item *item)$/;"	f
+list_sort	src/list.c	/^HAPI menu_screen_error_e list_sort(app_list *list, int (*_sort_cb)(const void *d1, const void *d2))$/;"	f
+listen_pc	src/pkgmgr.c	/^	pkgmgr_client *listen_pc;$/;"	m	struct:__anon4	file:
+long_press	src/key.c	/^	Ecore_Timer *long_press;$/;"	m	struct:__anon8	file:
+main	src/menu_screen.c	/^int main(int argc, char *argv[])$/;"	f
+mapbuf_bind	src/mapbuf.c	/^HAPI Evas_Object *mapbuf_bind(Evas_Object *box, Evas_Object *page)$/;"	f
+mapbuf_disable	src/mapbuf.c	/^HAPI int mapbuf_disable(Evas_Object *obj, int force)$/;"	f
+mapbuf_enable	src/mapbuf.c	/^HAPI menu_screen_error_e mapbuf_enable(Evas_Object *obj, int force)$/;"	f
+mapbuf_get_mapbuf	src/mapbuf.c	/^HAPI Evas_Object *mapbuf_get_mapbuf(Evas_Object *obj)$/;"	f
+mapbuf_get_page	src/mapbuf.c	/^HAPI Evas_Object *mapbuf_get_page(Evas_Object *obj)$/;"	f
+mapbuf_is_enabled	src/mapbuf.c	/^HAPI int mapbuf_is_enabled(Evas_Object *obj)$/;"	f
+mapbuf_unbind	src/mapbuf.c	/^HAPI Evas_Object *mapbuf_unbind(Evas_Object *obj)$/;"	f
+menu_screen_dec_booting_state	src/menu_screen.c	/^HAPI void menu_screen_dec_booting_state(void)$/;"	f
+menu_screen_error_e	include/util.h	/^} menu_screen_error_e;$/;"	t	typeref:enum:__anon12
+menu_screen_get_booting_state	src/menu_screen.c	/^HAPI int menu_screen_get_booting_state(void)$/;"	f
+menu_screen_get_done	src/menu_screen.c	/^HAPI bool menu_screen_get_done(void)$/;"	f
+menu_screen_get_evas	src/menu_screen.c	/^HAPI Evas *menu_screen_get_evas(void)$/;"	f
+menu_screen_get_root_height	src/menu_screen.c	/^HAPI int menu_screen_get_root_height(void)$/;"	f
+menu_screen_get_root_width	src/menu_screen.c	/^HAPI int menu_screen_get_root_width(void)$/;"	f
+menu_screen_get_state	src/menu_screen.c	/^HAPI int menu_screen_get_state(void)$/;"	f
+menu_screen_get_theme	src/menu_screen.c	/^HAPI Elm_Theme *menu_screen_get_theme(void)$/;"	f
+menu_screen_get_win	src/menu_screen.c	/^HAPI Evas_Object *menu_screen_get_win(void)$/;"	f
+menu_screen_inc_booting_state	src/menu_screen.c	/^HAPI void menu_screen_inc_booting_state(void)$/;"	f
+menu_screen_info	src/menu_screen.c	/^} menu_screen_info = {$/;"	v	typeref:struct:__anon10	file:
+menu_screen_is_tts	src/menu_screen.c	/^HAPI int menu_screen_is_tts(void)$/;"	f
+menu_screen_set_done	src/menu_screen.c	/^HAPI void menu_screen_set_done(bool is_done)$/;"	f
+mouse_down	src/mouse.c	/^	Ecore_Event_Handler *mouse_down;$/;"	m	struct:__anon7	file:
+mouse_info	src/mouse.c	/^} mouse_info = {$/;"	v	typeref:struct:__anon7	file:
+mouse_is_scrolling	src/mouse.c	/^HAPI bool mouse_is_scrolling(void)$/;"	f
+mouse_move	src/mouse.c	/^	Ecore_Event_Handler *mouse_move;$/;"	m	struct:__anon7	file:
+mouse_register	src/mouse.c	/^HAPI void mouse_register(void)$/;"	f
+mouse_unregister	src/mouse.c	/^HAPI void mouse_unregister(void)$/;"	f
+mouse_up	src/mouse.c	/^	Ecore_Event_Handler *mouse_up;$/;"	m	struct:__anon7	file:
+move_x	src/mouse.c	/^	Evas_Coord move_x;$/;"	m	struct:__anon7	file:
+move_y	src/mouse.c	/^	Evas_Coord move_y;$/;"	m	struct:__anon7	file:
+name	include/all_apps/db.h	/^	char *name;$/;"	m	struct:_db_info
+name	include/list.h	/^	char *name;$/;"	m	struct:__anon16
+nodisplay	include/list.h	/^	bool nodisplay;$/;"	m	struct:__anon16
+package	include/list.h	/^	char *package; \/* appid *\/$/;"	m	struct:__anon16
+package	include/list.h	/^	char *package;$/;"	m	struct:_app_list_item
+package	src/pkgmgr.c	/^	char* package;$/;"	m	struct:__anon1	file:
+package	src/pkgmgr.c	/^	char* package;$/;"	m	struct:__anon2	file:
+page_clean_dirty	src/page.c	/^HAPI inline void page_clean_dirty(Evas_Object *page)$/;"	f
+page_count_item	src/page.c	/^HAPI inline unsigned int page_count_item(Evas_Object *page)$/;"	f
+page_create	src/page.c	/^HAPI Evas_Object *page_create(Evas_Object *scroller, int idx, int rotate)$/;"	f
+page_destroy	src/page.c	/^HAPI void page_destroy(Evas_Object *scroller, Evas_Object *page)$/;"	f
+page_find_empty_near	src/page.c	/^HAPI int page_find_empty_near(Evas_Object *page, int pivot)$/;"	f
+page_find_first_empty	src/page.c	/^HAPI int page_find_first_empty(Evas_Object *page, int pivot)$/;"	f
+page_get_item_at	src/page.c	/^HAPI Evas_Object *page_get_item_at(Evas_Object *page, unsigned int idx)$/;"	f
+page_is_dirty	src/page.c	/^HAPI inline int page_is_dirty(Evas_Object *page)$/;"	f
+page_mark_dirty	src/page.c	/^HAPI inline void page_mark_dirty(Evas_Object *page)$/;"	f
+page_pack_item	src/page.c	/^HAPI void page_pack_item(Evas_Object *page, int idx, Evas_Object *item)$/;"	f
+page_scroller_bring_in	src/page_scroller.c	/^HAPI void page_scroller_bring_in(Evas_Object *scroller, int idx)$/;"	f
+page_scroller_clean	src/page_scroller.c	/^HAPI void page_scroller_clean(Evas_Object *scroller)$/;"	f
+page_scroller_count_page	src/page_scroller.c	/^HAPI unsigned int page_scroller_count_page(Evas_Object *scroller)$/;"	f
+page_scroller_create	src/page_scroller.c	/^HAPI Evas_Object *page_scroller_create(Evas_Object *tab, Evas_Object *index, page_scroller_sort_type_e sort_type, int rotate)$/;"	f
+page_scroller_destroy	src/page_scroller.c	/^HAPI void page_scroller_destroy(Evas_Object *scroller)$/;"	f
+page_scroller_edit	src/page_scroller.c	/^HAPI void page_scroller_edit(Evas_Object *scroller)$/;"	f
+page_scroller_find_item_by_package	src/page_scroller.c	/^HAPI Evas_Object *page_scroller_find_item_by_package(Evas_Object *scroller, const char *package, int *page_no)$/;"	f
+page_scroller_focus	src/page_scroller.c	/^HAPI void page_scroller_focus(Evas_Object *scroller)$/;"	f
+page_scroller_focus_into_vector	src/page_scroller.c	/^HAPI void page_scroller_focus_into_vector(Evas_Object *scroller, int vector)$/;"	f
+page_scroller_get_current_page_no	src/page_scroller.c	/^HAPI int page_scroller_get_current_page_no(Evas_Object *scroller)$/;"	f
+page_scroller_get_page_at	src/page_scroller.c	/^HAPI Evas_Object *page_scroller_get_page_at(Evas_Object *scroller, unsigned int idx)$/;"	f
+page_scroller_get_page_no	src/page_scroller.c	/^HAPI int page_scroller_get_page_no(Evas_Object* scroller, Evas_Object *page)$/;"	f
+page_scroller_is_edited	src/page_scroller.c	/^HAPI bool page_scroller_is_edited(Evas_Object *scroller)$/;"	f
+page_scroller_push_item	src/page_scroller.c	/^HAPI Evas_Object *page_scroller_push_item(Evas_Object *scroller, app_info_t *ai)$/;"	f
+page_scroller_push_item_by_order	src/page_scroller.c	/^HAPI Evas_Object *page_scroller_push_item_by_order(Evas_Object *scroller, app_info_t *ai)$/;"	f
+page_scroller_show_region	src/page_scroller.c	/^HAPI void page_scroller_show_region(Evas_Object *scroller, int idx)$/;"	f
+page_scroller_sort_type_e	include/page_scroller.h	/^} page_scroller_sort_type_e;$/;"	t	typeref:enum:__anon11
+page_scroller_trim_items	src/page_scroller.c	/^HAPI void page_scroller_trim_items(Evas_Object *scroller)$/;"	f
+page_scroller_unedit	src/page_scroller.c	/^HAPI void page_scroller_unedit(Evas_Object *scroller)$/;"	f
+page_set_item	src/page.c	/^HAPI void page_set_item(Evas_Object *page, int idx, Evas_Object *item)$/;"	f
+page_trim_items	src/page.c	/^HAPI void page_trim_items(Evas_Object *page)$/;"	f
+page_unmark_dirty	src/page.c	/^HAPI inline void page_unmark_dirty(Evas_Object *page)$/;"	f
+page_unpack_item	src/page.c	/^HAPI menu_screen_error_e page_unpack_item(Evas_Object *page, Evas_Object *item)$/;"	f
+page_unpack_item_at	src/page.c	/^HAPI Evas_Object *page_unpack_item_at(Evas_Object *page, int idx)$/;"	f
+pid	include/list.h	/^	pid_t pid;$/;"	m	struct:__anon16
+pid	include/list.h	/^	pid_t pid;$/;"	m	struct:_app_list_item
+pkg_id	src/pkgmgr.c	/^	char* pkg_id;$/;"	m	struct:__anon3	file:
+pkg_mgr_info	src/pkgmgr.c	/^} pkg_mgr_info = {$/;"	v	typeref:struct:__anon4	file:
+pkgid	include/list.h	/^	char *pkgid;$/;"	m	struct:__anon16
+pkgmgr_cbs	src/pkgmgr.c	/^static struct pkgmgr_handler pkgmgr_cbs[] = {$/;"	v	typeref:struct:pkgmgr_handler	file:
+pkgmgr_fini	src/pkgmgr.c	/^HAPI void pkgmgr_fini(void)$/;"	f
+pkgmgr_handler	src/pkgmgr.c	/^struct pkgmgr_handler {$/;"	s	file:
+pkgmgr_init	src/pkgmgr.c	/^HAPI menu_screen_error_e pkgmgr_init(void)$/;"	f
+pkgmgr_install_s	src/pkgmgr.c	/^} pkgmgr_install_s;$/;"	t	typeref:struct:__anon3	file:
+pkgmgr_item_list_affect_appid	src/pkgmgr.c	/^HAPI void pkgmgr_item_list_affect_appid(const char *app_id, Eina_Bool (*_affected_cb)(const char *, Evas_Object *, void *), void *data)$/;"	f
+pkgmgr_item_list_affect_pkgid	src/pkgmgr.c	/^HAPI void pkgmgr_item_list_affect_pkgid(const char *pkg_id, Eina_Bool (*_affected_cb)(const char *, Evas_Object *, void *), void *data)$/;"	f
+pkgmgr_item_list_append_item	src/pkgmgr.c	/^HAPI menu_screen_error_e pkgmgr_item_list_append_item(const char *pkg_id, const char *app_id, Evas_Object *item)$/;"	f
+pkgmgr_item_list_remove_item	src/pkgmgr.c	/^HAPI menu_screen_error_e pkgmgr_item_list_remove_item(const char *pkg_id, const char *app_id, Evas_Object *item)$/;"	f
+pkgmgr_request_s	src/pkgmgr.c	/^} pkgmgr_request_s;$/;"	t	typeref:struct:__anon2	file:
+pkgmgr_reserve_list_pop_request	src/pkgmgr.c	/^HAPI menu_screen_error_e pkgmgr_reserve_list_pop_request(void)$/;"	f
+pkgmgr_reserve_list_push_request	src/pkgmgr.c	/^HAPI menu_screen_error_e pkgmgr_reserve_list_push_request(const char *package, const char *key, const char *val)$/;"	f
+pkgmgr_reserve_s	src/pkgmgr.c	/^} pkgmgr_reserve_s;$/;"	t	typeref:struct:__anon1	file:
+pkgmgr_uninstall	src/pkgmgr.c	/^HAPI inline menu_screen_error_e pkgmgr_uninstall(Evas_Object *item)$/;"	f
+popup	src/popup.c	/^	Evas_Object *popup;$/;"	m	struct:__anon5	file:
+popup_create_confirm	src/popup.c	/^HAPI Evas_Object *popup_create_confirm(Evas_Object *parent, const char *warning)$/;"	f
+popup_create_uninstall	src/popup.c	/^HAPI Evas_Object *popup_create_uninstall(Evas_Object *parent, Evas_Object *item)$/;"	f
+popup_destroy_all	src/popup.c	/^HAPI void popup_destroy_all(void)$/;"	f
+popup_exist	src/popup.c	/^HAPI Evas_Object *popup_exist(void)$/;"	f
+popup_info	src/popup.c	/^} popup_info = {$/;"	v	typeref:struct:__anon5	file:
+pre_x	src/mouse.c	/^	Evas_Coord pre_x;$/;"	m	struct:__anon7	file:
+pre_y	src/mouse.c	/^	Evas_Coord pre_y;$/;"	m	struct:__anon7	file:
+press_handler	src/key.c	/^	Ecore_Event_Handler *press_handler;$/;"	m	struct:__anon8	file:
+pressed	src/key.c	/^	Eina_Bool pressed;$/;"	m	struct:__anon8	file:
+pressed	src/mouse.c	/^	bool pressed;$/;"	m	struct:__anon7	file:
+pressed_item	src/item_event.c	/^	Evas_Object *pressed_item;$/;"	m	struct:__anon6	file:
+register_handler	src/key.c	/^	Eina_Bool register_handler;$/;"	m	struct:__anon8	file:
+release_handler	src/key.c	/^	Ecore_Event_Handler *release_handler;$/;"	m	struct:__anon8	file:
+request_list	src/pkgmgr.c	/^	Eina_List *request_list;$/;"	m	struct:__anon4	file:
+reserve_list	src/pkgmgr.c	/^	Eina_List *reserve_list;$/;"	m	struct:__anon4	file:
+ret_if	include/util.h	108;"	d
+retv_if	include/util.h	101;"	d
+retv_with_dbmsg_if	src/db.c	35;"	d	file:
+root_height	src/menu_screen.c	/^	int root_height;$/;"	m	struct:__anon10	file:
+root_width	src/menu_screen.c	/^	int root_width;$/;"	m	struct:__anon10	file:
+rowid	include/all_apps/db.h	/^	long long rowid;$/;"	m	struct:_db_info
+state	src/menu_screen.c	/^	int state;$/;"	m	struct:__anon10	file:
+status	src/pkgmgr.c	/^	char* status;$/;"	m	struct:__anon2	file:
+stmt	src/db.c	/^	sqlite3_stmt *stmt;$/;"	m	struct:stmt	file:
+stmt	src/db.c	/^struct stmt {$/;"	s	file:
+stmt_h	include/db.h	/^typedef struct stmt stmt_h;$/;"	t	typeref:struct:stmt
+theme	src/menu_screen.c	/^	Elm_Theme *theme;$/;"	m	struct:__anon10	file:
+tray_type_e	include/util.h	/^} tray_type_e;$/;"	t	typeref:enum:__anon13
+type	include/all_apps/db.h	/^	int type;$/;"	m	struct:_db_info
+val	src/pkgmgr.c	/^	char* val;$/;"	m	struct:__anon1	file:
+win	src/menu_screen.c	/^	Evas_Object *win;$/;"	m	struct:__anon10	file:
+x_slp_removable	include/list.h	/^	bool x_slp_removable;$/;"	m	struct:__anon16
+x_slp_taskmanage	include/list.h	/^	bool x_slp_taskmanage;$/;"	m	struct:__anon16

@@ -3,6 +3,9 @@
  *
  * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
+ * Contact: Jin Yoon <jinny.yoon@samsung.com>
+ *          Junkyu Han <junkyu.han@samsung.com>
+
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -20,12 +23,9 @@
 #ifndef __MENU_SCREEN_POPUP_H__
 #define __MENU_SCREEN_POPUP_H__
 
-extern void popup_append_list(Evas_Object *popup);
-extern void popup_remove_list(Evas_Object *popup);
-extern void popup_free_list();
-
-extern Evas_Object *popup_create(Evas_Object *parent, const char *warning);
-extern void popup_destroy(Evas_Object *popup);
+extern Evas_Object *popup_exist(void);
+extern void popup_destroy_all(void);
+extern Evas_Object *popup_create_confirm(Evas_Object *parent, const char *warning);
 extern Evas_Object *popup_create_uninstall(Evas_Object *parent, Evas_Object *item);
 
 #endif //__MENU_SCREEN_POPUP_H__

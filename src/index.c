@@ -3,6 +3,9 @@
  *
  * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
+ * Contact: Jin Yoon <jinny.yoon@samsung.com>
+ *          Junkyu Han <junkyu.han@samsung.com>
+
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -42,6 +45,8 @@ HAPI inline void index_bring_in(Evas_Object *index, int idx)
 
 HAPI void index_destroy(Evas_Object *index)
 {
+	ret_if(NULL == index);
+
 	evas_object_data_del(index, "win");
 	evas_object_data_del(index, "layout");
 	evas_object_data_del(index, "controlbar");
@@ -53,7 +58,7 @@ HAPI void index_destroy(Evas_Object *index)
 
 
 
-HAPI Evas_Object *index_create(Evas_Object *tab, unsigned int count,unsigned int current_idx)
+HAPI Evas_Object *index_create(Evas_Object *tab, unsigned int count, unsigned int current_idx)
 {
 	Evas_Object *index;
 	Evas_Object *scroller;
@@ -109,19 +114,17 @@ HAPI Evas_Object *index_create(Evas_Object *tab, unsigned int count,unsigned int
 
 HAPI Evas_Object *index_update(Evas_Object *layout, Evas_Object *index, unsigned int count)
 {
-	int idx;
-	Elm_Object_Item *idx_it;
-	idx_it = elm_index_selected_item_get(index, 0);
-	idx = (int) elm_object_item_data_get(idx_it);
+	int idx = 0;
 
-	if(count == idx)
-	{
-		idx--;
+	int cur_count = (int) evas_object_data_get(index, "count");
+	if (cur_count > 0) {
+		Elm_Object_Item *idx_it = elm_index_selected_item_get(index, 0);
+		if (idx_it) idx = (int) elm_object_item_data_get(idx_it);
 	}
-	if(idx == -1)
-	{
-		idx = 0;
-	}
+
+	if(count == idx) idx--;
+	if(idx == -1) idx = 0;
+
 	_D("Current index %d, Current count: %d", idx,count);
 	index_destroy(index);
 	return index_create(layout, count,idx);

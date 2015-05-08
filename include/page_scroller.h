@@ -3,6 +3,9 @@
  *
  * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
+ * Contact: Jin Yoon <jinny.yoon@samsung.com>
+ *          Junkyu Han <junkyu.han@samsung.com>
+
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -41,6 +44,8 @@ extern unsigned int page_scroller_count_page(Evas_Object *scroller);
 extern int page_scroller_get_page_no(Evas_Object* scroller, Evas_Object *page);
 
 extern Evas_Object *page_scroller_push_item(Evas_Object *scroller, app_info_t *ai);
+extern Evas_Object *page_scroller_push_item_by_order(Evas_Object *scroller, app_info_t *ai);
+extern int page_scroller_get_current_page_no(Evas_Object *scroller);
 extern Evas_Object *page_scroller_find_item_by_package(Evas_Object *scroller, const char *package, int *page_no);
 extern void page_scroller_trim_items(Evas_Object *scroller);
 extern void page_scroller_bring_in(Evas_Object *scroller, int idx);
@@ -49,6 +54,9 @@ extern void page_scroller_show_region(Evas_Object *scroller, int idx);
 extern void page_scroller_edit(Evas_Object *scroller);
 extern void page_scroller_unedit(Evas_Object *scroller);
 extern bool page_scroller_is_edited(Evas_Object *scroller);
+
+extern void page_scroller_focus(Evas_Object *scroller);
+extern void page_scroller_focus_into_vector(Evas_Object *scroller, int vector);
 
 #endif //__MENU_SCREEN_PAGE_SCROLLER_H__
 
