@@ -14,7 +14,7 @@
 
 %define _localedir %{_resdir}/locale
 
-%if "%{?tizen_profile_name}" == "wearable"
+%if "%{?profile}" == "wearable"
 ExcludeArch: %{arm} %ix86 x86_64
 %endif
 
