@@ -3,6 +3,9 @@
  *
  * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
+ * Contact: Jin Yoon <jinny.yoon@samsung.com>
+ *          Junkyu Han <junkyu.han@samsung.com>
+
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -73,7 +76,6 @@ static void _item_down_cb(void *data, Evas_Object *obj, const char* emission, co
 
 static void _item_up_cb(void *data, Evas_Object *obj, const char* emission, const char* source)
 {
-	Evas_Object *scroller;
 	Evas_Object *icon_image;
 	Evas_Object *item;
 
@@ -92,16 +94,6 @@ static void _item_up_cb(void *data, Evas_Object *obj, const char* emission, cons
 		return;
 	}
 	item_event_info.pressed_item = NULL;
-
-	if (mouse_is_scrolling()) return;
-
-	scroller = evas_object_data_get(item, "scroller");
-	ret_if(NULL == scroller);
-
-	if (true == page_scroller_is_edited(scroller)) {
-		return;
-	}
-	item_launch(item);
 }
 
 
@@ -118,8 +110,6 @@ static void _uninstall_down_cb(void *data, Evas_Object *obj, const char* emissio
 static void _uninstall_up_cb(void *item, Evas_Object *obj, const char* emission, const char* source)
 {
 	Evas_Object *win;
-	Evas_Object *scroller;
-	char *package;
 
 	ret_if(mouse_is_scrolling());
 
@@ -127,20 +117,11 @@ static void _uninstall_up_cb(void *item, Evas_Object *obj, const char* emission,
 	ret_if(NULL == win);
 
 	_D("Uninstall button is up");
-	scroller = evas_object_data_get(item, "scroller");
 	obj = evas_object_data_get(obj, "evas_object");
 	ret_if(NULL == obj);
 	ret_if(NULL == evas_object_data_get(obj, "removing"));
 
 	evas_object_data_del(obj, "removing");
-
-	package = item_get_package(obj);
-	ret_if(!package || strlen(package) == 0);
-	ret_if(pkgmgr_find_pended_object(package, 0, scroller, NULL));
-
-	_D("Uninstalling... [%s]", package);
-
-	popup_create_uninstall(win, item);
 }
 
 

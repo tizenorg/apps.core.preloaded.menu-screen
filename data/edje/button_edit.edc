@@ -3,6 +3,9 @@
  *
  * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
+ * Contact: Jin Yoon <jinny.yoon@samsung.com>
+ *          Junkyu Han <junkyu.han@samsung.com>
+
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,18 +20,28 @@
  *
  */
 
+#define BUTTON_EDIT_BG_SIZE 98 56
+#define BUTTON_EDIT_BG_SIZE_MIN 45 30
+#define BUTTON_EDIT_IMAGE_SIZE 35 35
+#define BUTTON_EDIT_IMAGE_SIZE_MIN 17 17
+#define BUTTON_EDIT_W 128
+#define BUTTON_EDIT_H 80
+
 
 
 images {
-	image: "../images/RM06_App_tray_setting.png" COMP;
-	image: "../images/RM06_App_tray_setting_press.png" COMP;
-	image: "../images/RM06_App_tray_edit_btn.png" COMP;
-	image: "../images/RM06_App_tray_edit_btn_press.png" COMP;
+	image: "../images/btn_edit_nor.9.png" COMP;
+	image: "../images/btn_edit_press.9.png" COMP;
+	image: "../images/icon_btn_edit_press.png" COMP;
+	image: "../images/icon_btn_edit_nor.png" COMP;
+	image: "../images/icon_btn_done_press.png" COMP;
+	image: "../images/icon_btn_done_nor.png" COMP;
 }
 
 
 
 collections {
+	base_scale: 1.8;
 	group {
 		name: "button_edit";
 		parts {
@@ -39,20 +52,17 @@ collections {
 				mouse_events: 1;
 				description {
 					state: "default" 0.0;
-					rel1 { relative: 25/128 0.0; }
-					rel2 { relative: 1.0 1.0; }
-					visible: 0;
-				}
-				description {
-					state: "enable" 0.0;
 					rel1 { relative: 0.0 0.0; }
 					rel2 { relative: 1.0 1.0; }
 					visible: 0;
 				}
 				description {
+					state: "enable" 0.0;
+					inherit: "default" 0.0;
+				}
+				description {
 					state: "hide" 0.0;
 					inherit: "default" 0.0;
-					visible: 0;
 				}
 			}
             part {
@@ -62,19 +72,22 @@ collections {
 				mouse_events: 1;
 				description {
 					state: "default" 0.0;
-					rel1 { relative: 0.5 0.5; to, "edit_button"; }
-					rel2 { relative: 0.5 0.5; to, "edit_button"; }
-					min: 119 54;
-					max: 119 54;
+					rel1 { relative: 15/BUTTON_EDIT_W 12/BUTTON_EDIT_H; to, "edit_button"; }
+					rel2 { relative: 113/BUTTON_EDIT_W 68/BUTTON_EDIT_H; to, "edit_button"; }
+					min: BUTTON_EDIT_BG_SIZE_MIN;
 					fixed: 1 1;
 					image {
-						normal: "../images/RM06_App_tray_edit_btn.png";
-						border: 3 3 3 3;
+						normal: "../images/btn_edit_nor.9.png";
+						border: 15 15 0 0;
 						middle: DEFAULT;
-						border_scale: 0;
+						border_scale: 1;
 					}
-					color: 0 0 0 0;
+					color: 255 255 255 255;
 					visible: 1;
+				}
+				description {
+					state: "edit" 0.0;
+					inherit: "default" 0.0;
 				}
 				description {
 					state: "enable" 0.0;
@@ -83,19 +96,10 @@ collections {
 				}
 				description {
 					state: "press" 0.0;
-					rel1 { relative: 0.5 0.5; to, "edit_button"; }
-					rel2 { relative: 0.5 0.5; to, "edit_button"; }
-					min: 119 54;
-					max: 119 54;
-					fixed: 1 1;
+					inherit: "default" 0.0;
 					image {
-						normal: "../images/RM06_App_tray_edit_btn_press.png";
-						border: 3 3 3 3;
-						middle: DEFAULT;
-						border_scale: 0;
+						normal: "../images/btn_edit_press.9.png";
 					}
-					color: 255 255 255 255;
-					visible: 1;
 				}
 				description {
 					state: "hide" 0.0;
@@ -111,21 +115,48 @@ collections {
                 description {
                     state: "default" 0.0;
                     align: 0.5 0.5;
-					rel1 { relative: 30/119 0.5; to, "edit_button_bg";}
-					rel2 { relative: 30/119 0.5; to, "edit_button_bg";}
+					rel1 { relative: 46/BUTTON_EDIT_W 22/BUTTON_EDIT_H; to, "edit_button_bg";}
+					rel2 { relative: 81/BUTTON_EDIT_W 57/BUTTON_EDIT_H; to, "edit_button_bg";}
 					image {
-						normal: "../images/RM06_App_tray_setting.png";
+						normal: "../images/icon_btn_edit_nor.png";
 					}
-					min:42 42;
+					min: BUTTON_EDIT_IMAGE_SIZE_MIN;
 					fixed: 1 1;
 					visible: 1;
                 }
+				description {
+					state: "edit" 0.0;
+					inherit: "default" 0.0;
+					image {
+						normal: "../images/icon_btn_done_nor.png";
+					}
+				}
                 description {
                     state: "press" 0.0;
                     inherit: "default" 0.0;
 					image {
-						normal: "../images/RM06_App_tray_setting_press.png";
+						normal: "../images/icon_btn_edit_press.png";
 					}
+                }
+				description {
+					state: "edit_press" 0.0;
+					inherit: "default" 0.0;
+					image {
+						normal: "../images/icon_btn_done_press.png";
+					}
+				}
+            }
+            part {
+                name: "edit_button_event";
+                type: RECT;
+				scale: 1;
+                mouse_events: 1;
+                description {
+					state: "default" 0.0;
+					rel1 { relative: -0.1 -0.1; to: "edit_button_bg"; }
+					rel2 { relative: 1.1 1.1; to: "edit_button_bg"; }
+					color: 0 0 0 0;
+					visible: 1;
                 }
 				description {
 					state: "hide" 0.0;
@@ -134,56 +165,31 @@ collections {
 				}
             }
 			part {
-                name: "edit_button_text";
-				type: TEXT;
-				effect: SOFT_SHADOW;
+				name: "focus";
+				type: SWALLOW;
 				scale: 1;
-                mouse_events: 1;
-                description {
-                    state: "default" 0.0;
-					rel1 { relative: 50/119 0.15; to, "edit_button_bg";} // origin : 59/119 0.0
-					rel2 { relative: 1.0 1.0; to, "edit_button_bg";}
-					color: 183 183 183 255;
-					color2: 0 0 0 35;
-					color3: 0 0 0 35;
-					text {
-						text_class: "tizen";
-						font: "TIZEN:style=medium";
-						size: 6;
-						fit: 1 1;
-						align: 0.5 0.5;
-					}
+				mouse_events: 1;
+				repeat_events: 1;
+				description {
+					state: "default" 0.0;
+					rel1 { relative: 0.0 0.0; to: "edit_button_event"; }
+					rel2 { relative: 1.0 1.0; to: "edit_button_event"; }
+					fixed: 1 1;
 					visible: 1;
 				}
-				description {
-					state: "press" 0.0;
-					inherit: "default" 0.0;
-					color: 249 249 249 255;
-                }
-				description {
-					state: "hide" 0.0;
-					inherit: "default" 0.0;
-					visible: 0;
-				}
-            }
-
+			}
             part {
-                name: "edit_button_event";
+                name: "state_edit";
                 type: RECT;
 				scale: 1;
                 mouse_events: 1;
                 description {
 					state: "default" 0.0;
-					align: 0.5 0.5;
-					color: 0 0 0 0;
-					rel1 { relative: 0.0 0.0; to, "edit_button";}
-					rel2 { relative: 1.0 1.0; to, "edit_button";}
-					visible: 1;
+					visible: 0;
                 }
 				description {
-					state: "hide" 0.0;
+					state: "edit" 0.0;
 					inherit: "default" 0.0;
-					visible: 0;
 				}
             }
 		}
@@ -191,11 +197,27 @@ collections {
 		programs {
 			program {
 				name: "edit_button,down";
-				signal: "mouse,down,*";
+				signal: "mouse,down,1";
 				source: "edit_button_event";
 				action: STATE_SET "press" 0.0;
-				target: "edit_button_image";
-				target: "edit_button_text";
+				target: "edit_button_bg";
+				after: "press_state";
+			}
+			program {
+				name: "press_state";
+				script {
+					new st[31];
+					new Float:vl;
+					get_state(PART:"state_edit", st, 30, vl);
+					if (!strcmp(st, "default"))
+					{
+						set_state(PART:"edit_button_image", "press", 0.0);
+					}
+					else
+					{
+						set_state(PART:"edit_button_image", "edit_press", 0.0);
+					}
+				}
 				after: "edit_button,down,after";
 			}
 			program {
@@ -205,71 +227,70 @@ collections {
 
 			program {
 				name: "edit_button,up";
-				signal: "mouse,up,*";
+				signal: "mouse,up,1";
 				source: "edit_button_event";
 				action: STATE_SET "default" 0.0;
-				target: "edit_button_image";
-				target: "edit_button_text";
+				target: "edit_button_bg";
 				after: "edit_button,up,after";
 			}
-			program {
+			program { // Edit or unedit in C codes.
 				name: "edit_button,up,after";
 				action: SIGNAL_EMIT "edit_button,up" "menu";
 			}
+			program { // This program is called from C.
+				name: "release_state";
+				signal: "edit_button,release";
+				source: "menu";
+				script {
+					new st[31];
+					new Float:vl;
+					get_state(PART:"state_edit", st, 30, vl);
+					if (!strcmp(st, "default")) // Normal mode
+					{
+						set_state(PART:"edit_button_image", "default", 0.0);
+					}
+					else // Edit mode
+					{
+						set_state(PART:"edit_button_image", "edit", 0.0);
+					}
+				}
+			}
 
-			program {
-				name: "edit_button,enable";
-				signal: "edit_button,enable";
+			program { // Edit mode
+				name: "edit_button_state,edit";
+				signal: "edit_button_state,edit";
 				source: "menu";
-				action: STATE_SET "enable" 0.0;
-				target: "edit_button";
-				target: "edit_button_bg";
-				transition: DECELERATE 0.4;
-			}
-			program {
-				name: "edit_button,disable";
-				signal: "edit_button,disable";
-				source: "menu";
-				action: STATE_SET "default" 0.0;
-				target: "edit_button";
-				target: "edit_button_bg";
-				transition: DECELERATE 0.4;
-			}
-
-			program {
-				name: "edit_button,enable,press";
-				signal: "edit_button,enable,press";
-				source: "menu";
-				action: STATE_SET "press" 0.0;
-				target: "edit_button_bg";
-			}
-			program {
-				name: "edit_button,enable,release";
-				signal: "edit_button,enable,release";
-				source: "menu";
-				action: STATE_SET "enable" 0.0;
-				target: "edit_button_bg";
-			}
-			program {
-				name: "edit_button_image,hide";
-				signal: "edit_button_image,hide";
-				source: "menu";
-				action: STATE_SET "hide" 0.0;
-				target: "edit_button";
+				action: STATE_SET "edit" 0.0;
+				target: "state_edit";
 				target: "edit_button_bg";
 				target: "edit_button_image";
-				target: "edit_button_text";
+			}
+			program { // Normal mode
+				name: "edit_button_state,unedit";
+				signal: "edit_button_state,unedit";
+				source: "menu";
+				action: STATE_SET "default" 0.0;
+				target: "state_edit";
+				target: "edit_button_bg";
+				target: "edit_button_image";
+			}
+
+			program {
+				name: "edit_button,show";
+				signal: "edit_button,show";
+				source: "menu";
+				action: STATE_SET "default" 0.0;
+				target: "edit_button_bg";
+				target: "edit_button_image";
 				target: "edit_button_event";
 			}
 			program {
-				name: "edit_button_image,show";
-				signal: "edit_button_image,show";
+				name: "edit_button,hide";
+				signal: "edit_button,hide";
 				source: "menu";
-				action: STATE_SET "default" 0.0;
-				target: "edit_button";
+				action: STATE_SET "hide" 0.0;
 				target: "edit_button_bg";
 				target: "edit_button_image";
-				target: "edit_button_text";
 				target: "edit_button_event";
 			}
 		}

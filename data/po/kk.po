@@ -3,3 +3,7 @@ msgstr "Дайын"
 
 msgid "IDS_AT_POP_UNINSTALL_PS_Q"
 msgstr "%s жою керек пе?"
+
+msgid "IDS_AT_BODY_UNINSTALL"
+msgstr "Жою"
+

@@ -3,6 +3,9 @@
  *
  * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
+ * Contact: Jin Yoon <jinny.yoon@samsung.com>
+ *          Junkyu Han <junkyu.han@samsung.com>
+
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -26,11 +29,9 @@
 #include "util.h"
 #include "all_apps/db.h"
 
-#include <tzplatform_config.h>
-
 #define QUERY_LEN 1024
 
-#define MENU_SCREEN_DB_FILE tzplatform_mkpath(TZ_USER_APP, "com.samsung.menu-screen/data/dbspace/.menu_screen.db")
+#define MENU_SCREEN_DB_FILE "/opt/usr/apps/org.tizen.menu-screen/data/dbspace/.menu_screen.db"
 #define SHORTCUT_TABLE "shortcut"
 #define QUERY_INSERT_SHORTCUT "INSERT INTO "SHORTCUT_TABLE" ("\
 	"appid,"\
@@ -155,20 +156,24 @@ HAPI void all_apps_db_unretrieve_all_info(Eina_List *list)
 
 HAPI int all_apps_db_count_shortcut(const char *appid, const char *name)
 {
+	int count = -1;
+	char q[QUERY_LEN];
+	menu_screen_error_e ret = MENU_SCREEN_ERROR_FAIL;
+
 	retv_if(MENU_SCREEN_ERROR_OK != db_open(MENU_SCREEN_DB_FILE), -1);
 
-	char q[QUERY_LEN];
 	snprintf(q, sizeof(q), QUERY_COUNT_SHORTCUT, appid, name);
 
 	stmt_h *st;
 	st = db_prepare(q);
 	retv_if(NULL == st, -1);
 
-	menu_screen_error_e ret = MENU_SCREEN_ERROR_FAIL;
 	ret = db_next(st);
-	retv_if(MENU_SCREEN_ERROR_FAIL == ret, -1);
+	if (MENU_SCREEN_ERROR_FAIL == ret) {
+		db_finalize(st);
+		return -1;
+	}
 
-	int count = -1;
 	count = db_get_int(st, 0);
 
 	db_finalize(st);
