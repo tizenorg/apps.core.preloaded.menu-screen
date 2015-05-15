@@ -3,3 +3,7 @@ msgstr "Egina"
 
 msgid "IDS_AT_POP_UNINSTALL_PS_Q"
 msgstr "Desinstalatu %s?"
+
+msgid "IDS_AT_BODY_UNINSTALL"
+msgstr "Desinstalatu"
+

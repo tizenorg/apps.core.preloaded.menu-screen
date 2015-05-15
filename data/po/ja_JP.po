@@ -3,3 +3,7 @@ msgstr "完了"
 
 msgid "IDS_AT_POP_UNINSTALL_PS_Q"
 msgstr "%sをアンインストールしますか？"
+
+msgid "IDS_AT_BODY_UNINSTALL"
+msgstr "アンインストール"
+

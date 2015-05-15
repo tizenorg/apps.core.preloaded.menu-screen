@@ -3,3 +3,7 @@ msgstr "Končano"
 
 msgid "IDS_AT_POP_UNINSTALL_PS_Q"
 msgstr "Želite odstraniti %s?"
+
+msgid "IDS_AT_BODY_UNINSTALL"
+msgstr "Odstrani"
+

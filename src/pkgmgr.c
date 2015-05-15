@@ -3,6 +3,9 @@
  *
  * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
+ * Contact: Jin Yoon <jinny.yoon@samsung.com>
+ *          Junkyu Han <junkyu.han@samsung.com>
+
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -22,12 +25,12 @@
 #include <pkgmgr-info.h>
 
 #include "conf.h"
-#include "index.h"
+#include "menu_screen.h"
 #include "item.h"
+#include "layout.h"
 #include "list.h"
 #include "page.h"
 #include "page_scroller.h"
-#include "mapbuf.h"
 #include "pkgmgr.h"
 #include "util.h"
 
@@ -38,31 +41,267 @@ struct pkgmgr_handler {
 	int (*func)(const char *package, const char *val, void *data);
 };
 
+typedef struct {
+	char* package;
+	char* key;
+	char* val;
+} pkgmgr_reserve_s;
 
+typedef struct {
+	char* package;
+	char* status;
+} pkgmgr_request_s;
+
+typedef struct {
+	char* pkg_id;
+	char* app_id;
+	Evas_Object *item;
+} pkgmgr_install_s;
 
 static struct {
 	pkgmgr_client *listen_pc;
+	Eina_List *reserve_list;
+	Eina_List *request_list;
+	Eina_List *item_list;
 } pkg_mgr_info = {
 	.listen_pc = NULL,
+	.reserve_list = NULL,
+	.request_list = NULL,
+	.item_list = NULL,
 };
+
+
+
+static menu_screen_error_e _append_request_in_list(const char *package, const char *status)
+{
+	retv_if(NULL == package, MENU_SCREEN_ERROR_INVALID_PARAMETER);
+	retv_if(NULL == status, MENU_SCREEN_ERROR_INVALID_PARAMETER);
+
+	pkgmgr_request_s *rt = calloc(1, sizeof(pkgmgr_request_s));
+	retv_if(NULL == rt, MENU_SCREEN_ERROR_FAIL);
+
+	rt->package = strdup(package);
+	goto_if(NULL == rt->package, ERROR);
+
+	rt->status = strdup(status);
+	goto_if(NULL == rt->status, ERROR);
+
+	pkg_mgr_info.request_list = eina_list_append(pkg_mgr_info.request_list, rt);
+	goto_if(NULL == pkg_mgr_info.request_list, ERROR);
+
+	return MENU_SCREEN_ERROR_OK;
+
+ERROR:
+	if (rt->status) free(rt->status);
+	if (rt->package) free(rt->package);
+	if (rt) free(rt);
+
+	return MENU_SCREEN_ERROR_FAIL;
+}
+
+
+
+static menu_screen_error_e _remove_request_in_list(const char *package)
+{
+	retv_if(NULL == package, MENU_SCREEN_ERROR_INVALID_PARAMETER);
+
+	if (NULL == pkg_mgr_info.request_list) return MENU_SCREEN_ERROR_OK;
+
+	const Eina_List *l = NULL;
+	const Eina_List *ln = NULL;
+	pkgmgr_request_s *rt = NULL;
+	EINA_LIST_FOREACH_SAFE(pkg_mgr_info.request_list, l, ln, rt) {
+		if (!rt) continue;
+		if (!rt->package) continue;
+		if (strcmp(rt->package, package)) continue;
+
+		pkg_mgr_info.request_list = eina_list_remove(pkg_mgr_info.request_list, rt);
+		free(rt->package);
+		if (rt->status) free(rt->status);
+		free(rt);
+		return MENU_SCREEN_ERROR_OK;
+	}
+
+	return MENU_SCREEN_ERROR_FAIL;
+}
+
+
+
+static int _exist_request_in_list(const char *package)
+{
+	retv_if(NULL == package, 0);
+
+	if (NULL == pkg_mgr_info.request_list) return 0;
+
+	const Eina_List *l = NULL;
+	const Eina_List *ln = NULL;
+	pkgmgr_request_s *rt = NULL;
+	EINA_LIST_FOREACH_SAFE(pkg_mgr_info.request_list, l, ln, rt) {
+		if (!rt) continue;
+		if (!rt->package) continue;
+		if (strcmp(rt->package, package)) continue;
+		return 1;
+	}
+
+	return 0;
+}
+
+
+
+static pkgmgr_request_s *_get_request_in_list(const char *package)
+{
+	retv_if(NULL == package, NULL);
+
+	if (NULL == pkg_mgr_info.request_list) return NULL;
+
+	const Eina_List *l = NULL;
+	const Eina_List *ln = NULL;
+	pkgmgr_request_s *rt = NULL;
+	EINA_LIST_FOREACH_SAFE(pkg_mgr_info.request_list, l, ln, rt) {
+		if (!rt) continue;
+		if (!rt->package) continue;
+		if (strcmp(rt->package, package)) continue;
+		return rt;
+	}
+
+	return NULL;
+}
+
+
+
+HAPI menu_screen_error_e pkgmgr_item_list_append_item(const char *pkg_id, const char *app_id, Evas_Object *item)
+{
+	retv_if(NULL == pkg_id, MENU_SCREEN_ERROR_INVALID_PARAMETER);
+	retv_if(NULL == app_id, MENU_SCREEN_ERROR_INVALID_PARAMETER);
+	retv_if(NULL == item, MENU_SCREEN_ERROR_INVALID_PARAMETER);
+
+	char *tmp_pkg_id = NULL;
+	char *tmp_app_id = NULL;
+
+	pkgmgr_install_s *pi = calloc(1, sizeof(pkgmgr_install_s));
+	goto_if(NULL == pi, ERROR);
+
+	tmp_pkg_id = strdup(pkg_id);
+	goto_if(NULL == tmp_pkg_id, ERROR);
+
+	tmp_app_id = strdup(app_id);
+	goto_if(NULL == tmp_app_id, ERROR);
+
+	pi->pkg_id = tmp_pkg_id;
+	pi->app_id = tmp_app_id;
+	pi->item = item;
+
+	pkg_mgr_info.item_list = eina_list_append(pkg_mgr_info.item_list, pi);
+	goto_if(NULL == pkg_mgr_info.item_list, ERROR);
+
+	return MENU_SCREEN_ERROR_OK;
+
+ERROR:
+	if (tmp_app_id) free(tmp_app_id);
+	if (tmp_pkg_id) free(tmp_pkg_id);
+	free(pi);
+
+	return MENU_SCREEN_ERROR_FAIL;
+}
+
+
+
+HAPI menu_screen_error_e pkgmgr_item_list_remove_item(const char *pkg_id, const char *app_id, Evas_Object *item)
+{
+	retv_if(NULL == pkg_id, MENU_SCREEN_ERROR_INVALID_PARAMETER);
+	retv_if(NULL == app_id, MENU_SCREEN_ERROR_INVALID_PARAMETER);
+	retv_if(NULL == item, MENU_SCREEN_ERROR_INVALID_PARAMETER);
+
+	const Eina_List *l = NULL;
+	const Eina_List *ln = NULL;
+	pkgmgr_install_s *pi = NULL;
+	EINA_LIST_FOREACH_SAFE(pkg_mgr_info.item_list, l, ln, pi) {
+		continue_if(NULL == pi);
+		continue_if(NULL == pi->pkg_id);
+		continue_if(NULL == pi->app_id);
+		continue_if(NULL == pi->item);
+
+		if (strcmp(pi->pkg_id, pkg_id)) continue;
+		if (strcmp(pi->app_id, app_id)) continue;
+		if (pi->item != item) continue;
+
+		pkg_mgr_info.item_list = eina_list_remove(pkg_mgr_info.item_list, pi);
+
+		free(pi->app_id);
+		free(pi->pkg_id);
+		free(pi);
+
+		return MENU_SCREEN_ERROR_OK;
+	}
+
+	return MENU_SCREEN_ERROR_FAIL;
+}
+
+
+
+HAPI void pkgmgr_item_list_affect_pkgid(const char *pkg_id, Eina_Bool (*_affected_cb)(const char *, Evas_Object *, void *), void *data)
+{
+	ret_if(NULL == pkg_mgr_info.item_list);
+	ret_if(NULL == pkg_id);
+	ret_if(NULL == _affected_cb);
+
+	const Eina_List *l;
+	const Eina_List *ln;
+	pkgmgr_install_s *pi;
+	EINA_LIST_FOREACH_SAFE(pkg_mgr_info.item_list, l, ln, pi) {
+		continue_if(NULL == pi);
+		continue_if(NULL == pi->app_id);
+		continue_if(NULL == pi->item);
+
+		if (strcmp(pkg_id, pi->pkg_id)) continue;
+		/* It's possible that many items with the same package name are in the install list */
+		continue_if(EINA_TRUE != _affected_cb(pi->app_id, pi->item, data));
+	}
+}
+
+
+
+HAPI void pkgmgr_item_list_affect_appid(const char *app_id, Eina_Bool (*_affected_cb)(const char *, Evas_Object *, void *), void *data)
+{
+	ret_if(NULL == pkg_mgr_info.item_list);
+	ret_if(NULL == app_id);
+	ret_if(NULL == _affected_cb);
+
+	const Eina_List *l;
+	const Eina_List *ln;
+	pkgmgr_install_s *pi;
+	EINA_LIST_FOREACH_SAFE(pkg_mgr_info.item_list, l, ln, pi) {
+		continue_if(NULL == pi);
+		continue_if(NULL == pi->app_id);
+		continue_if(NULL == pi->item);
+
+		if (strcmp(app_id, pi->app_id)) continue;
+		/* It's possible that many items with the same package name are in the install list */
+		if (EINA_FALSE == _affected_cb(pi->app_id, pi->item, data)) break;
+	}
+}
 
 
 
 HAPI inline menu_screen_error_e pkgmgr_uninstall(Evas_Object *item)
 {
+	char *pkgid = NULL;
+	char *appid = NULL;
+	pkgmgr_client *req_pc = NULL;
+	pkgmgrinfo_appinfo_h handle = NULL;
 	int ret = MENU_SCREEN_ERROR_OK;
 
 	retv_if(NULL == item, MENU_SCREEN_ERROR_FAIL);
 
-	char *pkgid = NULL;
-	char *appid = item_get_package(item);
+	pkgid = item_get_pkgid(item);
+	retv_if(NULL == pkgid, MENU_SCREEN_ERROR_FAIL);
+
+	appid = item_get_package(item);
 	retv_if(NULL == appid, MENU_SCREEN_ERROR_FAIL);
 
-	pkgmgr_client *req_pc = NULL;
 	req_pc = pkgmgr_client_new(PC_REQUEST);
 	retv_if(NULL == req_pc, MENU_SCREEN_ERROR_FAIL);
 
-	pkgmgrinfo_appinfo_h handle;
 	if (PMINFO_R_OK != pkgmgrinfo_appinfo_get_appinfo(appid, &handle)) {
 		if (PKGMGR_R_OK != pkgmgr_client_free(req_pc)) {
 			_E("cannot free pkgmgr_client for request.");
@@ -70,28 +309,14 @@ HAPI inline menu_screen_error_e pkgmgr_uninstall(Evas_Object *item)
 		return MENU_SCREEN_ERROR_FAIL;
 	}
 
-	if (PMINFO_R_OK != pkgmgrinfo_appinfo_get_pkgid(handle, &pkgid)) {
-		if (PMINFO_R_OK != pkgmgrinfo_appinfo_destroy_appinfo(handle)) {
-			_E("cannot destroy the appinfo");
-		}
-
-		if (PKGMGR_R_OK != pkgmgr_client_free(req_pc)) {
-			_E("cannot free pkgmgr_client for request.");
-		}
-
-		return MENU_SCREEN_ERROR_FAIL;
+	if (PMINFO_R_OK != pkgmgrinfo_appinfo_destroy_appinfo(handle)) {
+		_E("cannot destroy the appinfo");
+		ret = MENU_SCREEN_ERROR_FAIL;
 	}
-
-	if (!pkgid) pkgid = appid;
 
 	_D("Uninstall a package[%s] from an app[%s]", pkgid, appid);
 	if (pkgmgr_client_uninstall(req_pc, NULL, pkgid, PM_QUIET, NULL, NULL) < 0) {
 		_E("cannot uninstall %s.", item_get_package(item));
-		ret = MENU_SCREEN_ERROR_FAIL;
-	}
-
-	if (PMINFO_R_OK != pkgmgrinfo_appinfo_destroy_appinfo(handle)) {
-		_E("cannot destroy the appinfo");
 		ret = MENU_SCREEN_ERROR_FAIL;
 	}
 
@@ -107,21 +332,7 @@ HAPI inline menu_screen_error_e pkgmgr_uninstall(Evas_Object *item)
 
 static menu_screen_error_e _start_download(const char *package, void *scroller)
 {
-	struct package_info *pi;
-	Eina_List *install_list;
-
-	install_list = evas_object_data_get(scroller, "install_list");
-	pi = calloc(1, sizeof(struct package_info));
-	retv_if(NULL == pi, MENU_SCREEN_ERROR_FAIL);
-
-	pi->status = DOWNLOAD_BEGIN;
-	pi->ai.package = strdup(package);
-	pi->ai.name = strdup("Download");
-
-	install_list = eina_list_append(install_list, pi);
-	evas_object_data_set(scroller, "install_list", install_list);
-	_D("Package [%s] is jump into the downloading phase", package);
-
+	_D("Start downloading for the package(%s)", package);
 	return MENU_SCREEN_ERROR_OK;
 }
 
@@ -129,35 +340,7 @@ static menu_screen_error_e _start_download(const char *package, void *scroller)
 
 static menu_screen_error_e _start_uninstall(const char *package, void *scroller)
 {
-	Eina_List *l;
-	Eina_List *tmp;
-	int page_no = 0;
-	struct package_info *pi = NULL;
-	Eina_List *install_list;
-
-	install_list = evas_object_data_get(scroller, "install_list");
-	EINA_LIST_FOREACH_SAFE(install_list, l, tmp, pi) {
-		if (pi->ai.package && !strcmp(pi->ai.package, package)) {
-			break;
-		}
-		pi = NULL;
-	}
-
-	retv_if(pi, MENU_SCREEN_ERROR_FAIL);
-
-	pi = calloc(1, sizeof(struct package_info));
-	retv_if(NULL == pi, MENU_SCREEN_ERROR_FAIL);
-
-	pi->status = UNINSTALL_BEGIN;
-	pi->ai.package = strdup(package);
-	pi->ai.nodisplay = false;
-	pi->ai.enabled = true;
-	pi->item = page_scroller_find_item_by_package(scroller, package, &page_no);
-	pi->page = page_scroller_get_page_at(scroller, page_no);
-
-	install_list = eina_list_append(install_list, pi);
-	evas_object_data_set(scroller, "install_list", install_list);
-
+	_D("Start uninstalling for the package(%s)", package);
 	return MENU_SCREEN_ERROR_OK;
 }
 
@@ -165,64 +348,7 @@ static menu_screen_error_e _start_uninstall(const char *package, void *scroller)
 
 static menu_screen_error_e _start_update(const char *package, void *scroller)
 {
-	Eina_List *l;
-	Eina_List *tmp;
-	struct package_info *pi = NULL;
-	Eina_List *install_list;
-
-	install_list = evas_object_data_get(scroller, "install_list");
-	EINA_LIST_FOREACH_SAFE(install_list, l, tmp, pi) {
-		if (pi->ai.package && !strcmp(pi->ai.package, package)) {
-			break;
-		}
-		pi = NULL;
-	}
-
-	if (!pi) {
-		int page_no = 0;
-		_D("Package [%s] is starting update phase directly (without downloading phase)", package);
-
-		pi = calloc(1, sizeof(struct package_info));
-		retv_if(NULL == pi, MENU_SCREEN_ERROR_FAIL);
-
-		pi->ai.package = strdup(package);
-		pi->item = page_scroller_find_item_by_package(scroller, package, &page_no);
-		if (pi->item) {
-			pi->page = page_scroller_get_page_at(scroller, page_no);
-		}
-
-		if (pi->item && pi->page) {
-			pi->ai.nodisplay = false;
-			pi->ai.enabled = true;
-		}
-
-		install_list = eina_list_append(install_list, pi);
-		evas_object_data_set(scroller, "install_list", install_list);
-	} else {
-		if (pi->status != DOWNLOAD_END && pi->status != INSTALL_END) {
-			_D("Package [%s] is in invalid state (%d), cancel this", package, pi->status);
-			install_list = eina_list_remove(install_list, pi);
-			evas_object_data_set(scroller, "install_list", install_list);
-			if (pi->item) {
-				page_unpack_item(pi->page, pi->item);
-				page_scroller_trim_items(scroller);
-				item_destroy(pi->item);
-			}
-
-			list_free_values(&pi->ai);
-			free(pi);
-			return MENU_SCREEN_ERROR_FAIL;
-		}
-	}
-
-	pi->status = UPDATE_BEGIN;
-	pi->ai.name = strdup("Update");
-	if (pi->item) {
-		item_set_name(pi->item, pi->ai.name, 0);
-	}
-
-	_D("Package [%s] is jump into the updating phase", package);
-
+	_D("Start updating for the package(%s)", package);
 	return MENU_SCREEN_ERROR_OK;
 }
 
@@ -230,6 +356,7 @@ static menu_screen_error_e _start_update(const char *package, void *scroller)
 
 static menu_screen_error_e _start_recover(const char *package, void *scroller)
 {
+	_D("Start recovering for the package(%s)", package);
 	return MENU_SCREEN_ERROR_OK;
 }
 
@@ -237,77 +364,7 @@ static menu_screen_error_e _start_recover(const char *package, void *scroller)
 
 static menu_screen_error_e _start_install(const char *package, void *scroller)
 {
-	Eina_List *l;
-	Eina_List *tmp;
-	struct package_info *pi = NULL;
-	Eina_List *install_list;
-
-	install_list = evas_object_data_get(scroller, "install_list");
-	EINA_LIST_FOREACH_SAFE(install_list, l, tmp, pi) {
-		if (pi->ai.package && !strcmp(pi->ai.package, package)) {
-			break;
-		}
-		pi = NULL;
-	}
-
-	if (!pi) {
-		int page_no = 0;
-		_D("Package [%s] is starting install phase directly (without downloading phase)", package);
-		pi = calloc(1, sizeof(struct package_info));
-		retv_if(NULL == pi, MENU_SCREEN_ERROR_FAIL);
-
-		pi->ai.package = strdup(package);
-		if (!pi->ai.package) {
-			free(pi);
-			return MENU_SCREEN_ERROR_FAIL;
-		}
-
-		pi->ai.icon = strdup(DEFAULT_ICON);
-		if (!pi->ai.icon) {
-			free(pi->ai.package);
-			free(pi);
-			return MENU_SCREEN_ERROR_FAIL;
-		}
-
-		pi->item = page_scroller_find_item_by_package(scroller, package, &page_no);
-		if (!pi->item) {
-			if (NULL == page_scroller_push_item(scroller, &pi->ai)) _E("Cannot push an item");
-		}
-		pi->item = page_scroller_find_item_by_package(scroller, package, &page_no);
-		pi->page = page_scroller_get_page_at(scroller, page_no);
-
-		if (pi->item && pi->page) {
-			pi->ai.nodisplay = false;
-			pi->ai.enabled = true;
-		}
-
-		install_list = eina_list_append(install_list, pi);
-		evas_object_data_set(scroller, "install_list", install_list);
-	} else {
-		if (pi->status != DOWNLOAD_END && pi->status != INSTALL_END) {
-			_D("Package [%s] is in invalid state (%d), cancel this", package, pi->status);
-			install_list = eina_list_remove(install_list, pi);
-			evas_object_data_set(scroller, "install_list", install_list);
-			if (pi->item) {
-				page_unpack_item(pi->page, pi->item);
-				page_scroller_trim_items(scroller);
-				item_destroy(pi->item);
-			}
-
-			list_free_values(&pi->ai);
-			free(pi);
-			return MENU_SCREEN_ERROR_FAIL;
-		}
-	}
-
-	pi->status = INSTALL_BEGIN;
-	pi->ai.name = strdup("Install");
-	if (pi->item) {
-		// Update app name to install
-		item_set_name(pi->item, pi->ai.name, 0);
-	}
-	_D("Package [%s] is jump into the installing phase", package);
-
+	_D("Start installing for the package(%s)", package);
 	return MENU_SCREEN_ERROR_OK;
 }
 
@@ -345,18 +402,18 @@ static menu_screen_error_e _start(const char *package, const char *val, void *sc
 		},
 	};
 
+	_D("package [%s], val [%s]", package, val);
+	retv_if(_exist_request_in_list(package), MENU_SCREEN_ERROR_FAIL);
+	retv_if(MENU_SCREEN_ERROR_OK != _append_request_in_list(package, val), MENU_SCREEN_ERROR_FAIL);
+
 	register unsigned int i;
-
-	_D("package [%s]", package);
-
 	for (i = 0; start_cb[i].name; i ++) {
-		if (!strcasecmp(val, start_cb[i].name) && start_cb[i].handler) {
-			return start_cb[i].handler(package, scroller);
-		}
+		if (strcasecmp(val, start_cb[i].name)) continue;
+		break_if(NULL == start_cb[i].handler);
+		return start_cb[i].handler(package, scroller);
 	}
 
-	_D("Unknown status for starting phase signal'd from package manager");
-
+	_E("Unknown status for starting phase signal'd from package manager");
 	return MENU_SCREEN_ERROR_OK;
 }
 
@@ -364,47 +421,7 @@ static menu_screen_error_e _start(const char *package, const char *val, void *sc
 
 static menu_screen_error_e _icon_path(const char *package, const char *val, void *scroller)
 {
-	Eina_List *l;
-	Eina_List *tmp;
-	struct package_info *pi = NULL;
-	Eina_List *install_list;
-
-	install_list = evas_object_data_get(scroller, "install_list");
-	retv_if(!package, MENU_SCREEN_ERROR_FAIL);
-	retv_if(!val, MENU_SCREEN_ERROR_FAIL);
-
-	_D("package [%s] with %s", package, val);
-
-	EINA_LIST_FOREACH_SAFE(install_list, l, tmp, pi) {
-		if (pi->ai.package && !strcmp(pi->ai.package, package)) {
-			break;
-		}
-		pi = NULL;
-	}
-	retv_if(NULL == pi, MENU_SCREEN_ERROR_FAIL);
-
-	if (strlen(val)) {
-		pi->ai.icon = strdup(val);
-		retv_if (NULL == pi->ai.icon, MENU_SCREEN_ERROR_OUT_OF_MEMORY);
-
-		if (!pi->item) {
-			_D("There is no item for [%s]", package);
-			pi->ai.nodisplay = false;
-			pi->ai.enabled = true;
-
-			if (NULL == page_scroller_push_item(scroller, &pi->ai)) {
-				_E("Failed to create a new item, remove this package from the installing list");
-				list_free_values(&pi->ai);
-				install_list = eina_list_remove(install_list, pi);
-				evas_object_data_set(scroller, "install_list", install_list);
-				free(pi);
-			}
-		} else {
-			_D("There is an item for [%s:%p]", package, pi->item);
-			item_update(pi->item, &pi->ai);
-		}
-	}
-
+	_D("package(%s) with %s", package, val);
 	return MENU_SCREEN_ERROR_OK;
 }
 
@@ -412,39 +429,7 @@ static menu_screen_error_e _icon_path(const char *package, const char *val, void
 
 static menu_screen_error_e _download_percent(const char *package, const char *val, void *scroller)
 {
-	Eina_List *l;
-	Eina_List *tmp;
-	struct package_info *pi = NULL;
-	Eina_List *install_list;
-
-	_D("package [%s] with %s", package, val);
-
-	install_list = evas_object_data_get(scroller, "install_list");
-	EINA_LIST_FOREACH_SAFE(install_list, l, tmp, pi) {
-		if (pi->ai.package && !strcmp(pi->ai.package, package)) {
-			break;
-		}
-		pi = NULL;
-	}
-
-	retv_if(NULL == pi, MENU_SCREEN_ERROR_FAIL);
-
-	if (pi->status == DOWNLOAD_BEGIN) {
-		pi->status = DOWNLOADING;
-	} else if (pi->status == DOWNLOADING) {
-		// Do nothing, just we are in proper state
-	} else {
-		_D("Invalid state for %s, This is not started from the download_begin state(%s)", package, val);
-	}
-
-	if (!pi->ai.nodisplay && pi->ai.enabled && pi->item) {
-		if (!item_is_enabled_progress(pi->item)) {
-			item_enable_progress(pi->item);
-		}
-
-		item_update_progress(pi->item, atoi(val));
-	}
-
+	_D("package(%s) with %s", package, val);
 	return MENU_SCREEN_ERROR_OK;
 }
 
@@ -452,51 +437,9 @@ static menu_screen_error_e _download_percent(const char *package, const char *va
 
 static menu_screen_error_e _install_percent(const char *package, const char *val, void *scroller)
 {
-	Eina_List *l;
-	Eina_List *tmp;
-	struct package_info *pi;
-	int progress;
-	Eina_List *install_list;
-
-	_D("package [%s] with %s", package, val);
-
-	pi = NULL;
-	install_list = evas_object_data_get(scroller, "install_list");
-	EINA_LIST_FOREACH_SAFE(install_list, l, tmp, pi) {
-		if (pi->ai.package && !strcmp(pi->ai.package, package)) {
-			break;
-		}
-
-		pi = NULL;
-	}
-
-	retv_if(NULL == pi, MENU_SCREEN_ERROR_FAIL);
-
-	progress = atoi(val);
-
-	if (pi->status == INSTALL_BEGIN) {
-		pi->status = INSTALLING;
-	} else if (pi->status == UNINSTALL_BEGIN) {
-		progress = 100 - progress;
-		pi->status = UNINSTALLING;
-	} else if (pi->status == UPDATE_BEGIN) {
-		pi->status = UPDATING;
-	} else if (pi->status == INSTALLING) {
-	} else if (pi->status == UNINSTALLING) {
-		progress = 100 - progress;
-	} else if (pi->status == UPDATING) {
-	} else {
-		_D("Invalid state for %s, This is not the uninstall or install_begin state(%s)", package, val);
-	}
-
-	if (!pi->ai.nodisplay && pi->ai.enabled && pi->item) {
-		if (!item_is_enabled_progress(pi->item)) {
-			item_enable_progress(pi->item);
-		}
-
-		item_update_progress(pi->item, progress);
-	}
-
+	_D("package(%s) with %s", package, val);
+	if (_exist_request_in_list(package)) return MENU_SCREEN_ERROR_OK;
+	retv_if(MENU_SCREEN_ERROR_OK != _append_request_in_list(package, "install"), MENU_SCREEN_ERROR_FAIL);
 	return MENU_SCREEN_ERROR_OK;
 }
 
@@ -504,250 +447,115 @@ static menu_screen_error_e _install_percent(const char *package, const char *val
 
 static menu_screen_error_e _error(const char *package, const char *val, void *scroller)
 {
-	struct package_info *pi = NULL;
-	Eina_List *l;
-	Eina_List *tmp;
-	Eina_List *install_list;
-
-	_D("package [%s] with %s", package, val);
-
-	install_list = evas_object_data_get(scroller, "install_list");
-	EINA_LIST_FOREACH_SAFE(install_list, l, tmp, pi) {
-		if (pi->ai.package && !strcmp(pi->ai.package, package)) {
-			break;
-		}
-
-		pi = NULL;
-	}
-
-	retv_if(NULL == pi, MENU_SCREEN_ERROR_FAIL);
-
-	pi->error_count ++;
+	_D("package(%s) with %s", package, val);
 	return MENU_SCREEN_ERROR_OK;
 }
 
 
 
-static menu_screen_error_e _end_downloading(const char *package, struct package_info *pi, void *scroller)
+static int _end_cb(pkgmgrinfo_appinfo_h handle, void *user_data)
 {
-	pi->status = DOWNLOAD_END;
-	_D("Package downloading is complete, waiting install progress");
-	return MENU_SCREEN_ERROR_OK;
+	retv_if(NULL == handle, -1);
+	retv_if(NULL == user_data, -1);
+
+	char *appid = NULL;
+	pkgmgrinfo_appinfo_get_appid(handle, &appid);
+
+	Evas_Object *layout = evas_object_data_get(menu_screen_get_win(), "layout");
+	retv_if(NULL == layout, MENU_SCREEN_ERROR_FAIL);
+
+	pkgmgr_request_s *rt = user_data;
+	if (!strcmp(rt->status, "install")) {
+		layout_create_package(layout, appid);
+	} else if (!strcmp(rt->status, "update")) {
+		layout_update_package(layout, appid);
+	} else {
+		_E("No routines for this status (%s:%s)", rt->package, rt->status);
+	}
+
+	return 0;
 }
 
 
 
-static menu_screen_error_e _end_installing(const char *package, struct package_info *pi, void *scroller)
+static Eina_Bool _uninstall_cb(const char *app_id, Evas_Object *item, void *data)
 {
-	// This status will not be referenced from the others.
-	// because it will be freed right after set it. ;)
-	Eina_List *install_list;
+	retv_if(NULL == data, EINA_FALSE);
 
-	pi->status = INSTALL_END;
-	_D("Package installing is complete");
+	Evas_Object *layout = data;
+	layout_delete_package(layout, app_id);
 
-	install_list = evas_object_data_get(scroller, "install_list");
-	if (pi->desktop_file_found == 1) {
-		install_list = eina_list_remove(install_list, pi);
-		evas_object_data_set(scroller, "install_list", install_list);
-		list_free_values(&pi->ai);
-		free(pi);
-	}
-
-
-	// TODO: Need to register a timer callback
-	return MENU_SCREEN_ERROR_OK;
+	return EINA_TRUE;
 }
 
 
 
-static menu_screen_error_e _end_updating(const char *package, struct package_info *pi, void *scroller)
+static Eina_Bool _set_removable_cb(const char *app_id, Evas_Object *item, void *data)
 {
-	// This status will not be referenced from the others.
-	// because it will be freed right after set it. ;)
-	Eina_List *install_list;
+	retv_if(NULL == item, EINA_FALSE);
 
-	pi->status = UPDATE_END;
-	_D("Package updating is complete");
+	item_set_removable(item, 1, 0);
+	elm_object_signal_emit(item, "uninstall,on", "menu");
 
-	install_list = evas_object_data_get(scroller, "install_list");
-	if (pi->desktop_file_found == 1) {
-		install_list = eina_list_remove(install_list, pi);
-		evas_object_data_set(scroller, "install_list", install_list);
-		list_free_values(&pi->ai);
-		free(pi);
-	}
-
-
-	// TODO: Need to register a timer callback
-	return MENU_SCREEN_ERROR_OK;
+	return EINA_TRUE;
 }
 
 
 
-static menu_screen_error_e _end_uninstalling(const char *package, struct package_info *pi, void *scroller)
+static menu_screen_error_e _end(const char *package, const char *val, void *data)
 {
-	Eina_List *install_list;
+	pkgmgrinfo_pkginfo_h handle = NULL;
 
-	pi->status = UNINSTALL_END;
-	_D("Package uninstalling is complete");
+	retv_if(!_exist_request_in_list(package), MENU_SCREEN_ERROR_FAIL);
 
-	install_list = evas_object_data_get(scroller, "install_list");
-	if (pi->desktop_file_found == 1) {
-		install_list = eina_list_remove(install_list, pi);
-		evas_object_data_set(scroller, "install_list", install_list);
-		list_free_values(&pi->ai);
-		free(pi);
+	pkgmgr_request_s *rt = _get_request_in_list(package);
+	retv_if(NULL == rt, MENU_SCREEN_ERROR_FAIL);
+	if(strcasecmp(val, "ok")) {
+		pkgmgr_item_list_affect_pkgid(package, _set_removable_cb, NULL);
+		_E("cannot end that package(%s) is %s", rt->package, rt->status);
+
+		goto ERROR;
 	}
+
+	_D("Package(%s) : key(%s) - val(%s)", package, rt->status, val);
+
+	/* Criteria : pkgid */
+	if (!strcasecmp("uninstall", rt->status)) {
+		Evas_Object *layout = evas_object_data_get(menu_screen_get_win(), "layout");
+		goto_if(NULL == layout, ERROR);
+
+		pkgmgr_item_list_affect_pkgid(package, _uninstall_cb, layout);
+		goto OUT;
+	}
+
+	goto_if(PMINFO_R_OK != pkgmgrinfo_pkginfo_get_pkginfo(package, &handle), ERROR);
+
+	/* Criteria : appid */
+	if (PMINFO_R_OK != pkgmgrinfo_appinfo_get_list(handle, PMINFO_UI_APP, _end_cb, rt)) {
+		goto ERROR;
+	}
+
+OUT:
+	if (MENU_SCREEN_ERROR_OK != _remove_request_in_list(package))
+		_E("cannot remove a request(%s:%s)", rt->package, rt->status);
+	if (handle) pkgmgrinfo_pkginfo_destroy_pkginfo(handle);
 
 	return MENU_SCREEN_ERROR_OK;
-}
 
+ERROR:
+	if (MENU_SCREEN_ERROR_OK != _remove_request_in_list(package))
+		_E("cannot remove a request(%s:%s)", rt->package, rt->status);
+	if (handle) pkgmgrinfo_pkginfo_destroy_pkginfo(handle);
 
-
-static menu_screen_error_e _end_unknown(const char *package, struct package_info *pi, void *scroller)
-{
-	Eina_List *install_list;
-
-	install_list = evas_object_data_get(scroller, "install_list");
-	install_list = eina_list_remove(install_list, pi);
-	evas_object_data_set(scroller, "install_list", install_list);
-
-	if (pi->item) {
-		// Remove an item only if it is installing.
-		if (
-			pi->status == INSTALL_BEGIN || pi->status == INSTALLING || pi->status == INSTALL_END ||
-			pi->status == DOWNLOAD_BEGIN || pi->status == DOWNLOADING || pi->status == DOWNLOAD_END
-		)
-		{
-			if (pi->page) {
-				page_unpack_item(pi->page, pi->item);
-				page_scroller_trim_items(scroller);
-			} else {
-				_D("Page is not valid (%s)", package);
-			}
-			item_destroy(pi->item);
-			page_scroller_trim_items(scroller);
-		}
-	}
-
-	list_free_values(&pi->ai);
-	free(pi);
-
-	return MENU_SCREEN_ERROR_OK;
-}
-
-
-
-static menu_screen_error_e _end(const char *package, const char *val, void *scroller)
-{
-	Eina_List *l;
-	Eina_List *tmp;
-	struct package_info *pi;
-	register int i;
-	struct end_cb_set {
-		int status;
-		int (*handler)(const char *package, struct package_info *pi, void *scroller);
-	} end_cb[] = {
-		{
-			.status = DOWNLOADING,
-			.handler = _end_downloading,
-		},
-		{
-			.status = INSTALLING,
-			.handler = _end_installing,
-		},
-		{
-			.status = UNINSTALLING,
-			.handler = _end_uninstalling,
-		},
-		{
-			.status = UPDATING,
-			.handler = _end_updating,
-		},
-		{
-			.status = UNKNOWN,
-			.handler = _end_unknown,
-		},
-		{
-			.status = MAX_STATUS,
-			.handler = NULL,
-		},
-	};
-	Eina_List *install_list;
-
-	_D("package [%s], val [%s]", package, val);
-
-	pi = NULL;
-	install_list = evas_object_data_get(scroller, "install_list");
-	EINA_LIST_FOREACH_SAFE(install_list, l, tmp, pi) {
-		if (pi->ai.package && !strcmp(pi->ai.package, package)) {
-			break;
-		}
-		pi = NULL;
-	}
-
-	retv_if(NULL == pi, MENU_SCREEN_ERROR_FAIL);
-
-	list_free_values(&pi->ai);
-	if (MENU_SCREEN_ERROR_OK != list_get_values(package, &pi->ai)) _E("Cannot get values");
-	item_update(pi->item, &pi->ai);
-
-	if (item_is_enabled_progress(pi->item)) {
-		item_disable_progress(pi->item);
-	}
-
-	// NOTE: Don't release the 'pi'
-	//       Release it from each handler
-	for (i = 0; end_cb[i].handler; i ++) {
-		if (end_cb[i].status == pi->status && end_cb[i].handler) {
-			int ret;
-
-			if (strcasecmp(val, "ok")) {
-				ret = _end_unknown(package, pi, scroller);
-			} else {
-				ret = end_cb[i].handler(package, pi, scroller);
-			}
-
-			return ret;
-		}
-	}
-
-	return _end_unknown(package, pi, scroller);
+	return MENU_SCREEN_ERROR_FAIL;
 }
 
 
 
 static menu_screen_error_e _change_pkg_name(const char *package, const char *val, void *scroller)
 {
-	Eina_List *l;
-	Eina_List *tmp;
-	struct package_info *pi;
-	Eina_List *install_list;
-
-	_D("package [%s]", package);
-
-	install_list = evas_object_data_get(scroller, "install_list");
-	EINA_LIST_FOREACH_SAFE(install_list, l, tmp, pi) {
-		if (!pi) {
-			continue;
-		}
-		if (pi->ai.package && !strcmp(pi->ai.package, package)) {
-			_D("Replace package name %s to %s", pi->ai.package, val);
-			free(pi->ai.package);
-			pi->ai.package = strdup(val);
-			if (!pi->ai.package) {
-				_E("cannot strdup");
-				return MENU_SCREEN_ERROR_FAIL;
-			}
-			if (pi->item) {
-				item_set_package(pi->item, (char*) val, 0);
-			}
-			return MENU_SCREEN_ERROR_OK;
-		}
-	}
-
-	return MENU_SCREEN_ERROR_FAIL;
+	_D("package(%s) with %s", package, val);
+	return MENU_SCREEN_ERROR_OK;
 }
 
 
@@ -768,21 +576,23 @@ static struct pkgmgr_handler pkgmgr_cbs[] = {
 static menu_screen_error_e _pkgmgr_cb(int req_id, const char *pkg_type, const char *package, const char *key, const char *val, const void *pmsg, void *data)
 {
 	register unsigned int i;
-	Evas_Object *scroller = data;
 
-	_D("pkgmgr request [%s] for %s, val(%s)", key, package, val);
+	_D("pkgmgr request [%s:%s] for %s", key, val, package);
+
+	if (BOOTING_STATE_DONE > menu_screen_get_booting_state()) {
+		pkgmgr_reserve_list_push_request(package, key, val);
+		return MENU_SCREEN_ERROR_OK;
+	}
 
 	for (i = 0; i < sizeof(pkgmgr_cbs) / sizeof(struct pkgmgr_handler); i++) {
-		if (!strcasecmp(pkgmgr_cbs[i].key, key)) {
-			if (pkgmgr_cbs[i].func) {
-				if (MENU_SCREEN_ERROR_OK != pkgmgr_cbs[i].func(package, val, scroller)) {
-					_E("pkgmgr_cbs[%u].func has errors.", i);
-				}
-			} else {
-				_E("Cannot find pkgmgr_cbs[%u].func.", i);
-			}
-			return MENU_SCREEN_ERROR_OK;
+		if (strcasecmp(pkgmgr_cbs[i].key, key)) continue;
+		break_if(!pkgmgr_cbs[i].func);
+
+		if (MENU_SCREEN_ERROR_OK != pkgmgr_cbs[i].func(package, val, NULL)) {
+			_E("pkgmgr_cbs[%u].func has errors.", i);
 		}
+
+		return MENU_SCREEN_ERROR_OK;
 	}
 
 	return MENU_SCREEN_ERROR_FAIL;
@@ -790,7 +600,76 @@ static menu_screen_error_e _pkgmgr_cb(int req_id, const char *pkg_type, const ch
 
 
 
-HAPI menu_screen_error_e pkgmgr_init(Evas_Object *scroller)
+HAPI menu_screen_error_e pkgmgr_reserve_list_push_request(const char *package, const char *key, const char *val)
+{
+	retv_if(NULL == package, MENU_SCREEN_ERROR_INVALID_PARAMETER);
+	retv_if(NULL == key, MENU_SCREEN_ERROR_INVALID_PARAMETER);
+	retv_if(NULL == val, MENU_SCREEN_ERROR_INVALID_PARAMETER);
+
+	char *tmp_package = NULL;
+	char *tmp_key = NULL;
+	char *tmp_val = NULL;
+
+	pkgmgr_reserve_s *pr = calloc(1, sizeof(pkgmgr_reserve_s));
+	retv_if(NULL == pr, MENU_SCREEN_ERROR_FAIL);
+
+	tmp_package = strdup(package);
+	goto_if(NULL == tmp_package, ERROR);
+	pr->package = tmp_package;
+
+	tmp_key = strdup(key);
+	goto_if(NULL == tmp_key, ERROR);
+	pr->key = tmp_key;
+
+	tmp_val = strdup(val);
+	goto_if(NULL == tmp_val, ERROR);
+	pr->val = tmp_val;
+
+	pkg_mgr_info.reserve_list = eina_list_append(pkg_mgr_info.reserve_list, pr);
+	goto_if(NULL == pkg_mgr_info.reserve_list, ERROR);
+
+	return MENU_SCREEN_ERROR_OK;
+
+ERROR:
+	if (tmp_val) free(tmp_val);
+	if (tmp_key) free(tmp_key);
+	if (tmp_package) free(tmp_package);
+	free(pr);
+
+	return MENU_SCREEN_ERROR_FAIL;
+}
+
+
+
+HAPI menu_screen_error_e pkgmgr_reserve_list_pop_request(void)
+{
+	if (!pkg_mgr_info.reserve_list) return MENU_SCREEN_ERROR_NO_DATA;
+
+	pkgmgr_reserve_s *pr = eina_list_nth(pkg_mgr_info.reserve_list, 0);
+	if (!pr) return MENU_SCREEN_ERROR_NO_DATA;
+	pkg_mgr_info.reserve_list = eina_list_remove(pkg_mgr_info.reserve_list, pr);
+
+	goto_if(MENU_SCREEN_ERROR_OK != _pkgmgr_cb(0, NULL, pr->package, pr->key, pr->val, NULL, NULL), ERROR);
+
+	if (pr->package) free(pr->package);
+	if (pr->key) free(pr->key);
+	if (pr->val) free(pr->val);
+	free(pr);
+
+	return MENU_SCREEN_ERROR_OK;
+
+ERROR:
+	if (pr->package) free(pr->package);
+	if (pr->key) free(pr->key);
+	if (pr->val) free(pr->val);
+	free(pr);
+
+	return MENU_SCREEN_ERROR_FAIL;
+}
+
+
+
+HAPI menu_screen_error_e pkgmgr_init(void)
 {
 	if (NULL != pkg_mgr_info.listen_pc) {
 		return MENU_SCREEN_ERROR_OK;
@@ -799,7 +678,7 @@ HAPI menu_screen_error_e pkgmgr_init(Evas_Object *scroller)
 	pkg_mgr_info.listen_pc = pkgmgr_client_new(PC_LISTENING);
 	retv_if(NULL == pkg_mgr_info.listen_pc, MENU_SCREEN_ERROR_FAIL);
 	retv_if(pkgmgr_client_listen_status(pkg_mgr_info.listen_pc,
-			_pkgmgr_cb, scroller) != PKGMGR_R_OK, MENU_SCREEN_ERROR_FAIL);
+			_pkgmgr_cb, NULL) != PKGMGR_R_OK, MENU_SCREEN_ERROR_FAIL);
 
 	return MENU_SCREEN_ERROR_OK;
 }
@@ -813,52 +692,6 @@ HAPI void pkgmgr_fini(void)
 		_E("cannot free pkgmgr_client for listen.");
 	}
 	pkg_mgr_info.listen_pc = NULL;
-}
-
-
-
-HAPI Evas_Object *pkgmgr_find_pended_object(const char *package, int with_desktop_file, Evas_Object *scroller, Evas_Object **page)
-{
-	Eina_List *l;
-	Eina_List *tmp;
-	struct package_info *pi;
-	Eina_List *install_list;
-
-	_D("package [%s]", package);
-
-	retv_if(NULL == package, NULL);
-	install_list = evas_object_data_get(scroller, "install_list");
-	EINA_LIST_FOREACH_SAFE(install_list, l, tmp, pi) {
-		if (!pi) {
-			continue;
-		}
-		if (pi->ai.package && !strcmp(pi->ai.package, package)) {
-			Evas_Object *item;
-			_D("Installing(Downloading) package is found (%p)", pi->item);
-
-			item = pi->item;
-
-			if (with_desktop_file) {
-				pi->desktop_file_found = 1;
-
-				if (pi->status == INSTALL_END || pi->status == UNINSTALL_END || pi->status == UPDATE_END) {
-					install_list = eina_list_remove(install_list, pi);
-					evas_object_data_set(scroller, "install_list", install_list);
-					list_free_values(&pi->ai);
-					free(pi);
-					pi = NULL;
-				}
-			}
-
-			if (page) {
-				*page = pi ? pi->page : NULL;
-			}
-			return item;
-		}
-	}
-
-	_D("Failed to find a installing/downloading package");
-	return NULL;
 }
 
 

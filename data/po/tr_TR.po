@@ -3,3 +3,7 @@ msgstr "Tamam"
 
 msgid "IDS_AT_POP_UNINSTALL_PS_Q"
 msgstr "%s kaldırılsın mı?"
+
+msgid "IDS_AT_BODY_UNINSTALL"
+msgstr "Kaldır"
+

@@ -3,3 +3,7 @@ msgstr "Fatto"
 
 msgid "IDS_AT_POP_UNINSTALL_PS_Q"
 msgstr "Disinstallare %s?"
+
+msgid "IDS_AT_BODY_UNINSTALL"
+msgstr "Disinstalla"
+

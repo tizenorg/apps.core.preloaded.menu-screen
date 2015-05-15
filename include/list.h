@@ -3,6 +3,9 @@
  *
  * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
+ * Contact: Jin Yoon <jinny.yoon@samsung.com>
+ *          Junkyu Han <junkyu.han@samsung.com>
+
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -27,14 +30,15 @@
 
 typedef struct
 {
-	char *package;
+	char *pkgid;
+	char *package; /* appid */
 	char *exec;
 	char *name;
 	char *icon;
 	char *desktop;
 	bool nodisplay;
 	bool enabled;
-	bool x_slp_removable;
+	bool removable;
 	bool x_slp_taskmanage;
 	pid_t pid;
 	Evas_Object *image;
@@ -49,7 +53,7 @@ typedef struct _app_list_item {
 	char *package;
 	pid_t pid;
 	time_t launch_time;
-	long long installed_time;
+	int installed_time;
 	void *data;
 } app_list_item;
 
@@ -65,6 +69,7 @@ extern void list_free_values(app_info_t *ai);
 extern menu_screen_error_e list_append_item(app_list *list, app_list_item *item);
 extern menu_screen_error_e list_remove_item(app_list *list, app_list_item *item);
 extern menu_screen_error_e list_sort(app_list *list, int (*_sort_cb)(const void *d1, const void *d2));
+extern app_list_item *list_nth(app_list *parent, unsigned int nth);
 
 #endif //__MENU_SCREEN_LIST_H__
 

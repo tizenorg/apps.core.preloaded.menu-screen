@@ -3,6 +3,9 @@
  *
  * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
+ * Contact: Jin Yoon <jinny.yoon@samsung.com>
+ *          Junkyu Han <junkyu.han@samsung.com>
+
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -206,7 +209,9 @@ HAPI menu_screen_error_e db_finalize(stmt_h *handle)
 	retv_if(NULL == handle->stmt, MENU_SCREEN_ERROR_INVALID_PARAMETER);
 
 	ret = sqlite3_finalize(handle->stmt);
-	retv_with_dbmsg_if(ret != SQLITE_OK, MENU_SCREEN_ERROR_FAIL);
+	if(ret != SQLITE_OK) {
+		_E("Cannot finalize handle");
+	}
 	free(handle);
 
 	return MENU_SCREEN_ERROR_OK;
@@ -227,21 +232,20 @@ HAPI long long db_last_insert_rowid(void)
 
 HAPI menu_screen_error_e db_exec(const char *query)
 {
-	int ret;
-	char *errmsg;
-
 	retv_if(NULL == query, MENU_SCREEN_ERROR_INVALID_PARAMETER);
 	retv_if(NULL == db_info.db, MENU_SCREEN_ERROR_FAIL);
 
-	ret = sqlite3_exec(db_info.db, query, NULL, NULL, &errmsg);
-	if (ret != SQLITE_OK) {
-		_E("Cannot execute this query - %s. because %s",
-				query, errmsg? errmsg:"uncatched error");
-		sqlite3_free(errmsg);
-		return MENU_SCREEN_ERROR_FAIL;
-	}
+	stmt_h *handle = db_prepare(query);
+	retv_if(NULL == handle, MENU_SCREEN_ERROR_FAIL);
+
+	goto_if(MENU_SCREEN_ERROR_FAIL == db_next(handle), ERROR);
+	if (MENU_SCREEN_ERROR_OK != db_finalize(handle)) return MENU_SCREEN_ERROR_FAIL;
 
 	return MENU_SCREEN_ERROR_OK;
+
+ERROR:
+	if (handle) db_finalize(handle);
+	return MENU_SCREEN_ERROR_FAIL;
 }
 
 
@@ -306,7 +310,12 @@ HAPI menu_screen_error_e db_end_transaction(bool success)
 			}
 		}
 	} else {
-		sqlite3_exec(db_info.db, "ROLLBACK TRANSACTION", NULL, NULL, NULL);
+		ret = sqlite3_exec(db_info.db, "ROLLBACK TRANSACTION", NULL, NULL, NULL);
+		if (SQLITE_OK != ret) {
+			_E("sqlite3_exec() Faild(%d)", ret);
+
+			return MENU_SCREEN_ERROR_FAIL;
+		}
 	}
 
 	return MENU_SCREEN_ERROR_OK;

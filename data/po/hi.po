@@ -1,5 +1,9 @@
 msgid "IDS_HS_BUTTON_DONE"
-msgstr "पूरा हुआ"
+msgstr "पूर्ण"
 
 msgid "IDS_AT_POP_UNINSTALL_PS_Q"
 msgstr "%s की स्थापना रद्द करें?"
+
+msgid "IDS_AT_BODY_UNINSTALL"
+msgstr "स्थापना रद्द करें"
+

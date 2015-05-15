@@ -7,18 +7,18 @@ SET(POFILES
 	ca.po
 	cs.po
 	da.po
-	de_DE.po
+	de.po
 	el_GR.po
 	en.po
 	en_PH.po
 	en_US.po
 	es_ES.po
-	es_MX.po
+	es_US.po
 	et.po
 	eu.po
 	fi.po
 	fr_CA.po
-	fr_FR.po
+	fr.po
 	ga.po
 	gl.po
 	hi.po
@@ -35,7 +35,7 @@ SET(POFILES
 	lv.po
 	mk.po
 	nb.po
-	nl_NL.po
+	nl.po
 	pl.po
 	pt_BR.po
 	pt_PT.po
@@ -50,8 +50,8 @@ SET(POFILES
 	uz.po
 	zh_CN.po
 	zh_HK.po
-	zh_SG.po
 	zh_TW.po
+	zh_SG.po
 )
 
 SET(MSGFMT "/usr/bin/msgfmt")
