@@ -3,3 +3,7 @@ msgstr "Արված է"
 
 msgid "IDS_AT_POP_UNINSTALL_PS_Q"
 msgstr "Ապատեղադրե՞լ %s-ը:"
+
+msgid "IDS_AT_BODY_UNINSTALL"
+msgstr "Ապատեղադրել"
+

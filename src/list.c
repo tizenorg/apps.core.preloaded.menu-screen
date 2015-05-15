@@ -3,6 +3,9 @@
  *
  * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
+ * Contact: Jin Yoon <jinny.yoon@samsung.com>
+ *          Junkyu Han <junkyu.han@samsung.com>
+
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -96,10 +99,11 @@ HAPI menu_screen_error_e list_get_item(app_list *list, app_list_item **item)
 
 
 
-
+/* FIXME : package -> appid */
 HAPI menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 {
 	ail_appinfo_h appinfo_h;
+	char *pkgid;
 	char *exec;
 	char *name;
 	char *icon;
@@ -112,6 +116,8 @@ HAPI menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 	ret = ail_get_appinfo(ai->package, &appinfo_h);
 	if (AIL_ERROR_OK == ret) {
 		do {
+			/* FIXME : Please check this */
+			break_if(ail_appinfo_get_str(appinfo_h, AIL_PROP_X_SLP_PKGID_STR, &pkgid) < 0);
 			break_if(ail_appinfo_get_str(appinfo_h, AIL_PROP_EXEC_STR, &exec) < 0);
 			break_if(ail_appinfo_get_str(appinfo_h, AIL_PROP_NAME_STR, &name) < 0);
 			break_if(ail_appinfo_get_str(appinfo_h, AIL_PROP_ICON_STR, &icon) < 0);
@@ -120,6 +126,7 @@ HAPI menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 			break_if(ail_appinfo_get_bool(appinfo_h, AIL_PROP_X_SLP_REMOVABLE_BOOL, &ai->x_slp_removable) < 0);
 			break_if(ail_appinfo_get_bool(appinfo_h, AIL_PROP_X_SLP_TASKMANAGE_BOOL, &ai->x_slp_taskmanage) < 0);
 
+			break_if(NULL == pkgid || NULL == (ai->pkgid = strdup(pkgid)));
 			break_if(NULL == exec || NULL == (ai->exec = strdup(exec)));
 			break_if(NULL == name || NULL == (ai->name = strdup(name)));
 			break_if(NULL == icon || NULL == (ai->icon = strdup(icon)));
@@ -136,6 +143,8 @@ HAPI menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 		return MENU_SCREEN_ERROR_OK;
 	}
 
+	if (appinfo_h) ail_destroy_appinfo(appinfo_h);
+
 	return MENU_SCREEN_ERROR_FAIL;
 }
 
@@ -146,6 +155,11 @@ HAPI void list_free_values(app_info_t *ai)
 	ret_if(NULL == ai);
 
 	/* Origin field */
+	if (ai->pkgid) {
+		free(ai->pkgid);
+		ai->pkgid = NULL;
+	}
+
 	if (ai->package) {
 		free(ai->package);
 		ai->package = NULL;
@@ -203,6 +217,20 @@ HAPI menu_screen_error_e list_sort(app_list *list, int (*_sort_cb)(const void *d
 	retv_if(NULL == list->list, MENU_SCREEN_ERROR_FAIL);
 
 	return MENU_SCREEN_ERROR_OK;
+}
+
+
+
+HAPI app_list_item *list_nth(app_list *parent, unsigned int nth)
+{
+	Eina_List *list;
+
+	retv_if(NULL == parent, NULL);
+
+	list = parent->list;
+	retv_if(NULL == list, NULL);
+
+	return eina_list_nth(list, nth);
 }
 
 

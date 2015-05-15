@@ -3,6 +3,9 @@
  *
  * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
+ * Contact: Jin Yoon <jinny.yoon@samsung.com>
+ *          Junkyu Han <junkyu.han@samsung.com>
+
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -30,6 +33,9 @@ extern void item_set_icon(Evas_Object *item, char *icon, int sync);
 
 extern char *item_get_name(Evas_Object *item);
 extern void item_set_name(Evas_Object *item, char *name, int sync);
+
+extern void item_set_pkgid(Evas_Object *edje, char *package, int sync);
+extern char *item_get_pkgid(Evas_Object *edje);
 
 extern char *item_get_package(Evas_Object *item);
 extern void item_set_package(Evas_Object *item, char *package, int sync);

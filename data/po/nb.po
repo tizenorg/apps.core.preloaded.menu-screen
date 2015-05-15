@@ -3,3 +3,6 @@ msgstr "Utført"
 
 msgid "IDS_AT_POP_UNINSTALL_PS_Q"
 msgstr "Avinstallere %s?"
+
+msgid "IDS_AT_BODY_UNINSTALL"
+msgstr "Avinstaller"

@@ -3,6 +3,9 @@
  *
  * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
+ * Contact: Jin Yoon <jinny.yoon@samsung.com>
+ *          Junkyu Han <junkyu.han@samsung.com>
+
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,9 +21,12 @@
  */
 
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include <Elementary.h>
 #include <ail.h>
 #include <appsvc.h>
+#include <app_control.h>
 #include <aul.h>
 
 #include "menu_screen.h"
@@ -33,6 +39,7 @@
 #include "mapbuf.h"
 #include "page.h"
 #include "page_scroller.h"
+#include "pkgmgr.h"
 #include "popup.h"
 #include "util.h"
 
@@ -40,6 +47,8 @@
 #define LAYOUT_BLOCK_INTERVAL		1.0
 #define ITEM_GROUP_NAME "icon"
 
+#define DATA_KEY_ITEM_LAUNCH_MAIN_OPERATION "dk_it_launch"
+#define STR_ATTRIBUTE_PKGID "pkgid"
 #define STR_ATTRIBUTE_NAME "name"
 #define STR_ATTRIBUTE_ICON "icon"
 #define STR_ATTRIBUTE_PKG_NAME "package"
@@ -80,11 +89,10 @@ HAPI void item_set_icon(Evas_Object *edje, char *icon, int sync)
 
 
 
-HAPI inline char *item_get_icon(Evas_Object *edje)
+HAPI char *item_get_icon(Evas_Object *edje)
 {
 	return evas_object_data_get(edje, STR_ATTRIBUTE_ICON);
 }
-
 
 
 
@@ -94,21 +102,23 @@ HAPI void item_set_name(Evas_Object *edje, char *name, int sync)
 	int changed;
 
 	tmp = evas_object_data_get(edje, STR_ATTRIBUTE_NAME);
+	if (!(tmp||name)) return;
 	changed = (tmp && name) ? strcmp(name, tmp) : 1;
 
 	if (!changed) {
 		return;
 	}
 
-	free(tmp);
+	if (tmp) free(tmp);
 	evas_object_data_del(edje, STR_ATTRIBUTE_NAME);
-	if (name) {
+	if (name && (strcmp(name, "(NULL)"))) {
 		tmp = strdup(name);
 		ret_if(NULL == tmp);
 		evas_object_data_set(edje, STR_ATTRIBUTE_NAME, tmp);
 		if (edje_object_part_text_set(_EDJ(edje), "txt", tmp) == EINA_FALSE){
-			//_E("Failed to set text on the part");
+			_E("Failed to set text on the part");
 		}
+		elm_object_signal_emit(edje, "text,on", "menu");
 	}
 }
 
@@ -205,9 +215,43 @@ HAPI void item_set_package(Evas_Object *edje, char *package, int sync)
 
 
 
-HAPI inline char *item_get_package(Evas_Object *edje)
+HAPI char *item_get_package(Evas_Object *edje)
 {
 	return evas_object_data_get(edje, STR_ATTRIBUTE_PKG_NAME);
+}
+
+
+
+HAPI void item_set_pkgid(Evas_Object *edje, char *package, int sync)
+{
+	char *tmp;
+	int changed;
+
+	tmp = evas_object_data_get(edje, STR_ATTRIBUTE_PKGID);
+	changed = (package && tmp) ? strcmp(tmp, package) : 1;
+
+	if (!changed) {
+		return;
+	}
+
+	free(tmp);
+	evas_object_data_del(edje, STR_ATTRIBUTE_PKGID);
+
+	if (package) {
+		tmp = strdup(package);
+		if (!tmp) {
+			_E("No more space for string \"%s\"", package);
+		} else {
+			evas_object_data_set(edje, STR_ATTRIBUTE_PKGID, tmp);
+		}
+	}
+}
+
+
+
+HAPI char *item_get_pkgid(Evas_Object *edje)
+{
+	return evas_object_data_get(edje, STR_ATTRIBUTE_PKGID);
 }
 
 
@@ -233,7 +277,7 @@ HAPI void item_set_removable(Evas_Object *edje, int removable, int sync)
 
 
 
-HAPI inline int item_get_removable(Evas_Object *edje)
+HAPI int item_get_removable(Evas_Object *edje)
 {
 	return (int) evas_object_data_get(edje, STR_ATTRIBUTE_REMOVABLE);
 }
@@ -261,7 +305,7 @@ HAPI void item_set_page(Evas_Object *edje, Evas_Object *page, int sync)
 
 
 
-HAPI inline Evas_Object *item_get_page(Evas_Object *edje)
+HAPI Evas_Object *item_get_page(Evas_Object *edje)
 {
 	return evas_object_data_get(edje, STR_ATTRIBUTE_PAGE);
 }
@@ -269,7 +313,7 @@ HAPI inline Evas_Object *item_get_page(Evas_Object *edje)
 
 
 
-HAPI inline void item_enable_delete(Evas_Object *item)
+HAPI void item_enable_delete(Evas_Object *item)
 {
 	if (item_get_removable(item) > 0) {
 		edje_object_signal_emit(_EDJ(item), "delete,on", "menu");
@@ -278,7 +322,7 @@ HAPI inline void item_enable_delete(Evas_Object *item)
 
 
 
-HAPI inline void item_disable_delete(Evas_Object *item)
+HAPI void item_disable_delete(Evas_Object *item)
 {
 	if (item_get_removable(item) > 0) {
 		edje_object_signal_emit(_EDJ(item), "delete,off", "menu");
@@ -498,6 +542,32 @@ HAPI menu_screen_error_e item_is_edje_icon(const char *icon)
 
 
 
+static int _is_main_operation_launch(Evas_Object *scroller, const char *package)
+{
+	Eina_List *main_operation_list;
+
+	retv_if(!package, 0);
+
+	main_operation_list = evas_object_data_get(scroller, DATA_KEY_MAIN_OPERATION_LIST);
+	if (!main_operation_list) {
+		_D("main operation list is NULL");
+		return 0;
+	}
+
+	const Eina_List *l, *l_next;
+	char *data;
+	EINA_LIST_FOREACH_SAFE(main_operation_list, l, l_next, data) {
+		continue_if(!data);
+		if (!strcmp(package, data)) {
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+
+
 HAPI void item_update(Evas_Object *item, app_info_t *ai)
 {
 	Evas_Object *icon = NULL;
@@ -506,11 +576,18 @@ HAPI void item_update(Evas_Object *item, app_info_t *ai)
 	ret_if(NULL == ai);
 
 	if (!ai->image) {
-		if (0 != access(ai->icon, R_OK)) {
-			_E("Failed to access to [%s]", ai->icon);
+		if (ai->icon && 0 == access(ai->icon, R_OK)) {
+			;
 		} else {
-			FILE *fp;
+			_E("Failed to access to [%s]", ai->icon);
+			if (ai->icon) free(ai->icon);
 
+			ai->icon = strdup(DEFAULT_ICON);
+			if (!ai->icon) _E("Critical! strdup error");
+		}
+
+		if (ai->icon) {
+			FILE *fp;
 			fp = fopen(ai->icon, "rb");
 			if (fp) {
 				fseek(fp, 0L, SEEK_END);
@@ -542,6 +619,7 @@ HAPI void item_update(Evas_Object *item, app_info_t *ai)
 		evas_object_data_set(item, "icon_image", icon);
 	}
 
+	item_set_pkgid(item, ai->pkgid, 0);
 	item_set_package(item, ai->package, 0);
 	item_set_desktop(item, ai->desktop, 0);
 	item_set_name(item, ai->name, 0);
@@ -564,6 +642,79 @@ HAPI void item_update(Evas_Object *item, app_info_t *ai)
 
 
 
+static char *_access_info_cb(void *data, Evas_Object *obj)
+{
+	Evas_Object *item = data;
+	char *name = NULL;
+	name = item_get_name(item);
+	retv_if(NULL == name, NULL);
+
+	char *tmp = NULL;
+	tmp = strdup(name);
+	retv_if(NULL == tmp, NULL);
+	return tmp;
+}
+
+
+
+/* This function is similar to _item_up_cb. But it's apparently different */
+static void _focus_clicked_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	Evas_Object *scroller;
+
+	Evas_Object *item = data;
+	ret_if(NULL == item);
+
+	_D("ITEM: mouse up event callback is invoked for %p", item);
+	PRINT_APPFWK();
+
+	scroller = evas_object_data_get(item, "scroller");
+	ret_if(NULL == scroller);
+
+	if (true == page_scroller_is_edited(scroller)) {
+		return;
+	}
+	item_launch(item);
+}
+
+
+
+#define IDS_AT_BODY_UNINSTALL "IDS_AT_BODY_UNINSTALL"
+static char *_access_uninstall_cb(void *data, Evas_Object *obj)
+{
+	char *info;
+	char *tmp;
+	info = _(IDS_AT_BODY_UNINSTALL);
+	if (!info) return NULL;
+	tmp = strdup(info);
+	if (!tmp) return NULL;
+	return tmp;
+}
+
+
+
+/* This function is similar to _uninstall_up_cb in item_event.c */
+static void _uninstall_focus_clicked_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	Evas_Object *win;
+	char *package;
+
+	win = menu_screen_get_win();
+	ret_if(NULL == win);
+
+	_D("Uninstall button is up");
+
+	Evas_Object *item = data;
+	package = item_get_package(item);
+	ret_if(!package || strlen(package) == 0);
+
+	_D("Uninstalling... [%s]", package);
+
+	popup_create_uninstall(win, item);
+}
+
+
+
 HAPI Evas_Object *item_create(Evas_Object *scroller, app_info_t* ai)
 {
 	Evas_Object *item;
@@ -579,6 +730,32 @@ HAPI Evas_Object *item_create(Evas_Object *scroller, app_info_t* ai)
 		_E("Failed to load an item object");
 		return NULL;
 	}
+
+	Evas_Object *item_focus = NULL;
+	Evas_Object *focus = NULL;
+
+	do { // focus
+		item_focus = elm_button_add(item);
+		retv_if(NULL == item_focus, NULL);
+
+		elm_object_style_set(item_focus, "focus");
+		elm_object_part_content_set(item, "focus", item_focus);
+		elm_access_info_cb_set(item_focus, ELM_ACCESS_INFO, _access_info_cb, item);
+		evas_object_smart_callback_add(item_focus, "clicked", _focus_clicked_cb, item);
+	} while (0);
+
+	do { // make a button for a focus button of deleting.
+		focus = elm_button_add(item);
+		retv_if(NULL == focus, NULL);
+
+		elm_object_style_set(focus, "focus");
+		elm_object_part_content_set(item, "uninstall_focus", focus);
+		elm_access_info_cb_set(focus, ELM_ACCESS_INFO, _access_uninstall_cb, item);
+		evas_object_smart_callback_add(focus, "clicked", _uninstall_focus_clicked_cb, item);
+	} while (0);
+
+	elm_object_focus_next_object_set(item_focus, focus, ELM_FOCUS_UP);
+	elm_object_focus_next_object_set(focus, item_focus, ELM_FOCUS_DOWN);
 
 	bg = evas_object_rectangle_add(menu_screen_get_evas());
 	if (!bg) {
@@ -596,8 +773,6 @@ HAPI Evas_Object *item_create(Evas_Object *scroller, app_info_t* ai)
 	evas_object_size_hint_max_set(bg, item_width, item_height);
 	elm_object_part_content_set(item, "bg", bg);
 
-	edje_object_text_class_set(_EDJ(item), "tizen", "TIZEN:style=medium", 24);
-
 	evas_object_data_set(item, "win", evas_object_data_get(scroller, "win"));
 	evas_object_data_set(item, "layout", evas_object_data_get(scroller, "layout"));
 	evas_object_data_set(item, "controlbar", evas_object_data_get(scroller, "controlbar"));
@@ -609,9 +784,17 @@ HAPI Evas_Object *item_create(Evas_Object *scroller, app_info_t* ai)
 	evas_object_data_set(item, "x", (void *) 0);
 	evas_object_data_set(item, "y", (void *) 0);
 	evas_object_data_set(item, "dirty", (void *) 0);
+	if (_is_main_operation_launch(scroller, ai->package)) {
+		evas_object_data_set(item, DATA_KEY_ITEM_LAUNCH_MAIN_OPERATION, (void *) 1);
+	}
 
 	item_update(item, ai);
 	item_event_register(item);
+	if (MENU_SCREEN_ERROR_OK !=
+					pkgmgr_item_list_append_item(ai->pkgid, ai->package, item))
+	{
+		_E("Cannot append an item into the item list");
+	}
 
 	return item;
 }
@@ -627,16 +810,27 @@ HAPI void item_destroy(Evas_Object *item)
 	Eina_List *n;
 	Eina_List *t;
 	Evas_Object *pend_item;
-	int pending_idx;
 	const char *icon_image_type;
+	char *pkgid = NULL;
+	char *package= NULL;
 
 	ret_if(NULL == item);
+
+	pkgid = item_get_pkgid(item);
+	package = item_get_package(item);
+
+	if (pkgid
+		&& package
+		&& MENU_SCREEN_ERROR_OK !=
+					pkgmgr_item_list_remove_item(pkgid, package, item))
+	{
+		_E("Cannot remove an item in the item list");
+	}
 
 	page = item_get_page(item);
 	pending_list = evas_object_data_get(page, "pending,list");
 	EINA_LIST_FOREACH_SAFE(pending_list, n, t, pend_item) {
 		if (pend_item == item) {
-			pending_idx = (int)evas_object_data_get(pend_item, "pending,idx");
 			pending_list = eina_list_remove(pending_list, pend_item);
 			evas_object_data_set(page, "pending,list", pending_list);
 			evas_object_data_del(pend_item, "pending,idx");
@@ -648,6 +842,7 @@ HAPI void item_destroy(Evas_Object *item)
 	}
 	item_event_unregister(item);
 
+	item_set_pkgid(item, NULL, 0);
 	item_set_package(item, NULL, 1);
 	item_set_desktop(item, NULL, 1);
 	item_set_name(item, NULL, 1);
@@ -683,6 +878,24 @@ HAPI void item_destroy(Evas_Object *item)
 	evas_object_data_del(item, "x");
 	evas_object_data_del(item, "y");
 	evas_object_data_del(item, "dirty");
+	evas_object_data_del(item, DATA_KEY_ITEM_LAUNCH_MAIN_OPERATION);
+
+	do {
+		Evas_Object *focus = NULL;
+		focus = elm_object_part_content_unset(item, "focus");
+		if (NULL == focus) break;
+		evas_object_smart_callback_del(focus, "clicked", _focus_clicked_cb);
+		evas_object_del(focus);
+	} while (0);
+
+	do {
+		Evas_Object *focus = NULL;
+		focus = elm_object_part_content_unset(item, "uninstall_focus");
+		if (NULL == focus) break;
+		evas_object_smart_callback_del(focus, "clicked", _uninstall_focus_clicked_cb);
+		evas_object_del(focus);
+	} while (0);
+
 	layout_unload_edj(item);
 }
 
@@ -703,32 +916,32 @@ static void _run_cb(bundle *b, int request_code, appsvc_result_val result, void 
 }
 
 
-
+#define BUNDLE_KEY_OPERATION    "__APP_SVC_OP_TYPE__"
 HAPI void item_launch(Evas_Object *obj)
 {
 	char *package;
 	char *name;
-	int ret_aul;
-	Evas_Object *layout;
+	bundle *b = NULL;
+	Evas_Object *layout = NULL;
 
-	ret_if(NULL == obj);
+	Evas_Object *item = obj;
+	ret_if(NULL == item);
 
-	name = item_get_name(obj);
-	package = item_get_package(obj);
+	name = item_get_name(item);
+	package = item_get_package(item);
 	ret_if(NULL == package);
 
 	layout = evas_object_data_get(menu_screen_get_win(), "layout");
 	layout_enable_block(layout);
 
-	bool is_shortcut = (bool) evas_object_data_get(obj, "is_shortcut");
-	bool shortcut_launch_package = (bool) evas_object_data_get(obj, "shortcut_launch_package");
+	bool is_shortcut = (bool) evas_object_data_get(item, "is_shortcut");
+	bool shortcut_launch_package = (bool) evas_object_data_get(item, "shortcut_launch_package");
 	if (is_shortcut && !shortcut_launch_package) {
-		bundle *b = NULL;
 		b = bundle_create();
 		ret_if(NULL == b);
 
 		appsvc_set_operation(b, APPSVC_OPERATION_VIEW);
-		appsvc_set_uri(b, evas_object_data_get(obj, "content_info"));
+		appsvc_set_uri(b, evas_object_data_get(item, "content_info"));
 
 		int ret = -1;
 		ret = appsvc_run_service(b, 0, _run_cb, NULL);
@@ -742,30 +955,55 @@ HAPI void item_launch(Evas_Object *obj)
 
 		bundle_free(b);
 	} else {
-		ret_aul = aul_open_app(package);
-		if (ret_aul == AUL_R_EINVAL) {
-			char* sinform;
-			int len;
+		int ret_aul = AUL_R_OK;
+		if (evas_object_data_get(item, DATA_KEY_ITEM_LAUNCH_MAIN_OPERATION)) {
+			b = bundle_create();
+			ret_if(NULL == b);
 
-			// IDS_IDLE_POP_UNABLE_TO_LAUNCH_PS : "Unable to launch %s"
-			len = strlen(D_("IDS_IDLE_POP_UNABLE_TO_LAUNCH_PS")) + strlen(name) + 1;
-
-			sinform = calloc(len, sizeof(char));
-			if (!sinform) {
-				_E("cannot calloc for popup.");
+			if (0 != bundle_add(b, BUNDLE_KEY_OPERATION, APP_CONTROL_OPERATION_MAIN)) {
+				_E("Cannot add to a bundle");
+				bundle_free(b);
 				return;
 			}
 
-			snprintf(sinform, len, D_("IDS_IDLE_POP_UNABLE_TO_LAUNCH_PS"), name);
-			popup_create(obj, sinform);
-
-			free(sinform);
-			layout_disable_block(layout);
+			if (b) {
+				ret_aul = aul_launch_app(package, b);
+				if (AUL_R_EINVAL == ret_aul) {
+					_E("cannot launch app");
+				}
+				bundle_free(b);
+			}
 		} else {
-			_D("Launch app's ret : [%d]", ret_aul);
-			_T(package);
-			ecore_timer_add(LAYOUT_BLOCK_INTERVAL, _unblock_cb, NULL);
+			ret_aul = aul_open_app(package);
+			if (AUL_R_EINVAL == ret_aul) {
+				char* sinform;
+				int len;
+
+				if (!name) {
+					name = package;
+				}
+
+				// IDS_IDLE_POP_UNABLE_TO_LAUNCH_PS : "Unable to launch %s"
+				len = strlen(D_("IDS_IDLE_POP_UNABLE_TO_LAUNCH_PS")) + strlen(name) + 1;
+
+				sinform = calloc(len, sizeof(char));
+				if (!sinform) {
+					_E("cannot calloc for popup.");
+					return;
+				}
+
+				snprintf(sinform, len, D_("IDS_IDLE_POP_UNABLE_TO_LAUNCH_PS"), name);
+				popup_create_confirm(layout, sinform);
+
+				free(sinform);
+				layout_disable_block(layout);
+			}
 		}
+
+		_D("Launch app's ret : [%d]", ret_aul);
+
+		_T(package);
+		ecore_timer_add(LAYOUT_BLOCK_INTERVAL, _unblock_cb, NULL);
 	}
 }
 

@@ -3,6 +3,9 @@
  *
  * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
+ * Contact: Jin Yoon <jinny.yoon@samsung.com>
+ *          Junkyu Han <junkyu.han@samsung.com>
+
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -59,6 +62,20 @@ HAPI Evas_Object *mapbuf_get_page(Evas_Object *obj)
 
 
 
+static void _move_pages(Evas_Object *page)
+{
+	if(NULL == page) return;
+
+	Evas_Object *scroller = evas_object_data_get(page, "scroller");
+	if(NULL == scroller) return;
+
+	Evas_Coord x, y;
+	evas_object_geometry_get(scroller, &x, &y, NULL, NULL);
+	evas_object_move(page, x, y);
+}
+
+
+
 HAPI menu_screen_error_e mapbuf_enable(Evas_Object *obj, int force)
 {
 	Evas_Object *mapbuf;
@@ -70,10 +87,21 @@ HAPI menu_screen_error_e mapbuf_enable(Evas_Object *obj, int force)
 		return MENU_SCREEN_ERROR_FAIL;
 	}
 
+	Evas_Object *page = mapbuf_get_page(obj);
+	if(!page) {
+		return MENU_SCREEN_ERROR_FAIL;
+	}
+
+	if(menu_screen_is_tts()) {
+		evas_object_data_set(mapbuf, "mapbuf_enabled", (void*)0);
+		elm_mapbuf_enabled_set(mapbuf, 0);
+		return MENU_SCREEN_ERROR_OK;
+	}
+
 	if (force) {
 		evas_object_data_set(mapbuf, "mapbuf_enabled", (void*)0);
-		//elm_mapbuf_enabled_set(mapbuf, 1); // Mapbuf has been disabled because of a mapbuf bug.
-		elm_mapbuf_enabled_set(mapbuf, 0);
+		_move_pages(page);
+		elm_mapbuf_enabled_set(mapbuf, 1); // Mapbuf has been disabled because of a mapbuf bug.
 		return MENU_SCREEN_ERROR_OK;
 	}
 
@@ -84,8 +112,8 @@ HAPI menu_screen_error_e mapbuf_enable(Evas_Object *obj, int force)
 
 	if (cnt == 0) {
 		if (!elm_mapbuf_enabled_get(mapbuf)) {
-			//elm_mapbuf_enabled_set(mapbuf, 1); // Mapbuf has been disabled because of a mapbuf bug.
-			elm_mapbuf_enabled_set(mapbuf, 0);
+			_move_pages(page);
+			elm_mapbuf_enabled_set(mapbuf, 1); // Mapbuf has been disabled because of a mapbuf bug.
 			//_D("[%s] mapbuf enabled", __func__);
 		}
 	}

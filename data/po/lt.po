@@ -3,3 +3,7 @@ msgstr "Atlikta"
 
 msgid "IDS_AT_POP_UNINSTALL_PS_Q"
 msgstr "Pašalinti „%s“?"
+
+msgid "IDS_AT_BODY_UNINSTALL"
+msgstr "Pašalinti"
+

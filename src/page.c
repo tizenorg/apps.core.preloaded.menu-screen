@@ -3,6 +3,9 @@
  *
  * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
+ * Contact: Jin Yoon <jinny.yoon@samsung.com>
+ *          Junkyu Han <junkyu.han@samsung.com>
+
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -148,8 +151,6 @@ HAPI Evas_Object *page_create(Evas_Object *scroller, int idx, int rotate)
 	Evas_Object *box;
 
 	char *page_edje;
-	bool enable_bg_image;
-
 	unsigned int count;
 	int page_height;
 	int page_width;
@@ -157,7 +158,6 @@ HAPI Evas_Object *page_create(Evas_Object *scroller, int idx, int rotate)
 	_D("Create a new page[%d]", idx);
 
 	page_edje = evas_object_data_get(scroller, "page_edje");
-	enable_bg_image = (bool) evas_object_data_get(scroller, "enable_bg_image");
 
 	page = layout_load_edj(scroller, page_edje, PAGE_GROUP_NAME);
 	retv_if(!page, NULL);
@@ -211,7 +211,8 @@ HAPI Evas_Object *page_create(Evas_Object *scroller, int idx, int rotate)
 	if (index) {
 		tab = evas_object_data_get(scroller, "tab");
 		count = page_scroller_count_page(scroller);
-		index_update(tab, index, count);
+		index = index_update(tab, index, count);
+		evas_object_data_set(scroller, "index", index);
 	}
 
 	return page;
@@ -259,10 +260,17 @@ HAPI void page_destroy(Evas_Object *scroller, Evas_Object *page)
 	}
 
 	index = evas_object_data_get(scroller, "index");
-	if (index) {
-		tab = evas_object_data_get(scroller, "tab");
+	tab = evas_object_data_get(scroller, "tab");
+	if (index && tab) {
 		count = page_scroller_count_page(scroller);
-		index_update(tab, index, count);
+		if (count) {
+			index = index_update(tab, index, count);
+			evas_object_data_set(scroller, "index", index);
+		}
+		else {
+			index_destroy(index);
+			evas_object_data_set(scroller, "index", NULL);
+		}
 	}
 
 	evas_object_data_del(page, "win");

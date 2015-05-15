@@ -3,3 +3,7 @@ msgstr "Готово"
 
 msgid "IDS_AT_POP_UNINSTALL_PS_Q"
 msgstr "Да се деинсталира %s?"
+
+msgid "IDS_AT_BODY_UNINSTALL"
+msgstr "Деинсталирај"
+

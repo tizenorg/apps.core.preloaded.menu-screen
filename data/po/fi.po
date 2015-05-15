@@ -3,3 +3,7 @@ msgstr "Valmis"
 
 msgid "IDS_AT_POP_UNINSTALL_PS_Q"
 msgstr "Poistetaanko kohteen %s asennus?"
+
+msgid "IDS_AT_BODY_UNINSTALL"
+msgstr "Poista asennus"
+

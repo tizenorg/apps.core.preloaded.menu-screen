@@ -3,6 +3,9 @@
  *
  * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
+ * Contact: Jin Yoon <jinny.yoon@samsung.com>
+ *          Junkyu Han <junkyu.han@samsung.com>
+
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -23,6 +26,10 @@
 #include <Evas.h>
 
 #define PAGE_MAX_APP 16
+
+extern bool all_apps_layout_is_edited(Evas_Object *all_apps);
+extern void all_apps_layout_edit(Evas_Object *all_apps);
+extern void all_apps_layout_unedit(Evas_Object *all_apps);
 
 extern Evas_Object *all_apps_layout_create(Evas_Object *controlbar, int rotate);
 extern void all_apps_layout_destroy(Evas_Object *all_apps);
