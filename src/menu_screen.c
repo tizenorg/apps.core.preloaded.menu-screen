@@ -32,6 +32,7 @@
 #include <app_preference.h>
 //#include <system_info_internal.h>
 #include <system_settings.h>
+#include <pkgmgr-info.h>
 
 #include "conf.h"
 #include "item.h"
@@ -231,7 +232,6 @@ static menu_screen_error_e _create_canvas(char *name, char *title)
 		}
 	}
 
-
 	menu_screen_info.win = elm_win_add(NULL, name, ELM_WIN_BASIC);
 	retv_if(NULL == menu_screen_info.win, MENU_SCREEN_ERROR_FAIL);
 
@@ -288,6 +288,7 @@ static int _dead_cb(int pid, void *data)
 
 static void _create_bg(void)
 {
+	_D("Create BG");
 	char *buf;
 	Evas_Coord w;
 	Evas_Coord h;
@@ -297,8 +298,10 @@ static void _create_bg(void)
 	const char *key;
 	int width;
 	int height;
+	int ret = SYSTEM_SETTINGS_ERROR_NONE;
 
-	system_settings_get_value_string(SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN, &buf);
+	ret = system_settings_get_value_string(SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN, &buf);
+	_D("result: %d, value: %s", ret, buf);
 	ret_if(NULL == buf);
 
 	width = menu_screen_get_root_width();
@@ -371,7 +374,7 @@ static void _destroy_bg()
 
 
 
-static void _change_bg_cb(keynode_t *node, void *data)
+static void _change_bg_cb(system_settings_key_e key, void *data)
 {
 	_D("Background image is changed.");
 	_create_bg();
@@ -405,9 +408,9 @@ static Evas_Object *_create_conformant(Evas_Object *win)
 	conformant = elm_conformant_add(win);
 	retv_if(NULL == conformant, NULL);
 
-	elm_win_indicator_opacity_set(win, ELM_WIN_INDICATOR_TRANSLUCENT);
 	evas_object_size_hint_weight_set(conformant, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	elm_win_indicator_mode_set(menu_screen_info.win, ELM_WIN_INDICATOR_SHOW);
+	elm_object_signal_emit(conformant, "elm,state,indicator,overlap", "elm");
 	evas_object_data_set(conformant, "win", win);
 	evas_object_show(conformant);
 
@@ -479,9 +482,9 @@ static bool _create_cb(void *data)
 	_init_theme();
 	retv_if(MENU_SCREEN_ERROR_FAIL == _create_canvas(PACKAGE, PACKAGE), false);
 
-	//if (system_settings_set_changed_cb(SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN, _change_bg_cb, NULL) < 0) {
-	//	_E("Failed to register a settings change cb for %s\n", SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN);
-	//}
+	if (system_settings_set_changed_cb(SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN, _change_bg_cb, NULL) < 0) {
+		_E("Failed to register a settings change cb for %s\n", SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN);
+	}
 	_create_bg();
 
 	conformant = _create_conformant(menu_screen_info.win);
@@ -629,29 +632,29 @@ static void _language_changed_cb(app_event_info_h event_info, void *data)
 		}
 
 		for (j = 0; j < page_max_app; j ++) {
-			ail_appinfo_h ai;
+			pkgmgrinfo_appinfo_h appinfo_h = NULL;
 			char *name;
 
 			item = page_get_item_at(page, j);
 			if (!item) continue;
 
-			if (ail_get_appinfo(item_get_package(item), &ai) < 0) {
-				ail_destroy_appinfo(ai);
+			if (pkgmgrinfo_appinfo_get_appinfo(item_get_package(item), &appinfo_h) < 0) {
+				pkgmgrinfo_appinfo_destroy_appinfo(appinfo_h);
 				continue;
 			}
-			if (ail_appinfo_get_str(ai, AIL_PROP_NAME_STR, &name) < 0) {
-				ail_destroy_appinfo(ai);
+			if (pkgmgrinfo_appinfo_get_label(appinfo_h, &name) < 0) {
+				pkgmgrinfo_appinfo_destroy_appinfo(appinfo_h);
 				continue;
 			}
 
 			if (!name) {
 				_D("Failed to get name for %s", item_get_package(item));
-				ail_destroy_appinfo(ai);
+				pkgmgrinfo_appinfo_destroy_appinfo(appinfo_h);
 				continue;
 			}
 
 			item_set_name(item, name, 0);
-			ail_destroy_appinfo(ai);
+			pkgmgrinfo_appinfo_destroy_appinfo(appinfo_h);
 		}
 
 		mapbuf_enable(page, 1);
