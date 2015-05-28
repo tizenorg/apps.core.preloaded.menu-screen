@@ -50,7 +50,7 @@ BuildRequires:  pkgconfig(pkgmgr-info)
 BuildRequires:  pkgconfig(shortcut)
 BuildRequires:  pkgconfig(syspopup-caller)
 #BuildRequires:  pkgconfig(utilX)
-#BuildRequires:  pkgconfig(capi-appfw-preference)
+BuildRequires:  pkgconfig(capi-appfw-preference)
 BuildRequires:  pkgconfig(capi-system-info)
 BuildRequires:  pkgconfig(capi-system-system-settings)
 BuildRequires:  cmake

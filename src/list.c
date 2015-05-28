@@ -129,7 +129,9 @@ HAPI menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 	} while (0);
 
 	goto_if(PMINFO_R_OK != pkgmgrinfo_pkginfo_is_removable(pkghandle, &ai->removable), ERROR);
+	_D("This package is removable: %d", ai->removable);
 	goto_if(PMINFO_R_OK != pkgmgrinfo_appinfo_is_nodisplay(appinfo_h, &ai->nodisplay), ERROR);
+	_D("This package is nodisplay: %d", ai->removable);
 	if (ai->nodisplay) goto ERROR;
 
 	pkgmgrinfo_appinfo_destroy_appinfo(appinfo_h);
