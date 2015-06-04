@@ -482,9 +482,9 @@ static bool _create_cb(void *data)
 	_init_theme();
 	retv_if(MENU_SCREEN_ERROR_FAIL == _create_canvas(PACKAGE, PACKAGE), false);
 
-	if (system_settings_set_changed_cb(SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN, _change_bg_cb, NULL) < 0) {
-		_E("Failed to register a settings change cb for %s\n", SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN);
-	}
+	//if (system_settings_set_changed_cb(SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN, _change_bg_cb, NULL) < 0) {
+	//	_E("Failed to register a settings change cb for %s\n", SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN);
+	//}
 	_create_bg();
 
 	conformant = _create_conformant(menu_screen_info.win);
