@@ -24,13 +24,11 @@
 #include <app.h>
 #include <appcore-efl.h>
 #include <aul.h>
-//#include <Ecore_X.h>
 #include <Elementary.h>
 #include <stdbool.h>
 #include <system_info.h>
 #include <vconf.h>
 #include <app_preference.h>
-//#include <system_info_internal.h>
 #include <system_settings.h>
 #include <pkgmgr-info.h>
 
@@ -289,7 +287,7 @@ static int _dead_cb(int pid, void *data)
 static void _create_bg(void)
 {
 	_D("Create BG");
-	char *buf;
+	char *buf = NULL;
 	Evas_Coord w;
 	Evas_Coord h;
 	Evas_Object *bg;
@@ -300,19 +298,18 @@ static void _create_bg(void)
 	int height;
 	int ret = SYSTEM_SETTINGS_ERROR_NONE;
 
-	ret = system_settings_get_value_string(SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN, &buf);
-	_D("result: %d, value: %s", ret, buf);
-	ret_if(NULL == buf);
+	if (system_settings_get_value_string(SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN, &buf) < 0) {
+		_E("Failed to get a wallpaper: %d\n", SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN);
+	}
 
 	width = menu_screen_get_root_width();
 	height = menu_screen_get_root_height();
 
 	bg = evas_object_data_get(menu_screen_get_win(), "bg");
-	if (NULL == bg) {
+	if (!bg) {
 		Evas_Object *rect;
-
 		rect = evas_object_rectangle_add(menu_screen_get_evas());
-		ret_if(NULL == rect);
+		goto_if(!rect, ERROR);
 		evas_object_data_set(menu_screen_get_win(), "rect", rect);
 		evas_object_color_set(rect, 0, 0, 0, 255);
 		evas_object_size_hint_min_set(rect, width, height);
@@ -321,10 +318,7 @@ static void _create_bg(void)
 		evas_object_show(rect);
 
 		bg = evas_object_image_add(menu_screen_get_evas());
-		if (NULL == bg) {
-			free(buf);
-			return;
-		}
+		goto_if(!bg, ERROR);
 		evas_object_image_load_orientation_set(bg, EINA_TRUE);
 		evas_object_data_set(menu_screen_get_win(), "bg", bg);
 	}
@@ -339,6 +333,10 @@ static void _create_bg(void)
 
 	evas_object_image_file_set(bg, buf, key);
 	evas_object_image_size_get(bg, &w, &h);
+	if (w == 0 || h == 0) {
+	    _E("There's something wrong, width or height is ZERO");
+	    goto ERROR;
+	}
 	evas_object_image_filled_set(bg, 1);
 
 	wf = (double) width / (double) w;
@@ -354,7 +352,13 @@ static void _create_bg(void)
 	elm_win_resize_object_add(menu_screen_get_win(), bg);
 	evas_object_show(bg);
 
-	free(buf);
+ERROR:
+	if (buf) {
+		free(buf);
+	}
+	if (rect) {
+		evas_object_del(rect);
+	}
 }
 
 
@@ -482,9 +486,9 @@ static bool _create_cb(void *data)
 	_init_theme();
 	retv_if(MENU_SCREEN_ERROR_FAIL == _create_canvas(PACKAGE, PACKAGE), false);
 
-	//if (system_settings_set_changed_cb(SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN, _change_bg_cb, NULL) < 0) {
-	//	_E("Failed to register a settings change cb for %s\n", SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN);
-	//}
+	if (system_settings_set_changed_cb(SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN, _change_bg_cb, NULL) < 0) {
+		_E("Failed to register a settings change cb for %d\n", SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN);
+	}
 	_create_bg();
 
 	conformant = _create_conformant(menu_screen_info.win);
