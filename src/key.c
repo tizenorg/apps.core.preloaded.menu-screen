@@ -197,16 +197,15 @@ HAPI void key_unregister(void)
 
 HAPI void key_grab_home(void)
 {
+	Evas_Object *win = NULL;
+	int setkey_ret = 0;
 	if (EINA_TRUE == key_info.home_grabbed) return;
 
-	//Ecore_X_Window win = elm_win_xwindow_get(menu_screen_get_win());
-	//Display* dpy = ecore_x_display_get();
-
-	//int ret = utilx_grab_key(dpy, win, KEY_SELECT, TOP_POSITION_GRAB);
-	//ret_if(0 != ret);
-
-	//ret = utilx_grab_key(dpy, win, KEY_BACK, TOP_POSITION_GRAB);
-	//ret_if(0 != ret);
+	win = menu_screen_get_win();
+	setkey_ret = elm_win_keygrab_set(win, KEY_BACK, 0, 0, 0, ELM_WIN_KEYGRAB_TOPMOST);
+	ret_if(!setkey_ret);
+	setkey_ret = elm_win_keygrab_set(win, KEY_SELECT, 0, 0, 0, ELM_WIN_KEYGRAB_TOPMOST);
+	ret_if(!setkey_ret);
 
 	key_info.home_grabbed = EINA_TRUE;
 }
@@ -215,16 +214,11 @@ HAPI void key_grab_home(void)
 
 HAPI void key_ungrab_home(void)
 {
+	Evas_Object *win = NULL;
 	if (key_info.home_grabbed == EINA_FALSE) return;
 
-	/*Ecore_X_Window win = elm_win_xwindow_get(menu_screen_get_win());
-	Display* dpy = ecore_x_display_get();
-
-	int ret = utilx_ungrab_key(dpy, win, KEY_SELECT);
-	ret_if(0 != ret);
-
-	ret = utilx_ungrab_key(dpy, win, KEY_BACK);
-	ret_if(0 != ret);*/
+	elm_win_keygrab_unset(win, KEY_SELECT, 0, 0);
+	elm_win_keygrab_unset(win, KEY_BACK, 0, 0);
 
 	key_info.home_grabbed = EINA_FALSE;
 }

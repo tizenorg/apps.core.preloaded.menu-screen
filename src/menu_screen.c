@@ -239,16 +239,18 @@ static menu_screen_error_e _create_canvas(char *name, char *title)
 	elm_win_borderless_set(menu_screen_info.win, EINA_TRUE);
 	elm_win_screen_size_get(menu_screen_info.win, NULL, NULL, &menu_screen_info.root_width, &menu_screen_info.root_height);
 
-	//ecore_x_icccm_name_class_set(elm_win_xwindow_get(menu_screen_info.win), "MENU_SCREEN", "MENU_SCREEN");
-	//ATOM_WM_WINDOW_ROLE = ecore_x_atom_get("WM_WINDOW_ROLE");
-	//if (ATOM_WM_WINDOW_ROLE) {
-//		ecore_x_window_prop_string_set(elm_win_xwindow_get(menu_screen_info.win), ATOM_WM_WINDOW_ROLE, "MENU_SCREEN");
-//	} else {
-//		_D("Failed to set the window role as MENU_SCREEN");
-//	}
+#if 0
+	ecore_x_icccm_name_class_set(elm_win_xwindow_get(menu_screen_info.win), "MENU_SCREEN", "MENU_SCREEN");
+	ATOM_WM_WINDOW_ROLE = ecore_x_atom_get("WM_WINDOW_ROLE");
+	if (ATOM_WM_WINDOW_ROLE) {
+		ecore_x_window_prop_string_set(elm_win_xwindow_get(menu_screen_info.win), ATOM_WM_WINDOW_ROLE, "MENU_SCREEN");
+	} else {
+		_D("Failed to set the window role as MENU_SCREEN");
+	}
+#endif
 
-	//elm_win_role_set(menu_screen_info.win, "MENU_SCREEN");
-	//evas_object_resize(menu_screen_info.win, menu_screen_get_root_width(), menu_screen_get_root_height());
+	elm_win_role_set(menu_screen_info.win, "MENU_SCREEN");
+	evas_object_resize(menu_screen_info.win, menu_screen_get_root_width(), menu_screen_get_root_height());
 
 	menu_screen_info.evas = evas_object_evas_get(menu_screen_info.win);
 	if (!menu_screen_info.evas) {
@@ -318,7 +320,12 @@ static void _create_bg(void)
 		evas_object_show(rect);
 
 		bg = evas_object_image_add(menu_screen_get_evas());
-		goto_if(!bg, ERROR);
+		if (!bg) {
+		    if (rect) {
+			evas_object_del(rect);
+		    }
+		    goto ERROR;
+		}
 		evas_object_image_load_orientation_set(bg, EINA_TRUE);
 		evas_object_data_set(menu_screen_get_win(), "bg", bg);
 	}
@@ -355,9 +362,6 @@ static void _create_bg(void)
 ERROR:
 	if (buf) {
 		free(buf);
-	}
-	if (rect) {
-		evas_object_del(rect);
 	}
 }
 
