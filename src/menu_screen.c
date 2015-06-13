@@ -318,7 +318,12 @@ static void _create_bg(void)
 		evas_object_show(rect);
 
 		bg = evas_object_image_add(menu_screen_get_evas());
-		goto_if(!bg, ERROR);
+		if (!bg) {
+		    if (rect) {
+			evas_object_del(rect);
+		    }
+		    goto ERROR;
+		}
 		evas_object_image_load_orientation_set(bg, EINA_TRUE);
 		evas_object_data_set(menu_screen_get_win(), "bg", bg);
 	}
@@ -355,9 +360,6 @@ static void _create_bg(void)
 ERROR:
 	if (buf) {
 		free(buf);
-	}
-	if (rect) {
-		evas_object_del(rect);
 	}
 }
 
