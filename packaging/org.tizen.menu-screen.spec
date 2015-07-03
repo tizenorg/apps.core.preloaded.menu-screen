@@ -168,4 +168,3 @@ fi
 %{_usr_datadir}/icons/default/small/org.tizen.menu-screen.png
 %{_usr_datadir}/packages/org.tizen.menu-screen.xml
 #%{_packagedir}/*.xml
-/etc/smack/accesses.d/%{_package_name}.efl
