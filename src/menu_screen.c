@@ -303,6 +303,7 @@ static void _create_bg(void)
 	if (system_settings_get_value_string(SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN, &buf) < 0) {
 		_E("Failed to get a wallpaper: %d\n", SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN);
 	}
+	_D("Menu-screen bg's image : %s", buf);
 
 	width = menu_screen_get_root_width();
 	height = menu_screen_get_root_height();

@@ -109,6 +109,7 @@ HAPI menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 	char *exec;
 	char *name;
 	char *icon;
+	int ret;
 
 	retv_if(NULL == package, MENU_SCREEN_ERROR_FAIL);
 	retv_if(NULL == ai, MENU_SCREEN_ERROR_FAIL);
@@ -117,9 +118,16 @@ HAPI menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 	goto_if(0 > pkgmgrinfo_appinfo_get_appinfo(ai->package, &appinfo_h), ERROR);
 
 	goto_if(PMINFO_R_OK != pkgmgrinfo_appinfo_get_pkgid(appinfo_h, &pkgid), ERROR);
+	_D("pkgmgrinfo pkgid : %s", pkgid);
 	goto_if(PMINFO_R_OK != pkgmgrinfo_appinfo_get_label(appinfo_h, &name), ERROR);
-	goto_if(PMINFO_R_OK != pkgmgrinfo_appinfo_get_icon(appinfo_h, &icon), ERROR);
+	_D("pkgmgrinfo label : %s", name);
 	goto_if(PMINFO_R_OK != pkgmgrinfo_appinfo_is_enabled(appinfo_h, &ai->enabled), ERROR);
+	ret = pkgmgrinfo_appinfo_get_icon(appinfo_h, &icon);
+	if (ret != PMINFO_R_OK) {
+		_D("This package has something strange, icon: %s", icon);
+		icon = DEFAULT_ICON;
+	}
+	_D("pkgmgrinfo icon : %s", icon);
 
 	do {
 		goto_if(NULL == pkgid || NULL == (ai->pkgid = strdup(pkgid)), ERROR);
@@ -131,7 +139,7 @@ HAPI menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 	goto_if(PMINFO_R_OK != pkgmgrinfo_pkginfo_is_removable(pkghandle, &ai->removable), ERROR);
 	_D("This package is removable: %d", ai->removable);
 	goto_if(PMINFO_R_OK != pkgmgrinfo_appinfo_is_nodisplay(appinfo_h, &ai->nodisplay), ERROR);
-	_D("This package is nodisplay: %d", ai->removable);
+	_D("This package is nodisplay: %d", ai->nodisplay);
 	if (ai->nodisplay) goto ERROR;
 
 	pkgmgrinfo_appinfo_destroy_appinfo(appinfo_h);
