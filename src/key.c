@@ -1,7 +1,7 @@
 /*
  * MENU-SCREEN
  *
- * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
  *
  * Contact: Jin Yoon <jinny.yoon@samsung.com>
  *          Junkyu Han <junkyu.han@samsung.com>
@@ -22,8 +22,6 @@
 
 #include <stdlib.h>
 #include <Elementary.h>
-//#include <utilX.h>
-//#include <Ecore_X.h>
 
 #include "conf.h"
 #include "key.h"

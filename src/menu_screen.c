@@ -1,7 +1,7 @@
 /*
  * MENU-SCREEN
  *
- * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
  *
  * Contact: Jin Yoon <jinny.yoon@samsung.com>
  *          Junkyu Han <junkyu.han@samsung.com>
@@ -187,7 +187,7 @@ HAPI int menu_screen_get_booting_state(void)
 static bool _is_emulator_on(void)
 {
 	int ret;
-	char *model;
+	char *model = NULL;
 
 	ret = system_info_get_platform_string("tizen.org/system/model_name", &model);
 	if (SYSTEM_INFO_ERROR_NONE != ret) {
@@ -212,7 +212,6 @@ static bool _is_emulator_on(void)
 
 static menu_screen_error_e _create_canvas(char *name, char *title)
 {
-	//Ecore_X_Atom ATOM_WM_WINDOW_ROLE;
 	char *buf;
 
 	if (_is_emulator_on()) {
@@ -290,15 +289,9 @@ static void _create_bg(void)
 {
 	_D("Create BG");
 	char *buf = NULL;
-	Evas_Coord w;
-	Evas_Coord h;
 	Evas_Object *bg;
-	double f, wf, hf;
-	static int trigger = 0;
-	const char *key;
 	int width;
 	int height;
-	int ret = SYSTEM_SETTINGS_ERROR_NONE;
 
 	if (system_settings_get_value_string(SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN, &buf) < 0) {
 		_E("Failed to get a wallpaper: %d\n", SYSTEM_SETTINGS_KEY_WALLPAPER_HOME_SCREEN);
@@ -311,8 +304,9 @@ static void _create_bg(void)
 	bg = evas_object_data_get(menu_screen_get_win(), "bg");
 	if (!bg) {
 		Evas_Object *rect;
+
 		rect = evas_object_rectangle_add(menu_screen_get_evas());
-		goto_if(!rect, ERROR);
+		ret_if(!rect);
 		evas_object_data_set(menu_screen_get_win(), "rect", rect);
 		evas_object_color_set(rect, 0, 0, 0, 255);
 		evas_object_size_hint_min_set(rect, width, height);
@@ -320,50 +314,28 @@ static void _create_bg(void)
 		elm_win_resize_object_add(menu_screen_get_win(), rect);
 		evas_object_show(rect);
 
-		bg = evas_object_image_add(menu_screen_get_evas());
-		if (!bg) {
-		    if (rect) {
-			evas_object_del(rect);
-		    }
-		    goto ERROR;
+		bg = elm_image_add(menu_screen_get_win());
+		if (NULL == bg) {
+			free(buf);
+			return;
 		}
-		evas_object_image_load_orientation_set(bg, EINA_TRUE);
 		evas_object_data_set(menu_screen_get_win(), "bg", bg);
 	}
 
-	if (trigger == 0) {
-		key = "/";
-		trigger = 1;
-	} else {
-		key = NULL;
-		trigger = 0;
+	elm_image_aspect_fixed_set(bg, EINA_TRUE);
+	elm_image_fill_outside_set(bg, EINA_TRUE);
+	elm_image_preload_disabled_set(bg, EINA_FALSE);
+
+	evas_object_size_hint_min_set(bg, width, height);
+	evas_object_size_hint_max_set(bg, width, height);
+	if (!elm_image_file_set(bg, buf, NULL)) {
+		_E("Failed to set image file : %s", buf);
 	}
 
-	evas_object_image_file_set(bg, buf, key);
-	evas_object_image_size_get(bg, &w, &h);
-	if (w == 0 || h == 0) {
-	    _E("There's something wrong, width or height is ZERO");
-	    goto ERROR;
-	}
-	evas_object_image_filled_set(bg, 1);
-
-	wf = (double) width / (double) w;
-	hf = (double) height / (double) h;
-
-	f = wf < hf ? hf : wf;
-
-	w = (int) ((double) f * (double) w);
-	h = (int) ((double) f * (double) h);
-
-	evas_object_image_load_size_set(bg, w, h);
-	evas_object_image_fill_set(bg, 0, 0, w, h);
 	elm_win_resize_object_add(menu_screen_get_win(), bg);
 	evas_object_show(bg);
 
-ERROR:
-	if (buf) {
-		free(buf);
-	}
+	free(buf);
 }
 
 
