@@ -105,10 +105,10 @@ HAPI menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 {
 	pkgmgrinfo_appinfo_h appinfo_h = NULL;
 	pkgmgrinfo_pkginfo_h pkghandle = NULL;
-	char *pkgid;
-	char *exec;
-	char *name;
-	char *icon;
+	char *pkgid = NULL;
+	char *exec = NULL;
+	char *name = NULL;
+	char *icon = NULL;
 	int ret;
 
 	retv_if(NULL == package, MENU_SCREEN_ERROR_FAIL);
@@ -124,7 +124,7 @@ HAPI menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 	goto_if(PMINFO_R_OK != pkgmgrinfo_appinfo_is_enabled(appinfo_h, &ai->enabled), ERROR);
 	ret = pkgmgrinfo_appinfo_get_icon(appinfo_h, &icon);
 	if (ret != PMINFO_R_OK) {
-		_D("This package has something strange, icon");
+		_D("This package has something strange, icon: %s", icon);
 		icon = DEFAULT_ICON;
 	}
 	_D("pkgmgrinfo icon : %s", icon);
