@@ -124,7 +124,7 @@ HAPI menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 	goto_if(PMINFO_R_OK != pkgmgrinfo_appinfo_is_enabled(appinfo_h, &ai->enabled), ERROR);
 	ret = pkgmgrinfo_appinfo_get_icon(appinfo_h, &icon);
 	if (ret != PMINFO_R_OK) {
-		_D("This package has something strange, icon: %s", icon);
+		_D("This package has something strange, icon");
 		icon = DEFAULT_ICON;
 	}
 	_D("pkgmgrinfo icon : %s", icon);
