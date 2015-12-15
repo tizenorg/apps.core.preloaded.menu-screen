@@ -28,6 +28,7 @@
 #include <appsvc.h>
 #include <app_control.h>
 #include <aul.h>
+#include <bundle_internal.h>
 
 #include "menu_screen.h"
 #include "item_badge.h"
