@@ -227,8 +227,6 @@ HAPI app_list *all_apps_list_create(void)
 
 		for(i = (MAX_PAGE_NO * PAGE_MAX_APP); i<count; i++) {
 			app_list_item *item = list_nth(list, (MAX_PAGE_NO * PAGE_MAX_APP));
-			if(!item)
-			_E("Cannot remove an item(%s)", item->package);
 
 			_D("%d: %s is removed", i, item->package);
 
