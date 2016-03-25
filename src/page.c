@@ -337,7 +337,7 @@ HAPI menu_screen_error_e page_unpack_item(Evas_Object *page, Evas_Object *item)
 	}
 
 	retv_if(pending_idx == -1, MENU_SCREEN_ERROR_FAIL);
-	sprintf(tmp, "menu_swallow_%d", pending_idx);
+	snprintf(tmp, sizeof(tmp), "menu_swallow_%d", pending_idx);
 
 	check_item = edje_object_part_swallow_get(_EDJ(page), tmp);
 	retv_if(check_item != item, MENU_SCREEN_ERROR_FAIL);
@@ -380,7 +380,7 @@ HAPI Evas_Object *page_unpack_item_at(Evas_Object *page, int idx)
 	object = page_get_item_at(page, idx);
 	if (object) {
 		Evas_Object *check_object;
-		sprintf(tmp, "menu_swallow_%d", idx);
+		snprintf(tmp, sizeof(tmp), "menu_swallow_%d", idx);
 
 		check_object = elm_object_part_content_unset(page, tmp);
 		if (check_object != object) {
