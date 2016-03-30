@@ -109,10 +109,7 @@ static Eina_Bool _key_release_cb(void *data, int type, void *event)
 
 			/* If there are no items to be focused after pressing keys,
 			   Menu-screen forces to focus the first item of the other page */
-			int rest = 0;
-			if (w) {
-				rest = x % w;
-			}
+			int rest = x % w;
 			if (rest) {
 				page_scroller_focus_into_vector(scroller, rest > w / 2 ? -1 : 1);
 			}

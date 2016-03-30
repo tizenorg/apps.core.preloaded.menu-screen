@@ -340,7 +340,7 @@ HAPI void item_show_badge(Evas_Object *obj, int value)
 	ret_if(NULL == obj);
 	ret_if(value <= 0);
 
-	snprintf(str, sizeof(str), "%d", value);
+	sprintf(str, "%d", value);
 	if (edje_object_part_text_set(_EDJ(obj), "badge,txt", str) == EINA_FALSE) {
 		_E("Failed to set text on the part, edje:%p, part:%s, text:%s", _EDJ(obj), "badge,txt", str);
 	}

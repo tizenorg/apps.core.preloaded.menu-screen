@@ -78,7 +78,7 @@ HAPI Evas_Object *index_create(Evas_Object *tab, unsigned int count, unsigned in
 	retv_if(NULL == number, NULL);
 
 	for (i = 0; i < count; i++) {
-		snprintf(number, sizeof(number), "%d", i + 1);
+		sprintf(number, "%d", i + 1);
 		elm_index_item_append(index, number, NULL, (void *) i);
 	}
 	elm_index_level_go(index, 0);
