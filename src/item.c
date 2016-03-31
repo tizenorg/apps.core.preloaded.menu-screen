@@ -340,7 +340,7 @@ HAPI void item_show_badge(Evas_Object *obj, int value)
 	ret_if(NULL == obj);
 	ret_if(value <= 0);
 
-	sprintf(str, "%d", value);
+	snprintf(str, sizeof(str), "%d", value);
 	if (edje_object_part_text_set(_EDJ(obj), "badge,txt", str) == EINA_FALSE) {
 		_E("Failed to set text on the part, edje:%p, part:%s, text:%s", _EDJ(obj), "badge,txt", str);
 	}
@@ -739,7 +739,8 @@ HAPI Evas_Object *item_create(Evas_Object *scroller, app_info_t* ai)
 		item_focus = elm_button_add(item);
 		retv_if(NULL == item_focus, NULL);
 
-		elm_object_style_set(item_focus, "focus");
+		elm_object_theme_set(item_focus, menu_screen_get_theme());
+		elm_object_style_set(item_focus, "transparent");
 		elm_object_part_content_set(item, "focus", item_focus);
 		elm_access_info_cb_set(item_focus, ELM_ACCESS_INFO, _access_info_cb, item);
 		evas_object_smart_callback_add(item_focus, "clicked", _focus_clicked_cb, item);
@@ -749,7 +750,8 @@ HAPI Evas_Object *item_create(Evas_Object *scroller, app_info_t* ai)
 		focus = elm_button_add(item);
 		retv_if(NULL == focus, NULL);
 
-		elm_object_style_set(focus, "focus");
+		elm_object_theme_set(focus, menu_screen_get_theme());
+		elm_object_style_set(focus, "transparent");
 		elm_object_part_content_set(item, "uninstall_focus", focus);
 		elm_access_info_cb_set(focus, ELM_ACCESS_INFO, _access_uninstall_cb, item);
 		evas_object_smart_callback_add(focus, "clicked", _uninstall_focus_clicked_cb, item);
