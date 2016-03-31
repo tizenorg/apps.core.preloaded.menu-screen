@@ -100,8 +100,9 @@ static Eina_Bool _key_release_cb(void *data, int type, void *event)
 			int cur_idx = page_scroller_get_current_page_no(scroller);
 			int idx = 0, x = 0, w = 0;
 			elm_scroller_region_get(scroller, &x, NULL, &w, NULL);
+			break_if(w == 0);
 
-			if (w) idx = x / w;
+			idx = x / w;
 			if (cur_idx != idx) {
 				page_scroller_bring_in(scroller, idx);
 				break;
@@ -109,6 +110,7 @@ static Eina_Bool _key_release_cb(void *data, int type, void *event)
 
 			/* If there are no items to be focused after pressing keys,
 			   Menu-screen forces to focus the first item of the other page */
+
 			int rest = x % w;
 			if (rest) {
 				page_scroller_focus_into_vector(scroller, rest > w / 2 ? -1 : 1);

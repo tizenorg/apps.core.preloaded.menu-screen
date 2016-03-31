@@ -78,7 +78,7 @@ HAPI Evas_Object *index_create(Evas_Object *tab, unsigned int count, unsigned in
 	retv_if(NULL == number, NULL);
 
 	for (i = 0; i < count; i++) {
-		sprintf(number, "%d", i + 1);
+		snprintf(number, ((size_t) log10((double) MAX_PAGE_NO)) + 2, "%d", i + 1);
 		elm_index_item_append(index, number, NULL, (void *) i);
 	}
 	elm_index_level_go(index, 0);
