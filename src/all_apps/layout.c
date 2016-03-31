@@ -186,7 +186,8 @@ static Evas_Object *_add_edit_button(Evas_Object *parent, Evas_Object *scroller)
 		focus = elm_button_add(button);
 		retv_if(NULL == focus, NULL);
 
-		elm_object_style_set(focus, "focus");
+		elm_object_theme_set(focus, menu_screen_get_theme());
+		elm_object_style_set(focus, "transparent");
 		elm_object_part_content_set(button, "focus", focus);
 		elm_access_info_cb_set(focus, ELM_ACCESS_INFO, _access_info_cb, scroller);
 		evas_object_smart_callback_add(focus, "clicked", _focus_clicked_cb, scroller);
