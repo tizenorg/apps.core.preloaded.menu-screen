@@ -933,6 +933,8 @@ HAPI void page_scroller_trim_items(Evas_Object *scroller)
 	Eina_List *list = NULL;
 
 	page_max_app = (int) evas_object_data_get(scroller, "page_max_app");
+	ret_if (page_max_app == 0);
+
 	for (i = 0; i < MAX_PAGE_NO; i ++) {
 		page = page_scroller_get_page_at(scroller, i);
 		if (!page) break;
@@ -958,8 +960,7 @@ HAPI void page_scroller_trim_items(Evas_Object *scroller)
 		}
 
 		item = eina_list_nth(list, i);
-		if (NULL == item) {
-			_E("Cannot get item");
+		if (NULL == item) { _E("Cannot get item");
 			break;
 		}
 		_D("LIST GET : [%d] %s", pos, item_get_package(item));
