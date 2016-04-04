@@ -41,6 +41,7 @@
 #define BUFSZE 1024
 #define PAGE_SCROLL_SENSITIVE 0.2
 #define PROP_PORTRAIT_HEIGHT (PAGE_PORTRAIT_HEIGHT / BASE_HEIGHT)
+#define MAIN_OPERATION_FILE "/usr/apps/org.tizen.menu-screen/res/data/main_operation.launch"
 
 
 
@@ -555,14 +556,13 @@ static inline int _rtrim(char *str)
 static int _create_main_operation_list(Evas_Object *scroller)
 {
 	FILE *fp;
-	const char *filename = RESDIR"/data/main_operation.launch";
 	char *line = NULL;
 	size_t size = 0;
 	ssize_t read;
 	char *data = NULL;
 	Eina_List *main_operation_list = NULL;
 
-	fp = fopen(filename, "r");
+	fp = fopen(MAIN_OPERATION_FILE, "r");
 	if (!fp) {
 		_D("cannot open fp");
 		return 0;

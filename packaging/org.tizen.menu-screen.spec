@@ -56,6 +56,7 @@ BuildRequires:  pkgconfig(capi-system-system-settings)
 BuildRequires:  cmake
 BuildRequires:  edje-tools
 BuildRequires:  gettext-tools
+BuildRequires:  pkgconfig(libtzplatform-config)
 # %ifarch %{arm}
 # %define ARCH arm
 # BuildRequires:  pkgconfig(bincfg)
@@ -109,59 +110,22 @@ make %{?jobs:-j%jobs}
 %define tizen_author_sign 1
 %define tizen_dist_sign 1
 
-mkdir -p %{buildroot}%{_datadir}
 mkdir -p %{buildroot}/usr/share/license
-cp -f LICENSE %{buildroot}/usr/share/license/%{name}
 
 %post
 
 PRIVATE_OPTION="-s org.tizen.menu-screen"
 
-if [ ! -d %{_datadir}/dbspace ]
-then
-	mkdir -p %{_datadir}/dbspace
-fi
-
-if [ ! -d %{_datadir}/shortcut ]
-then
-	mkdir -p %{_datadir}/shortcut
-else
-	rm -rf %{_datadir}/shortcut/*
-fi
-
-sqlite3 %{_datadir}/dbspace/.menu_screen.db 'PRAGMA journal_mode = PERSIST;
-	create table if not exists shortcut (
-		ROWID INTEGER PRIMARY KEY AUTOINCREMENT,
-		appid TEXT,
-		name TEXT,
-		type INTEGER,
-		content_info TEXT,
-		icon TEXT
-	);
-'
-
 INHOUSE_ID="5000"
-chown -R $INHOUSE_ID:$INHOUSE_ID %{_datadir}
-chown root:$INHOUSE_ID %{_datadir}/dbspace/.menu_screen.db
-chown root:$INHOUSE_ID %{_datadir}/dbspace/.menu_screen.db-journal
-
-chmod 660 %{_datadir}/dbspace/.menu_screen.db
-chmod 660 %{_datadir}/dbspace/.menu_screen.db-journal
 
 %files
 %manifest %{name}.manifest
 %defattr(-,root,root,-)
-%{_bindir}/menu-screen
-%{_resdir}/edje/all_apps_portrait.edj
-%{_resdir}/edje/button_edit.edj
-%{_resdir}/edje/group_4x4_portrait.edj
-%{_resdir}/edje/item_4x4.edj
-%{_resdir}/edje/layout_portrait.edj
-%{_resdir}/edje/index.edj
-%{_resdir}/images/default.png
-%{_resdir}/data/main_operation.launch
-%{_localedir}/*/*/*.mo
-%{_usr_datadir}/icons/default/small/org.tizen.menu-screen.png
-%{_usr_datadir}/packages/org.tizen.menu-screen.xml
-/usr/share/license/%{name}
-#%{_packagedir}/*.xml
+%{TZ_SYS_RO_APP}/org.tizen.menu-screen/bin/*
+%{TZ_SYS_RO_APP}/org.tizen.menu-screen/res/edje/*
+%{TZ_SYS_RO_APP}/org.tizen.menu-screen/res/images/*
+%{TZ_SYS_RO_APP}/org.tizen.menu-screen/res/data/main_operation.launch
+%{TZ_SYS_RO_APP}/org.tizen.menu-screen/res/locale/*
+%{TZ_SYS_RO_APP}/org.tizen.menu-screen/shared/res/org.tizen.menu-screen.png
+#%{TZ_SYS_RO_PACKAGES}/org.tizen.menu-screen.xml
+/usr/share/packages/org.tizen.menu-screen.xml

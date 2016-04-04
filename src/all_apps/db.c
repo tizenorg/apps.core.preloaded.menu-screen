@@ -31,7 +31,7 @@
 
 #define QUERY_LEN 1024
 
-#define MENU_SCREEN_DB_FILE "/opt/usr/apps/org.tizen.menu-screen/data/dbspace/.menu_screen.db"
+#define MENU_SCREEN_DB_FILE ".menu_screen.db"
 #define SHORTCUT_TABLE "shortcut"
 #define QUERY_INSERT_SHORTCUT "INSERT INTO "SHORTCUT_TABLE" ("\
 	"appid,"\

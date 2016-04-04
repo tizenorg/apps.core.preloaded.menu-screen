@@ -39,6 +39,14 @@
 	} \
 } while (0)
 
+#define CREATE_APPS_DB_TABLE "CREATE TABLE IF NOT EXISTS shortcut (\
+	ROWID INTEGER PRIMARY KEY AUTOINCREMENT,\
+	appid TEXT,\
+	name TEXT,\
+	type INTEGER,\
+	content_info TEXT,\
+	icon TEXT );"
+
 
 
 static struct {
@@ -55,15 +63,47 @@ struct stmt {
 
 HAPI menu_screen_error_e db_open(const char *db_file)
 {
+	_D("db open");
 	int ret;
+	char *errMsg;
+	char *res_path = NULL;
+	char db_file_path[1024];
+
+	res_path = app_get_data_path();
+	snprintf(db_file_path, sizeof(db_file_path), "%s%s", res_path, db_file);
 
 	retv_if(NULL == db_file, MENU_SCREEN_ERROR_INVALID_PARAMETER);
 	if (db_info.db) {
+		_D("db is already exist");
 		return MENU_SCREEN_ERROR_OK;
 	}
 
-	ret = db_util_open(db_file, &db_info.db, DB_UTIL_REGISTER_HOOK_METHOD);
-	retv_with_dbmsg_if(ret != SQLITE_OK, MENU_SCREEN_ERROR_FAIL);
+	FILE *fp = fopen(db_file_path, "r");
+	if (fp) {
+		fclose(fp);
+		_D("Apps DB[%s] exist", db_file_path);
+		return MENU_SCREEN_ERROR_OK;
+	}
+
+	ret = sqlite3_open(db_file_path, &db_info.db);
+	if (ret != SQLITE_OK) {
+		_E("SQL error(%d) : %s", ret, db_file_path);
+	}
+
+	ret = sqlite3_exec(db_info.db, "PRAGMA journal_mode = PERSIST", NULL, NULL, &errMsg);
+	if (ret != SQLITE_OK) {
+		_E("SQL error(%d) : %s", ret, errMsg);
+		sqlite3_free(errMsg);
+		return MENU_SCREEN_ERROR_FAIL;
+	}
+
+	ret = sqlite3_exec(db_info.db, CREATE_APPS_DB_TABLE, NULL, NULL, &errMsg);
+	if (ret != SQLITE_OK) {
+		_E("SQL error(%d) : %s", ret, errMsg);
+		sqlite3_free(errMsg);
+		return MENU_SCREEN_ERROR_FAIL;
+	}
+	_D("Create DB[%s] : [%s] OK", db_file, CREATE_APPS_DB_TABLE);
 
 	return MENU_SCREEN_ERROR_OK;
 }
