@@ -111,6 +111,7 @@ make %{?jobs:-j%jobs}
 %define tizen_dist_sign 1
 
 mkdir -p %{buildroot}/usr/share/license
+cp -f LICENSE %{buildroot}/usr/share/license/%{_package_name}
 
 %post
 
@@ -129,3 +130,4 @@ INHOUSE_ID="5000"
 %{TZ_SYS_RO_APP}/org.tizen.menu-screen/shared/res/org.tizen.menu-screen.png
 #%{TZ_SYS_RO_PACKAGES}/org.tizen.menu-screen.xml
 /usr/share/packages/org.tizen.menu-screen.xml
+/usr/share/license/%{_package_name}

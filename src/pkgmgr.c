@@ -302,7 +302,7 @@ HAPI inline menu_screen_error_e pkgmgr_uninstall(Evas_Object *item)
 	req_pc = pkgmgr_client_new(PC_REQUEST);
 	retv_if(NULL == req_pc, MENU_SCREEN_ERROR_FAIL);
 
-	if (PMINFO_R_OK != pkgmgrinfo_appinfo_get_appinfo(appid, &handle)) {
+	if (PMINFO_R_OK != pkgmgrinfo_appinfo_get_usr_appinfo(appid, getuid(), &handle)) {
 		if (PKGMGR_R_OK != pkgmgr_client_free(req_pc)) {
 			_E("cannot free pkgmgr_client for request.");
 		}
@@ -528,10 +528,10 @@ static menu_screen_error_e _end(const char *package, const char *val, void *data
 		goto OUT;
 	}
 
-	goto_if(PMINFO_R_OK != pkgmgrinfo_pkginfo_get_pkginfo(package, &handle), ERROR);
+	goto_if(PMINFO_R_OK != pkgmgrinfo_pkginfo_get_usr_pkginfo(package, getuid(), &handle), ERROR);
 
 	/* Criteria : appid */
-	if (PMINFO_R_OK != pkgmgrinfo_appinfo_get_list(handle, PMINFO_UI_APP, _end_cb, rt)) {
+	if (PMINFO_R_OK != pkgmgrinfo_appinfo_get_usr_list(handle, PMINFO_UI_APP, _end_cb, rt, getuid())) {
 		goto ERROR;
 	}
 
@@ -573,7 +573,7 @@ static struct pkgmgr_handler pkgmgr_cbs[] = {
 
 
 
-static menu_screen_error_e _pkgmgr_cb(int req_id, const char *pkg_type, const char *package, const char *key, const char *val, const void *pmsg, void *data)
+static menu_screen_error_e _pkgmgr_cb(uid_t target_uid, int req_id, const char *pkg_type, const char *package, const char *key, const char *val, const void *pmsg, void *data)
 {
 	register unsigned int i;
 
@@ -649,7 +649,7 @@ HAPI menu_screen_error_e pkgmgr_reserve_list_pop_request(void)
 	if (!pr) return MENU_SCREEN_ERROR_NO_DATA;
 	pkg_mgr_info.reserve_list = eina_list_remove(pkg_mgr_info.reserve_list, pr);
 
-	goto_if(MENU_SCREEN_ERROR_OK != _pkgmgr_cb(0, NULL, pr->package, pr->key, pr->val, NULL, NULL), ERROR);
+	goto_if(MENU_SCREEN_ERROR_OK != _pkgmgr_cb(getuid(), 0, NULL, pr->package, pr->key, pr->val, NULL, NULL), ERROR);
 
 	if (pr->package) free(pr->package);
 	if (pr->key) free(pr->key);

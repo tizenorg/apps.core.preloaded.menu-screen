@@ -115,7 +115,7 @@ HAPI menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 	retv_if(NULL == ai, MENU_SCREEN_ERROR_FAIL);
 	retv_if(NULL == (ai->package = strdup(package)), MENU_SCREEN_ERROR_FAIL);
 
-	goto_if(0 > pkgmgrinfo_appinfo_get_appinfo(ai->package, &appinfo_h), ERROR);
+	goto_if(0 > pkgmgrinfo_appinfo_get_usr_appinfo(ai->package, getuid(), &appinfo_h), ERROR);
 
 	goto_if(PMINFO_R_OK != pkgmgrinfo_appinfo_get_pkgid(appinfo_h, &pkgid), ERROR);
 	_D("pkgmgrinfo pkgid : %s", pkgid);
@@ -133,7 +133,7 @@ HAPI menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 		goto_if(NULL == pkgid || NULL == (ai->pkgid = strdup(pkgid)), ERROR);
 		goto_if(NULL == name || NULL == (ai->name = strdup(name)), ERROR);
 		goto_if(NULL == icon || NULL == (ai->icon = strdup(icon)), ERROR);
-		goto_if(0 > pkgmgrinfo_pkginfo_get_pkginfo(pkgid, &pkghandle) || !pkghandle, ERROR);
+		goto_if(0 > pkgmgrinfo_pkginfo_get_usr_pkginfo(pkgid, getuid(), &pkghandle) || !pkghandle, ERROR);
 	} while (0);
 
 	goto_if(PMINFO_R_OK != pkgmgrinfo_pkginfo_is_removable(pkghandle, &ai->removable), ERROR);

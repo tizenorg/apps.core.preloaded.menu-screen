@@ -619,7 +619,7 @@ static void _language_changed_cb(app_event_info_h event_info, void *data)
 			item = page_get_item_at(page, j);
 			if (!item) continue;
 
-			if (pkgmgrinfo_appinfo_get_appinfo(item_get_package(item), &appinfo_h) < 0) {
+			if (pkgmgrinfo_appinfo_get_usr_appinfo(item_get_package(item), getuid(), &appinfo_h) < 0) {
 				pkgmgrinfo_appinfo_destroy_appinfo(appinfo_h);
 				continue;
 			}

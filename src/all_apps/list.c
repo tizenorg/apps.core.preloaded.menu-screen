@@ -39,13 +39,13 @@ HAPI int all_apps_list_find_installed_time(const char *id)
 	int ret = 0;
 	int installed_time = 0;
 
-	goto_if(0> pkgmgrinfo_appinfo_get_appinfo(id, &appinfo_h), ERROR);
+	goto_if(0> pkgmgrinfo_appinfo_get_usr_appinfo(id, getuid(), &appinfo_h), ERROR);
 
 	char *pkgid = NULL;
 	goto_if(PMINFO_R_OK != pkgmgrinfo_appinfo_get_pkgid(appinfo_h, &pkgid), ERROR);
 	goto_if (NULL == pkgid, ERROR);
 
-	goto_if (0>pkgmgrinfo_pkginfo_get_pkginfo(pkgid, &handle), ERROR);
+	goto_if (0>pkgmgrinfo_pkginfo_get_usr_pkginfo(pkgid, getuid(), &handle), ERROR);
 
 	ret = pkgmgrinfo_pkginfo_get_installed_time(handle, &installed_time);
 	goto_if (ret != PMINFO_R_OK, ERROR);
@@ -207,7 +207,7 @@ HAPI app_list *all_apps_list_create(void)
 		return NULL;
 	}
 	goto_if(PMINFO_R_OK != pkgmgrinfo_appinfo_filter_add_bool(handle, PMINFO_APPINFO_PROP_APP_NODISPLAY, 0), ERROR);
-	goto_if(PMINFO_R_OK != pkgmgrinfo_appinfo_filter_foreach_appinfo(handle, _all_apps_cb, list), ERROR);
+	goto_if(PMINFO_R_OK != pkgmgrinfo_appinfo_usr_filter_foreach_appinfo(handle, _all_apps_cb, list, getuid()), ERROR);
 
 	pkgmgrinfo_appinfo_filter_destroy(handle);
 

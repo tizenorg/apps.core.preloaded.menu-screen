@@ -718,6 +718,7 @@ static void _uninstall_focus_clicked_cb(void *data, Evas_Object *obj, void *even
 
 HAPI Evas_Object *item_create(Evas_Object *scroller, app_info_t* ai)
 {
+	_D("item create : %s", ai->package);
 	Evas_Object *item;
 	Evas_Object *bg;
 
