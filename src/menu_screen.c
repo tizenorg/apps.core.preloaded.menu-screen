@@ -235,8 +235,12 @@ static menu_screen_error_e _create_canvas(char *name, char *title)
 	if (title) {
 		elm_win_title_set(menu_screen_info.win, title);
 	}
+	_D("elm_scale: %f", elm_app_base_scale_get());
+	_D("config_scale: %f", elm_config_scale_get());
+
 	elm_win_borderless_set(menu_screen_info.win, EINA_TRUE);
 	elm_win_screen_size_get(menu_screen_info.win, NULL, NULL, &menu_screen_info.root_width, &menu_screen_info.root_height);
+	_D("menu-screen window size:: width: %d, height: %d", menu_screen_info.root_width, menu_screen_info.root_height);
 
 #if 0
 	ecore_x_icccm_name_class_set(elm_win_xwindow_get(menu_screen_info.win), "MENU_SCREEN", "MENU_SCREEN");

@@ -315,7 +315,7 @@ HAPI inline menu_screen_error_e pkgmgr_uninstall(Evas_Object *item)
 	}
 
 	_D("Uninstall a package[%s] from an app[%s]", pkgid, appid);
-	if (pkgmgr_client_uninstall(req_pc, NULL, pkgid, PM_QUIET, NULL, NULL) < 0) {
+	if (pkgmgr_client_usr_uninstall(req_pc, NULL, pkgid, PM_QUIET, NULL, NULL, getuid()) < 0) {
 		_E("cannot uninstall %s.", item_get_package(item));
 		ret = MENU_SCREEN_ERROR_FAIL;
 	}
