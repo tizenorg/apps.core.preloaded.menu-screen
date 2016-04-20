@@ -214,6 +214,7 @@ static menu_screen_error_e _create_canvas(char *name, char *title)
 {
 	char *buf;
 
+#if 0
 	if (_is_emulator_on()) {
 		_D("ELM_ENGINE is set as [software_x11]");
 		elm_config_accel_preference_set("opengl");
@@ -228,6 +229,7 @@ static menu_screen_error_e _create_canvas(char *name, char *title)
 			elm_config_accel_preference_set("gl");
 		}
 	}
+#endif
 
 	menu_screen_info.win = elm_win_add(NULL, name, ELM_WIN_BASIC);
 	retv_if(NULL == menu_screen_info.win, MENU_SCREEN_ERROR_FAIL);
