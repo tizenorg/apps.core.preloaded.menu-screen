@@ -22,7 +22,6 @@
 
 #include <Elementary.h>
 #include <pkgmgr-info.h>
-#include <ail.h>
 
 #include "menu_screen.h"
 #include "conf.h"

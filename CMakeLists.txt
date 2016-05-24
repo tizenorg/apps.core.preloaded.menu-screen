@@ -24,7 +24,6 @@ SET(VERSION 0.1.0)
 
 INCLUDE(FindPkgConfig)
 pkg_check_modules(MENU_PKGS REQUIRED
-	ail
 	appcore-efl
 	appsvc
 	aul
@@ -36,6 +35,7 @@ pkg_check_modules(MENU_PKGS REQUIRED
 	capi-system-system-settings
 	capi-system-info
 	dlog
+	db-util
 	ecore
 	ecore-evas
 	ecore-file

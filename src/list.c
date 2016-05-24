@@ -23,7 +23,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <Elementary.h>
-#include <ail.h>
 #include <pkgmgr-info.h>
 
 #include "list.h"

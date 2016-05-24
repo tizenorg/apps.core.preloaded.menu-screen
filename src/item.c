@@ -24,7 +24,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <Elementary.h>
-#include <ail.h>
 #include <appsvc.h>
 #include <app_control.h>
 #include <aul.h>
