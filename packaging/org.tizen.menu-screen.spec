@@ -25,7 +25,6 @@ Release:    1.1
 Group:      TO_BE/FILLED_IN
 License:    Apache-2.0
 Source0:    %{name}-%{version}.tar.gz
-BuildRequires:  pkgconfig(ail)
 BuildRequires:  pkgconfig(appcore-efl)
 BuildRequires:  pkgconfig(appsvc)
 BuildRequires:  pkgconfig(aul)
@@ -33,6 +32,7 @@ BuildRequires:  pkgconfig(badge)
 BuildRequires:  pkgconfig(bundle)
 BuildRequires:  pkgconfig(capi-appfw-application)
 BuildRequires:  pkgconfig(capi-system-info)
+BuildRequires:  pkgconfig(db-util)
 BuildRequires:  pkgconfig(dlog)
 BuildRequires:  pkgconfig(ecore)
 #BuildRequires:  pkgconfig(ecore-x)
