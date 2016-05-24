@@ -8,7 +8,7 @@
 	<ui-application appid="@PACKAGE_NAME@" exec="@EXEC_PREFIX@/@PROJECT_NAME@" nodisplay="true" multiple="false" type="capp" taskmanage="false">
 		<label>Simple Menu-screen</label>
 		<category name="http://tizen.org/category/homeapp"/>
-		<icon>/usr/share/icons/default/small/org.tizen.menu-screen.png</icon>
+		<icon>/usr/apps/org.tizen.menu-screen/shared/res/org.tizen.menu-screen.png</icon>
 	</ui-application>
 	<privileges>
 		<privilege>http://tizen.org/privilege/appmanager.launch</privilege>
