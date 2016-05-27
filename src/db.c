@@ -69,6 +69,8 @@ HAPI menu_screen_error_e db_open(const char *db_file)
 	char *res_path = NULL;
 	char db_file_path[1024];
 
+	return MENU_SCREEN_ERROR_FAIL;
+
 	res_path = app_get_data_path();
 	snprintf(db_file_path, sizeof(db_file_path), "%s%s", res_path, db_file);
 
