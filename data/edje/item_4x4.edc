@@ -28,7 +28,7 @@
 styles {
 	style {
 		name: "app_name_style";
-		base: "font=TIZEN:style=MEDIUM font_size=27 align=center valign=top color=#FFFFFF style=soft_shadow shadow_color=#00000060 ellipsis=1";
+		base: "font=TIZEN:style=MEDIUM font_size=24 align=center valign=top color=#FFFFFF style=soft_shadow shadow_color=#00000060 wrap=mixed";
 
 		tag: "br" "\n";
 	}
@@ -189,7 +189,7 @@ collections {
 			}
 			part {
 				name: "txt";
-				type: TEXT;
+				type: TEXTBLOCK;
 				effect: SOFT_SHADOW;
 				scale: 1;
 				mouse_events: 1;
@@ -203,9 +203,7 @@ collections {
 					color2: 0 0 0 35;
 					color3: 0 0 0 35;
 					text {
-						text_class: "tizen";
-						font: "TIZEN:style=medium";
-						size: 24;
+						style: "app_name_style";
 						align: 0.5 0.1;
 					}
 					visible: 1;
