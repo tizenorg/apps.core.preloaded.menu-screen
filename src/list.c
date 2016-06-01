@@ -105,7 +105,6 @@ HAPI menu_screen_error_e list_get_values(const char *package, app_info_t *ai)
 	pkgmgrinfo_appinfo_h appinfo_h = NULL;
 	pkgmgrinfo_pkginfo_h pkghandle = NULL;
 	char *pkgid = NULL;
-	char *exec = NULL;
 	char *name = NULL;
 	char *icon = NULL;
 	int ret;

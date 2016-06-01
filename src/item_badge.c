@@ -21,6 +21,7 @@
  */
 
 #include <badge.h>
+#include <badge_internal.h>
 #include <Elementary.h>
 #include <stdbool.h>
 
@@ -39,7 +40,7 @@ HAPI int item_badge_count(char *package)
 	badge_error_e err = BADGE_ERROR_NONE;
 
 	err = badge_get_display(package, &is_display);
-	if (BADGE_ERROR_NONE != err) _D("cannot get badge display");
+	if (BADGE_ERROR_NONE != err) _D("cannot get badge display err: %d", err);
 
 	if (0 == is_display) return 0;
 
@@ -67,6 +68,7 @@ static Eina_Bool _idler_cb(void *data)
 	}
 
 	count = item_badge_count(package);
+	_D("badge count: %d", count);
 	if (count) item_show_badge(item, count);
 	else item_hide_badge(item);
 
