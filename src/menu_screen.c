@@ -413,51 +413,6 @@ static void _destroy_conformant(Evas_Object *conformant)
 }
 
 
-static char *_replace_str(char *str, const char *before, const char *after)
-{
-	retv_if(NULL == str, NULL);
-	retv_if(NULL == before, NULL);
-	retv_if(NULL == after, NULL);
-
-	size_t before_len = strlen(before);
-	retv_if(before_len < 1, str);
-
-	size_t after_len = strlen(after);
-	size_t i, count = 0;
-	if (after_len != before_len) {
-		for (i = 0; str[i] != '\0';) {
-			if (0 == memcmp(&str[i], before, before_len)) {
-				count++;
-				i += before_len;
-			} else {
-				i++;
-			}
-		}
-	} else {
-		i = strlen(str);
-	}
-
-	char *result;
-	result = malloc(i + 1 + count * (after_len - before_len));
-	retv_if(result == NULL, NULL);
-
-	char *sr;
-	sr = result;
-	while (*str) {
-		if (0 == memcmp(str, before, before_len)) {
-			memcpy(sr, after, after_len);
-			sr += after_len;
-			str += before_len;
-		} else {
-			*sr++ = *str++;
-		}
-	}
-	*sr = '\0';
-
-	return result;
-}
-
-
 
 static bool _create_cb(void *data)
 {
@@ -677,15 +632,8 @@ static void _fini(app_event_handler_h *event_handlers)
 
 
 
-static void _init_reference_value(void)
-{
-	preference_set_string(MENU_SCREEN_ENGINE, "gl");
-}
-
-
 int main(int argc, char *argv[])
 {
-	char *buf;
 	ui_app_lifecycle_callback_s lifecycle_callback = {0, };
 	app_event_handler_h event_handlers[5] = {NULL, };
 
