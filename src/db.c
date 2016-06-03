@@ -79,22 +79,9 @@ HAPI menu_screen_error_e db_open(const char *db_file)
 		return MENU_SCREEN_ERROR_OK;
 	}
 
-	FILE *fp = fopen(db_file_path, "r");
-	if (fp) {
-		fclose(fp);
-		_D("Apps DB[%s] exist", db_file_path);
-		return MENU_SCREEN_ERROR_OK;
-	}
-
 	ret = sqlite3_open(db_file_path, &db_info.db);
 	if (ret != SQLITE_OK) {
-		_E("SQL error(%d) : %s", ret, db_file_path);
-	}
-
-	ret = sqlite3_exec(db_info.db, "PRAGMA journal_mode = PERSIST", NULL, NULL, &errMsg);
-	if (ret != SQLITE_OK) {
-		_E("SQL error(%d) : %s", ret, errMsg);
-		sqlite3_free(errMsg);
+		_E("sqlite3_open error : %s", sqlite3_errmsg(db_info.db));
 		return MENU_SCREEN_ERROR_FAIL;
 	}
 
@@ -103,8 +90,17 @@ HAPI menu_screen_error_e db_open(const char *db_file)
 		_E("SQL error(%d) : %s", ret, errMsg);
 		sqlite3_free(errMsg);
 		return MENU_SCREEN_ERROR_FAIL;
+	} else {
+		_D("SQL result(%d) : %s", ret, errMsg);
+		_D("Create DB[%s] : [%s] OK", db_file, CREATE_APPS_DB_TABLE);
+
+		ret = sqlite3_exec(db_info.db, "PRAGMA journal_mode = WAL", NULL, NULL, &errMsg);
+		if (ret != SQLITE_OK) {
+			_E("SQL error(%d) : %s", ret, errMsg);
+			sqlite3_free(errMsg);
+			return MENU_SCREEN_ERROR_FAIL;
+		}
 	}
-	_D("Create DB[%s] : [%s] OK", db_file, CREATE_APPS_DB_TABLE);
 
 	return MENU_SCREEN_ERROR_OK;
 }
