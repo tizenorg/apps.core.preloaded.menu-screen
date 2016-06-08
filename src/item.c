@@ -491,7 +491,7 @@ static Evas_Object *_add_icon_image(Evas_Object *item, const char *icon_file)
 	elm_image_resizable_set(icon, EINA_TRUE, EINA_TRUE);
 
 	if (menu_screen_get_root_height() > BASE_HEIGHT || menu_screen_get_root_width() > BASE_WIDTH) {
-		elm_image_no_scale_set(icon, EINA_TRUE);
+		elm_image_no_scale_set(icon, EINA_FALSE);
 	}
 
 	return icon;
