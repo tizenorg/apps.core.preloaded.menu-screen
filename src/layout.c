@@ -34,8 +34,6 @@
 #include "util.h"
 #include "all_apps/layout.h"
 
-
-
 HAPI Evas_Object *layout_create(Evas_Object *conformant, const char *file, const char *group, int rotate)
 {
 	Evas_Object *layout;

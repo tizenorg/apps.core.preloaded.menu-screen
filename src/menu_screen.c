@@ -228,7 +228,7 @@ static menu_screen_error_e _create_canvas(char *name, char *title)
 		}
 	}
 
-	menu_screen_info.win = elm_win_add(NULL, name, ELM_WIN_BASIC);
+	menu_screen_info.win = elm_win_util_standard_add(name, name);
 	retv_if(NULL == menu_screen_info.win, MENU_SCREEN_ERROR_FAIL);
 
 	if (title) {
@@ -252,7 +252,6 @@ static menu_screen_error_e _create_canvas(char *name, char *title)
 #endif
 
 	elm_win_role_set(menu_screen_info.win, "MENU_SCREEN");
-	evas_object_resize(menu_screen_info.win, menu_screen_get_root_width(), menu_screen_get_root_height());
 
 	menu_screen_info.evas = evas_object_evas_get(menu_screen_info.win);
 	if (!menu_screen_info.evas) {
@@ -264,9 +263,6 @@ static menu_screen_error_e _create_canvas(char *name, char *title)
 		_E("[%s] Failed to get ecore_evas object", __func__);
 	}
 
-	evas_object_size_hint_min_set(menu_screen_info.win, menu_screen_info.root_width, menu_screen_info.root_height);
-	evas_object_size_hint_max_set(menu_screen_info.win, menu_screen_info.root_width, menu_screen_info.root_height);
-	evas_object_resize(menu_screen_info.win, menu_screen_info.root_width, menu_screen_info.root_height);
 	evas_object_show(menu_screen_info.win);
 
 	return MENU_SCREEN_ERROR_OK;
@@ -303,9 +299,11 @@ static void _create_bg(void)
 
 	width = menu_screen_get_root_width();
 	height = menu_screen_get_root_height();
+	_D("width : %d, height : %d FOR BG", width, height);
 
 	bg = evas_object_data_get(menu_screen_get_win(), "bg");
 	if (!bg) {
+		_D("BG is NULL, Create!!");
 		Evas_Object *rect;
 
 		rect = evas_object_rectangle_add(menu_screen_get_evas());

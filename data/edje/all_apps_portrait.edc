@@ -73,6 +73,7 @@ collections {
 					align: 0.5 0.5;
 					rel1 { relative: 0.2 0.0; to, "index_bg";}
 					rel2 { relative: 0.8 1.0; to, "index_bg";}
+					fixed: 1 1;
 					visible: 1;
 				}
 			}
@@ -99,6 +100,7 @@ collections {
 					state: "default" 0.0;
 					rel1 { relative: 0.0 194/_BASE_HEIGHT; to, "bg"; } // 154 - 70
 					rel2 { relative: 1.0 1224/_BASE_HEIGHT; to, "bg"; }
+					fixed: 1 1;
 					color: 34 34 34 255;
 					visible: 0;
 				}
@@ -114,6 +116,7 @@ collections {
 					align: 0.5 0.0;
 					rel1 { relative: 0.0 0.0; to, "content_bg";}
 					rel2 { relative: 1.0 1.0; to, "content_bg";}
+					fixed: 1 1;
 					visible: 1;
 				}
 			}
