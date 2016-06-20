@@ -209,6 +209,16 @@ static bool _is_emulator_on(void)
 
 
 
+static void _window_resize_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
+{
+	int x, y, w, h;
+
+	evas_object_geometry_get(obj, &x, &y, &w, &h);
+	_D("window is resized : x[%d], y[%d], w[%d], h[%d]", x, y, w, h);
+}
+
+
+
 static menu_screen_error_e _create_canvas(char *name, char *title)
 {
 	char *buf;
@@ -228,7 +238,7 @@ static menu_screen_error_e _create_canvas(char *name, char *title)
 		}
 	}
 
-	menu_screen_info.win = elm_win_add(NULL, name, ELM_WIN_BASIC);
+	menu_screen_info.win = elm_win_util_standard_add(name, name);
 	retv_if(NULL == menu_screen_info.win, MENU_SCREEN_ERROR_FAIL);
 
 	if (title) {
@@ -252,7 +262,6 @@ static menu_screen_error_e _create_canvas(char *name, char *title)
 #endif
 
 	elm_win_role_set(menu_screen_info.win, "MENU_SCREEN");
-	evas_object_resize(menu_screen_info.win, menu_screen_get_root_width(), menu_screen_get_root_height());
 
 	menu_screen_info.evas = evas_object_evas_get(menu_screen_info.win);
 	if (!menu_screen_info.evas) {
@@ -264,10 +273,9 @@ static menu_screen_error_e _create_canvas(char *name, char *title)
 		_E("[%s] Failed to get ecore_evas object", __func__);
 	}
 
-	evas_object_size_hint_min_set(menu_screen_info.win, menu_screen_info.root_width, menu_screen_info.root_height);
-	evas_object_size_hint_max_set(menu_screen_info.win, menu_screen_info.root_width, menu_screen_info.root_height);
-	evas_object_resize(menu_screen_info.win, menu_screen_info.root_width, menu_screen_info.root_height);
 	evas_object_show(menu_screen_info.win);
+
+	evas_object_event_callback_add(menu_screen_info.win, EVAS_CALLBACK_RESIZE, _window_resize_cb, NULL);
 
 	return MENU_SCREEN_ERROR_OK;
 }
@@ -288,6 +296,16 @@ static int _dead_cb(int pid, void *data)
 
 
 
+static void _bg_resize_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
+{
+	int x, y, w, h;
+
+	evas_object_geometry_get(obj, &x, &y, &w, &h);
+	_D("bg is resized : x[%d], y[%d], w[%d], h[%d]", x, y, w, h);
+}
+
+
+
 static void _create_bg(void)
 {
 	_D("Create BG");
@@ -303,9 +321,11 @@ static void _create_bg(void)
 
 	width = menu_screen_get_root_width();
 	height = menu_screen_get_root_height();
+	_D("width : %d, height : %d FOR BG", width, height);
 
 	bg = evas_object_data_get(menu_screen_get_win(), "bg");
 	if (!bg) {
+		_D("BG is NULL, Create!!");
 		Evas_Object *rect;
 
 		rect = evas_object_rectangle_add(menu_screen_get_evas());
@@ -337,6 +357,8 @@ static void _create_bg(void)
 
 	elm_win_resize_object_add(menu_screen_get_win(), bg);
 	evas_object_show(bg);
+
+	evas_object_event_callback_add(bg, EVAS_CALLBACK_RESIZE, _bg_resize_cb, NULL);
 
 	free(buf);
 }
@@ -385,6 +407,16 @@ static void _fini_theme(void)
 
 
 
+static void _conform_resize_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
+{
+	int x, y, w, h;
+
+	evas_object_geometry_get(obj, &x, &y, &w, &h);
+	_D("conformant is resized : x[%d], y[%d], w[%d], h[%d]", x, y, w, h);
+}
+
+
+
 static Evas_Object *_create_conformant(Evas_Object *win)
 {
 	Evas_Object *conformant;
@@ -400,6 +432,8 @@ static Evas_Object *_create_conformant(Evas_Object *win)
 
 	elm_win_resize_object_add(win, conformant);
 	elm_win_conformant_set(win, EINA_TRUE);
+
+	evas_object_event_callback_add(conformant, EVAS_CALLBACK_RESIZE, _conform_resize_cb, NULL);
 
 	return conformant;
 }

@@ -34,6 +34,24 @@
 #include "util.h"
 #include "all_apps/layout.h"
 
+static void _layout_resize_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
+{
+	int x, y, w, h;
+
+	evas_object_geometry_get(obj, &x, &y, &w, &h);
+	_D("layout is resized : x[%d], y[%d], w[%d], h[%d]", x, y, w, h);
+}
+
+
+
+static void _all_apps_resize_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
+{
+	int x, y, w, h;
+
+	evas_object_geometry_get(obj, &x, &y, &w, &h);
+	_D("all_apps is resized : x[%d], y[%d], w[%d], h[%d]", x, y, w, h);
+}
+
 
 
 HAPI Evas_Object *layout_create(Evas_Object *conformant, const char *file, const char *group, int rotate)
@@ -83,7 +101,10 @@ HAPI Evas_Object *layout_create(Evas_Object *conformant, const char *file, const
 		}
 		evas_object_data_set(layout, "all_apps", all_apps);
 		elm_object_part_content_set(layout, "content", all_apps);
+		evas_object_event_callback_add(all_apps, EVAS_CALLBACK_RESIZE, _all_apps_resize_cb, NULL);
 	} while (0);
+
+	evas_object_event_callback_add(layout, EVAS_CALLBACK_RESIZE, _layout_resize_cb, NULL);
 
 	return layout;
 }
