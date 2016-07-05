@@ -310,6 +310,7 @@ static void _create_bg(void)
 		ret_if(!rect);
 		evas_object_data_set(menu_screen_get_win(), "rect", rect);
 		evas_object_color_set(rect, 0, 0, 0, 255);
+		evas_object_size_hint_weight_set(rect, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 		evas_object_size_hint_min_set(rect, width, height);
 		evas_object_size_hint_max_set(rect, width, height);
 		elm_win_resize_object_add(menu_screen_get_win(), rect);
@@ -327,6 +328,7 @@ static void _create_bg(void)
 	elm_image_fill_outside_set(bg, EINA_TRUE);
 	elm_image_preload_disabled_set(bg, EINA_FALSE);
 
+	evas_object_size_hint_weight_set(bg, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_size_hint_min_set(bg, width, height);
 	evas_object_size_hint_max_set(bg, width, height);
 	if (!elm_image_file_set(bg, buf, NULL)) {
