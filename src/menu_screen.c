@@ -307,7 +307,10 @@ static void _create_bg(void)
 		Evas_Object *rect;
 
 		rect = evas_object_rectangle_add(menu_screen_get_evas());
-		ret_if(!rect);
+		if (NULL == rect) {
+			free(buf);
+			return;
+		}
 		evas_object_data_set(menu_screen_get_win(), "rect", rect);
 		evas_object_color_set(rect, 0, 0, 0, 255);
 		evas_object_size_hint_weight_set(rect, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);

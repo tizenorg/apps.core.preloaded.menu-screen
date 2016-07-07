@@ -338,6 +338,7 @@ HAPI Evas_Object *all_apps_layout_create(Evas_Object *controlbar, int rotate)
 	evas_object_size_hint_max_set(bg, width, height);
 	evas_object_resize(bg, width, height);
 	elm_object_part_content_set(all_apps, "bg", bg);
+	evas_object_color_set(bg, 0, 0, 0, 0);
 	evas_object_show(bg);
 
 	evas_object_data_set(all_apps, "win", evas_object_data_get(controlbar, "win"));
@@ -357,6 +358,7 @@ HAPI Evas_Object *all_apps_layout_create(Evas_Object *controlbar, int rotate)
 	evas_object_size_hint_min_set(all_apps, width, height);
 	evas_object_size_hint_max_set(all_apps, width, height);
 	evas_object_resize(all_apps, width, height);
+	evas_object_show(all_apps);
 
 	index = index_create(all_apps, 0, 0);
 	if (NULL == index) {

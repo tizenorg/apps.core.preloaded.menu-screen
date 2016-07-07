@@ -62,6 +62,7 @@ HAPI Evas_Object *layout_create(Evas_Object *conformant, const char *file, const
 		evas_object_size_hint_max_set(bg, width, height);
 		evas_object_resize(bg, width, height);
 		elm_object_part_content_set(layout, "bg", bg);
+		evas_object_color_set(bg, 0, 0, 0, 0);
 		evas_object_show(bg);
 
 		evas_object_data_set(layout, "win", menu_screen_get_win());
