@@ -348,7 +348,13 @@ HAPI void item_show_badge(Evas_Object *obj, int value)
 	ret_if(NULL == scroller);
 	ret_if(page_scroller_is_edited(scroller));
 
-	edje_object_signal_emit(_EDJ(obj), "badge,on", "menu");
+	if (value < 10) {
+		edje_object_signal_emit(_EDJ(obj), "badge,one", "menu");
+	} else if (value >= 10 && value < 100) {
+		edje_object_signal_emit(_EDJ(obj), "badge,two", "menu");
+	} else {
+		edje_object_signal_emit(_EDJ(obj), "badge,three", "menu");
+	}
 	evas_object_data_set(obj, "badge,enabled", (void*)1);
 
 	_D("Badge is updated to %s", str);

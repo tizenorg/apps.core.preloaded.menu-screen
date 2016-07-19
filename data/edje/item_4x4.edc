@@ -104,8 +104,22 @@ collections {
 					}
 				}
 				description {
-					state: "badge" 0.0;
+					state: "badge,one" 0.0;
 					inherit: "default" 0.0;
+					visible: 1;
+				}
+				description {
+					state: "badge,two" 0.0;
+					inherit: "default" 0.0;
+					rel1 { relative: 110/_ITEM_WIDTH 0.0; to, "bg"; }
+					rel2 { relative: 170/_ITEM_WIDTH 52/_ITEM_HEIGHT; to, "bg"; }
+					visible: 1;
+				}
+				description {
+					state: "badge,three" 0.0;
+					inherit: "default" 0.0;
+					rel1 { relative: 105/_ITEM_WIDTH 0.0; to, "bg"; }
+					rel2 { relative: 175/_ITEM_WIDTH 52/_ITEM_HEIGHT; to, "bg"; }
 					visible: 1;
 				}
 			}
@@ -118,8 +132,8 @@ collections {
 				description {
 					state: "default" 0.0;
 					visible: 0;
-					rel1 { relative: 0.1 0.1; to, "badge"; }
-					rel2 { relative: 0.9 0.9; to, "badge"; }
+					rel1 { relative: 0.0 0.0; to, "badge"; offset: -2 0; }
+					rel2 { relative: 1.0 1.0; to, "badge"; }
 					align: 0.5 0.5;
 					color: 255 255 255 255;
 					color2: 0 0 0 35;
@@ -127,13 +141,23 @@ collections {
 					text {
 						text_class: "tizen";
 						font: "TIZEN:style=medium";
-						size: 20;
+						size: 18;
 						text: "1";
 						align: 0.5 0.5;
 					}
 				}
 				description {
-					state: "badge" 0.0;
+					state: "badge,one" 0.0;
+					inherit: "default" 0.0;
+					visible: 1;
+				}
+				description {
+					state: "badge,two" 0.0;
+					inherit: "default" 0.0;
+					visible: 1;
+				}
+				description {
+					state: "badge,three" 0.0;
 					inherit: "default" 0.0;
 					visible: 1;
 				}
@@ -299,10 +323,26 @@ collections {
 
 			// Badge
 			program {
-				name: "badge,on";
-				signal: "badge,on";
+				name: "badge,one";
+				signal: "badge,one";
 				source: "menu";
-				action: STATE_SET "badge" 0.0;
+				action: STATE_SET "badge,one" 0.0;
+				target: "badge";
+				target: "badge,txt";
+			}
+			program {
+				name: "badge,two";
+				signal: "badge,two";
+				source: "menu";
+				action: STATE_SET "badge,two" 0.0;
+				target: "badge";
+				target: "badge,txt";
+			}
+			program {
+				name: "badge,three";
+				signal: "badge,three";
+				source: "menu";
+				action: STATE_SET "badge,three" 0.0;
 				target: "badge";
 				target: "badge,txt";
 			}
