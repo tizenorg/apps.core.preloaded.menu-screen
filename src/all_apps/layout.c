@@ -21,6 +21,7 @@
  */
 
 #include <Elementary.h>
+#include <app.h>
 
 #include "menu_screen.h"
 #include "conf.h"

@@ -61,8 +61,10 @@
 #endif
 
 /* Multi-language */
+#if 0
 #ifndef _
 #define _(str) gettext(str)
+#endif
 #endif
 
 #define gettext_noop(str) (str)

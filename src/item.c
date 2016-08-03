@@ -28,6 +28,7 @@
 #include <app_control.h>
 #include <aul.h>
 #include <bundle_internal.h>
+#include <app.h>
 
 #include "menu_screen.h"
 #include "item_badge.h"
@@ -993,7 +994,7 @@ HAPI void item_launch(Evas_Object *obj)
 				}
 
 				// IDS_IDLE_POP_UNABLE_TO_LAUNCH_PS : "Unable to launch %s"
-				len = strlen(D_("IDS_IDLE_POP_UNABLE_TO_LAUNCH_PS")) + strlen(name) + 1;
+				len = strlen(_("IDS_IDLE_POP_UNABLE_TO_LAUNCH_PS")) + strlen(name) + 1;
 
 				sinform = calloc(len, sizeof(char));
 				if (!sinform) {
@@ -1001,7 +1002,7 @@ HAPI void item_launch(Evas_Object *obj)
 					return;
 				}
 
-				snprintf(sinform, len, D_("IDS_IDLE_POP_UNABLE_TO_LAUNCH_PS"), name);
+				snprintf(sinform, len, _("IDS_IDLE_POP_UNABLE_TO_LAUNCH_PS"), name);
 				popup_create_confirm(layout, sinform);
 
 				free(sinform);
