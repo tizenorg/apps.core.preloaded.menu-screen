@@ -21,6 +21,7 @@
  */
 
 #include <Elementary.h>
+#include <app.h>
 
 #include "conf.h"
 #include "item.h"
